@@ -19,6 +19,10 @@ RM = rm -rf
 all: libft libmlx $(NAME)
 
 libmlx:
+	@if [ ! -d "$(LIBMLX)" ]; then \
+		echo "MLX42 not found, cloning..."; \
+		git clone https://github.com/codam-coding-college/MLX42.git $(LIBMLX); \
+	fi
 	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
 
 libft:
@@ -33,10 +37,12 @@ $(NAME): $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
+	@$(RM) $(LIBMLX)/build
 	@$(MAKE) clean -C $(LIBLIBFT)
 
 fclean: clean
 	$(RM) $(NAME)
+	@$(RM) $(LIBMLX)
 	@$(MAKE) fclean -C $(LIBLIBFT)
 
 re: fclean all
