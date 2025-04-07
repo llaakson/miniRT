@@ -1,0 +1,2 @@
+# miniRT
+Small RayTracing project 
