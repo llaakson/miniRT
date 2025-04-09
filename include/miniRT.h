@@ -11,4 +11,10 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
+typedef struct s_minirt
+{
+	mlx_t		*mlx_ptr;
+	mlx_image_t	*image_ptr;
+} t_minirt;
+
 #endif
