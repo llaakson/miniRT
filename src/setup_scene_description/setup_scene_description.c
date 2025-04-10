@@ -1,0 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   setup_scene_description.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/10 13:28:09 by aalbrech          #+#    #+#             */
+/*   Updated: 2025/04/10 23:20:23 by aalbrech         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/miniRT.h"
+//open header??
+
+static int line_has_valid_chars(char *line, int line_i)
+{
+	while (line[line_i])
+	{
+		if ((ft_isdigit(line[line_i]) == 0) &&
+		(line[line_i] != 32 ) && (line[line_i] != '.') &&
+		(line[line_i] != ',') && (line[line_i] !=  '-') &&
+		(line[line_i] != '\n'))
+			return (-1);
+		line_i++;
+	}
+	return (0);
+}
+
+static void set_elements_to_struct(char *line, t_minirt *data)
+{
+	int i;
+	char identifier[3];
+	int identifier_i;
+
+	i = 0;
+	while (line[i] && line[i] == 32) //SPACE but nother other whitespace
+		i++;
+	identifier_i = 0;
+	while (line[i] && identifier_i < 2 && line[i] != 32)
+		identifier[identifier_i++] = line[i++];
+	identifier[identifier_i] = '\0';
+	if (line[i] != 32 && line[i] != '\0')
+		error_exit("Invalid element identifier in file", NULL);
+	if (line_has_valid_chars(line, i) == -1)
+		error_exit("File has invalid char(s)", NULL);
+	if (ft_strcmp(identifier, "A"))
+		set_ambient_light(line, i, data);
+	else if (ft_strcmp(identifier, "C"))
+		set_camera(line, i, data);
+	/*else if (ft_strcmp(identifier, "L"))
+		set_light(line, i, data);
+	else if (ft_strcmp(identifier, "sp"))
+		set_object_sphere(line, i, data);
+	else if (ft_strcmp(identifier, "pl"))
+		set_object_plane(line, i, data);
+	else if (ft_strcmp(identifier, "cy"))
+		set_object_cylinder(line, i, data);*/
+	else
+		error_exit("Invalid element identifier in file", NULL);
+}
+
+static void get_elements_from_file(char *file, t_minirt *data)
+{
+	int fd;
+	char *line;
+
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		error_exit("Couldn't open file", NULL);
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		//if newline??
+		set_elements_to_struct(line, data);
+		line = get_next_line(fd);
+	}
+}
+
+int setup_scene_description(char *file, t_minirt *data)
+{
+	if (file_extension_is_rt(file) == -1)
+		error_exit("Wrong file extension", NULL);
+	get_elements_from_file(file, data);
+
+	return (0);
+}

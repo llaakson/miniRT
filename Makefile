@@ -1,50 +1,51 @@
-NAME	:= miniRT
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/04/10 13:23:22 by aalbrech          #+#    #+#              #
+#    Updated: 2025/04/10 17:47:20 by aalbrech         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-CFLAGS	:= -Wextra -Wall -Werror
+SRC = src/main.c \
+src/setup_scene_description/initial_checks.c \
+src/setup_scene_description/setup_scene_description.c \
+src/error_exit.c \
+src/basic_utils.c \
+src/setup_scene_description/set_elements.c \
 
-LIBMLX	:= ./MLX42
 
-LIBLIBFT	:= ./libft
+OBJ = $(SRC:.c=.o)
 
-HEADERS	:= -I ./include -I $(LIBMLX)/include -I $(LIBLIBFT)
+NAME = miniRT
 
-LIBS	:= $(LIBMLX)/build/libmlx42.a -L$(LIBLIBFT) -lft -ldl -lglfw -pthread -lm
+CC = cc
 
-SRCS	:= ./src/main.c \
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
-OBJS	:= ${SRCS:.c=.o}
+.PHONY = all clean fclean re
 
-RM = rm -rf
+LIBFT_DIR = ./libft
 
-all: libft libmlx $(NAME)
+LIBFT = $(LIBFT_DIR)/libft.a
 
-libmlx:
-	@if [ ! -d "$(LIBMLX)" ]; then \
-		echo "MLX42 not found, cloning..."; \
-		git clone https://github.com/codam-coding-college/MLX42.git $(LIBMLX); \
-	fi
-	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
+all: $(NAME) $(LIBFT)
 
-libft:
-	@$(MAKE) -C $(LIBLIBFT)
+$(NAME): $(OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
-%.o: %.c
-	@$(CC) $(CFLAGS) $< -c -o $@ $(HEADERS) 
-
-$(NAME): $(OBJS)
-	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
-	@echo "$(NAME) compiled successfully.\n"
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
 clean:
-	$(RM) $(OBJS)
-	@$(RM) $(LIBMLX)/build
-	@$(MAKE) clean -C $(LIBLIBFT)
+	rm -f $(OBJ)
+	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME)
-	@$(RM) $(LIBMLX)
-	@$(MAKE) fclean -C $(LIBLIBFT)
+	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
-
-.PHONY: all clean fclean re libmlx libft

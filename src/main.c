@@ -1,7 +1,7 @@
 
 #include "../include/miniRT.h"
 
-int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
+/*int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 {
     return (r << 24 | g << 16 | b << 8 | a);
 }
@@ -19,7 +19,7 @@ int ft_put_pixel(t_minirt *mlx)
 	{
 		while(x < WIDTH)
 		{
-			// Should we calculate here the color for each pixel and put it in the image 
+			// Should we calculate here the color for each pixel and put it in the image
 			// or calculate the colors in array and the call the array here
 			color = ft_pixel(
 				y % 0xFF, // R
@@ -58,29 +58,44 @@ int ft_render(t_minirt *mlx)
 }
 void key_input(void *param)
 {
-	
+
 	mlx_t *mlx = param;
 	//Closes the windows with escape
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx);
-}
+}*/
 
-int main(void)
+int main(int argc, char **argv)
 {
-	t_minirt mlx;
+	t_minirt *data;
 
-	if (!(mlx.mlx_ptr = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
+	if (argc != 2)
+	{
+		printf("Wrong amount of arguments. Ex: ./miniRT file.rt");
+		return (1);
+	}
+	data = malloc(sizeof(t_minirt));
+	//err check
+	ft_memset(data, 0, sizeof(t_minirt));
+	error_exit("", &data);
+	/*if (!(mlx.mlx_ptr = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
 	{
 		ft_printf("Error\n");
 		return (1);
-	}
-	//Creates the image and fills all of it's pixels of chosen color
+	}*/
+	setup_scene_description(argv[1], data);
+	printf("%f\n", data->ambLight->ambientLightRatio);
+	printf("%f and %f and %f\n", data->ambLight->RGB.x, data->ambLight->RGB.y, data->ambLight->RGB.z);
+	//We cant error exit and free the *data, need **data, already in
+	//the beginning send **data to error_exit so it has it for the whole program?
+
+	/*//Creates the image and fills all of it's pixels of chosen color
 	ft_render(&mlx);
 	//calls key function when key is pressed
 	mlx_loop_hook(mlx.mlx_ptr, key_input, mlx.mlx_ptr);
 
 	mlx_loop(mlx.mlx_ptr);
-	mlx_terminate(mlx.mlx_ptr);
+	mlx_terminate(mlx.mlx_ptr);*/
 
 	return (0);
 }
