@@ -34,7 +34,7 @@ typedef struct s_ambientLight
 
 typedef struct s_lighting
 {
-	t_xyz lightPoint;
+	t_xyz coordinatesOfLightPoint;
 	float lightBrightnessRatio;
 	t_xyz RGB;
 }t_lighting;
@@ -91,6 +91,7 @@ int setup_scene_description(char *file, t_minirt *data);
 int file_extension_is_rt(char *file);
 void set_ambient_light(char *line, int line_i, t_minirt *data);
 void set_camera(char *line, int line_i, t_minirt *data);
+void set_light(char *line, int line_i, t_minirt *data);
 
 //error
 void error_exit(char *error, t_minirt **data);

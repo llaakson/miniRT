@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 	}
 	data = malloc(sizeof(t_minirt));
 	//err check
-	ft_memset(data, 0, sizeof(t_minirt));
+	ft_memset(data, 0, sizeof(t_minirt)); //not everyting is 0, like camera FOV
 	error_exit("", &data);
 	/*if (!(mlx.mlx_ptr = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
 	{
@@ -84,8 +84,13 @@ int main(int argc, char **argv)
 		return (1);
 	}*/
 	setup_scene_description(argv[1], data);
+	printf("AMBIENT LIGHT\n");
 	printf("%f\n", data->ambLight->ambientLightRatio);
-	printf("%f and %f and %f\n", data->ambLight->RGB.x, data->ambLight->RGB.y, data->ambLight->RGB.z);
+	printf("%f and %f and %f\n\n\n", data->ambLight->RGB.x, data->ambLight->RGB.y, data->ambLight->RGB.z);
+	printf("CAMERA\n");
+	printf("%f and %f and %f\n", data->camera->coordinatesOfViewpoint.x, data->camera->coordinatesOfViewpoint.y, data->camera->coordinatesOfViewpoint.z);
+	printf("%f and %f and %f\n", data->camera->normOrientVec.x, data->camera->normOrientVec.y, data->camera->normOrientVec.z);
+	printf("%d\n", data->camera->FOV);
 	//We cant error exit and free the *data, need **data, already in
 	//the beginning send **data to error_exit so it has it for the whole program?
 

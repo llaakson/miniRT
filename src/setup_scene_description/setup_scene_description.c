@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:28:09 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/10 23:20:23 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/11 02:23:01 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ static void set_elements_to_struct(char *line, t_minirt *data)
 		set_ambient_light(line, i, data);
 	else if (ft_strcmp(identifier, "C"))
 		set_camera(line, i, data);
-	/*else if (ft_strcmp(identifier, "L"))
+	else if (ft_strcmp(identifier, "L"))
 		set_light(line, i, data);
-	else if (ft_strcmp(identifier, "sp"))
+	/*else if (ft_strcmp(identifier, "sp"))
 		set_object_sphere(line, i, data);
 	else if (ft_strcmp(identifier, "pl"))
 		set_object_plane(line, i, data);

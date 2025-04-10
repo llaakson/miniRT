@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:53:53 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/10 23:27:34 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/11 02:42:26 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ static float ft_atof(char *str, float *result)
 		i++;
 	}
 	if (no_extra_minus_in_str(str, i) == -1)
-		return (-1); //err check in calling func
+		error_exit("EXTRA MINUS\n", NULL);
+		//return (-1); //err check in calling func
 	while (str[i] >= '0' && str[i] <= '9')
 	{
         *result = *result * 10 + (str[i] - '0');
@@ -84,10 +85,8 @@ static float ft_atof(char *str, float *result)
 	return (0);
 }
 
-static void set_light_ratio(char **element_info, float *light_ratio) //for lightning and ambilight
+static void set_light_ratio(char **element_info, float *light_ratio)
 {
-	//float light_ratio;
-
 	if (ft_strchr(*element_info, ','))
 	{
 		free_and_set_to_null(element_info);
@@ -164,6 +163,11 @@ void set_ambient_light(char *line, int line_i, t_minirt *data)
 		free_and_set_to_null(&element_info);
 		element_info = get_next_element_info(line, &line_i);
 	}
+	if (info_num != 1) //check SIMILAR in all funcs test "C "
+	{
+		free_and_set_to_null(&element_info);
+		error_exit("Too few element arguments for ambient light", NULL);
+	}
 }
 
 static void set_coordinates(char **element_info, t_xyz *coordinates)
@@ -219,14 +223,6 @@ static void set_normalized_vector(char **element_info, t_xyz *vector)
 		//free splitrgb;
 		error_exit("Normalized vector argument has to be 1 or smaller", NULL);
 	}
-	if ((vector->x != 1 && vector->x != 0 && vector->x != -1) &&
-		(vector->y != 1 && vector->y != 0 && vector->y != -1)
-		&& (vector->z != 1 && vector->z != 0 && vector->z != -1))
-	{
-		free_and_set_to_null(element_info);
-		//free splitrgb;
-		error_exit("Normalized vector argument has to have a decimal part of .0 or no decimal part", NULL);
-	}
 }
 static void set_horizontal_field_of_view_in_degrees(char **element_info, int *FOV)
 {
@@ -235,7 +231,12 @@ static void set_horizontal_field_of_view_in_degrees(char **element_info, int *FO
 		free_and_set_to_null(element_info);
 		error_exit("Camera FOV argument must be a whole number", NULL); //change to cant be decimal??
 	}
-	ft_atof(*element_info, (float *)FOV);
+	if (no_extra_minus_in_str(*element_info, 1) == -1)
+	{
+		free_and_set_to_null(element_info);
+		error_exit("Element argument can't have many minus signs", NULL); //change to cant be decimal??
+	}
+	*FOV = ft_atoi(*element_info);
 	if (*FOV < 0 || *FOV > 180)
 	{
 		free_and_set_to_null(element_info);
@@ -251,7 +252,7 @@ void set_camera(char *line, int line_i, t_minirt *data)
 
 	if (data->camera != NULL)
 		error_exit("Element camera found twice in file", NULL);
-	data->camera = malloc(sizeof(t_ambientLight));
+	data->camera = malloc(sizeof(t_camera));
 	if (!data->camera)
 		error_exit("Memory allocation failed", NULL);
 	info_num = -1;
@@ -277,6 +278,43 @@ void set_camera(char *line, int line_i, t_minirt *data)
 	{
 		free_and_set_to_null(&element_info);
 		error_exit("Too few element arguments for camera", NULL);
+	}
+	//free element_info in ALL funcs
+}
+
+void set_light(char *line, int line_i, t_minirt *data)
+{
+	char *element_info;
+	int info_num;
+
+	if (data->light != NULL)
+		error_exit("Element light found twice in file", NULL);
+	data->light = malloc(sizeof(t_lighting));
+	if (!data->light)
+		error_exit("Memory allocation failed", NULL);
+	info_num = -1;
+	element_info = get_next_element_info(line, &line_i);
+	while (element_info != NULL)
+	{
+		info_num++;
+		if (info_num == 0)
+			set_coordinates(&element_info, &data->light->coordinatesOfLightPoint);
+		else if (info_num == 1)
+			set_light_ratio(&element_info, &data->light->lightBrightnessRatio);
+		else if (info_num == 2)
+			set_RGB(&element_info, &data->light->RGB);
+		else
+		{
+			free_and_set_to_null(&element_info);
+			error_exit("Too many element arguments for light", NULL);
+		}
+		free_and_set_to_null(&element_info);
+		element_info = get_next_element_info(line, &line_i);
+	}
+	if (info_num != 2) //check SIMILAR in all funcs test "C "
+	{
+		free_and_set_to_null(&element_info);
+		error_exit("Too few element arguments for light", NULL);
 	}
 	//free element_info in ALL funcs
 }
