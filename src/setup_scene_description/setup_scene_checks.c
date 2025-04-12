@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   initial_checks.c                                   :+:      :+:    :+:   */
+/*   setup_scene_checks.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:21:00 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/10 17:42:00 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/11 21:51:04 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,15 @@ int file_extension_is_rt(char *file)
 	if (ft_strcmp(wanted_extension, found_extension) == 1)
 		return (0);
 	return (-1);
+}
+
+int no_extra_minus_in_str(char *str, int i)
+{
+	while (str[i])
+	{
+		if (str[i] == '-')
+			error_exit("Element argument can't have extraneous minus signs");
+		i++;
+	}
+	return (0);
 }

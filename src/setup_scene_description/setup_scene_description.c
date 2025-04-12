@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:28:09 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/11 02:23:01 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/12 20:50:04 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,23 @@ static void set_elements_to_struct(char *line, t_minirt *data)
 		identifier[identifier_i++] = line[i++];
 	identifier[identifier_i] = '\0';
 	if (line[i] != 32 && line[i] != '\0')
-		error_exit("Invalid element identifier in file", NULL);
+		error_exit("Invalid element identifier in file");
 	if (line_has_valid_chars(line, i) == -1)
-		error_exit("File has invalid char(s)", NULL);
+		error_exit("File has invalid char(s)");
 	if (ft_strcmp(identifier, "A"))
 		set_ambient_light(line, i, data);
 	else if (ft_strcmp(identifier, "C"))
 		set_camera(line, i, data);
 	else if (ft_strcmp(identifier, "L"))
 		set_light(line, i, data);
-	/*else if (ft_strcmp(identifier, "sp"))
+	else if (ft_strcmp(identifier, "sp"))
 		set_object_sphere(line, i, data);
 	else if (ft_strcmp(identifier, "pl"))
 		set_object_plane(line, i, data);
 	else if (ft_strcmp(identifier, "cy"))
-		set_object_cylinder(line, i, data);*/
+		set_object_cylinder(line, i, data);
 	else
-		error_exit("Invalid element identifier in file", NULL);
+		error_exit("Invalid element identifier in file");
 }
 
 static void get_elements_from_file(char *file, t_minirt *data)
@@ -67,21 +67,26 @@ static void get_elements_from_file(char *file, t_minirt *data)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		error_exit("Couldn't open file", NULL);
+		error_exit("Couldn't open file");
+	data->objects = tracked_malloc(sizeof(t_object));
+	if (!data->objects)
+		error_exit("Memory allocation failed");
+	ft_memset(data->objects, 0, sizeof(t_object));
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		//if newline??
-		set_elements_to_struct(line, data);
+		if (!(line[0] == '\n' && line[1] == '\0'))
+			set_elements_to_struct(line, data);
+		//free line
 		line = get_next_line(fd);
 	}
+	//free line
 }
 
 int setup_scene_description(char *file, t_minirt *data)
 {
 	if (file_extension_is_rt(file) == -1)
-		error_exit("Wrong file extension", NULL);
+		error_exit("Wrong file extension");
 	get_elements_from_file(file, data);
-
 	return (0);
 }

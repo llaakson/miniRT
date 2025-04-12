@@ -6,24 +6,34 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:38:57 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/10 20:33:00 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/12 19:29:18 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/miniRT.h"
 
-void error_exit(char *error, t_minirt **data)
+void free_2d_array(char ***arr)
 {
-	static t_minirt *ptr = NULL;
-	if (data && *data)
+	int i;
+
+	if (!arr || !*arr)
+		return;
+	i = 0;
+	while ((*arr)[i])
 	{
-		ptr = *data;
-		return ;
+		free((*arr)[i]);
+		(*arr)[i] = NULL;
+		i++;
 	}
+	free(*arr);
+	*arr = NULL;
+}
+
+void error_exit(char *error)
+{
+
 	printf("Error: %s\n", error);
-	if (ptr)
-		free(ptr);
-	//free data if data
+	tracked_free_all();
 	exit(1);
 }
 

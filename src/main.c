@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/12 19:13:57 by aalbrech          #+#    #+#             */
+/*   Updated: 2025/04/12 20:40:44 by aalbrech         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 
 #include "../include/miniRT.h"
 
@@ -74,25 +87,18 @@ int main(int argc, char **argv)
 		printf("Wrong amount of arguments. Ex: ./miniRT file.rt");
 		return (1);
 	}
-	data = malloc(sizeof(t_minirt));
-	//err check
-	ft_memset(data, 0, sizeof(t_minirt)); //not everyting is 0, like camera FOV
-	error_exit("", &data);
+	data = tracked_malloc(sizeof(t_minirt));
+	if (!data)
+		error_exit("Memory allocation failed");
+	ft_bzero(data, sizeof(t_minirt));
+	//ft_memset(data, 0, sizeof(t_minirt)); //not everyting is 0, like camera FOV
 	/*if (!(mlx.mlx_ptr = mlx_init(WIDTH, HEIGHT, "miniRT", true)))
 	{
 		ft_printf("Error\n");
 		return (1);
 	}*/
 	setup_scene_description(argv[1], data);
-	printf("AMBIENT LIGHT\n");
-	printf("%f\n", data->ambLight->ambientLightRatio);
-	printf("%f and %f and %f\n\n\n", data->ambLight->RGB.x, data->ambLight->RGB.y, data->ambLight->RGB.z);
-	printf("CAMERA\n");
-	printf("%f and %f and %f\n", data->camera->coordinatesOfViewpoint.x, data->camera->coordinatesOfViewpoint.y, data->camera->coordinatesOfViewpoint.z);
-	printf("%f and %f and %f\n", data->camera->normOrientVec.x, data->camera->normOrientVec.y, data->camera->normOrientVec.z);
-	printf("%d\n", data->camera->FOV);
-	//We cant error exit and free the *data, need **data, already in
-	//the beginning send **data to error_exit so it has it for the whole program?
+	print_elements_of_rt_file(data);
 
 	/*//Creates the image and fills all of it's pixels of chosen color
 	ft_render(&mlx);
@@ -101,6 +107,6 @@ int main(int argc, char **argv)
 
 	mlx_loop(mlx.mlx_ptr);
 	mlx_terminate(mlx.mlx_ptr);*/
-
+	tracked_free_all();
 	return (0);
 }

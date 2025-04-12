@@ -6,16 +6,22 @@
 #    By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 13:23:22 by aalbrech          #+#    #+#              #
-#    Updated: 2025/04/10 17:47:20 by aalbrech         ###   ########.fr        #
+#    Updated: 2025/04/12 20:40:08 by aalbrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC = src/main.c \
-src/setup_scene_description/initial_checks.c \
+src/setup_scene_description/setup_scene_checks.c \
 src/setup_scene_description/setup_scene_description.c \
 src/error_exit.c \
 src/basic_utils.c \
-src/setup_scene_description/set_elements.c \
+src/setup_scene_description/set_elements_declared_once.c \
+src/setup_scene_description/setup_scene_utils.c \
+src/setup_scene_description/set_element_arguments.c \
+src/setup_scene_description/set_elements_objects.c \
+src/malloc_tracker.c \
+src/setup_scene_description/object_nodes.c \
+src/DEL_utils.c
 
 
 OBJ = $(SRC:.c=.o)
