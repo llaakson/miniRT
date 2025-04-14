@@ -7,11 +7,13 @@
 #include <stdbool.h>
 //#include "../MLX42/include/MLX42/MLX42.h"
 #include "../libft/libft.h"
+#include <math.h>
 
-#define WIDTH 1280
-#define HEIGHT 720
+#define IMG_WIDTH 1280
+#define IMG_HEIGHT 720
 
-typedef struct s_mallocs {
+typedef struct s_mallocs
+{
     void* ptr;
     struct s_mallocs* next;
 } t_mallocs;
@@ -23,12 +25,17 @@ typedef struct s_xyz
 	float z;
 } t_xyz;
 
+typedef struct s_ray
+{
+	t_xyz origin;
+	t_xyz direction;
+} t_ray;
+
 typedef struct s_camera
 {
 	t_xyz coordinatesOfViewpoint;
 	t_xyz normOrientVec;
 	int FOV;
-
 } t_camera;
 
 typedef struct s_ambientLight
@@ -125,6 +132,16 @@ float ft_atof(char *str, float *result);
 void* tracked_malloc(size_t size);
 void tracked_free(void* ptr);
 void tracked_free_all(void);
+
+//vector math
+t_xyz vec_add(t_xyz one, t_xyz two);
+t_xyz vec_subtract(t_xyz one, t_xyz two);
+t_xyz vec_scale(t_xyz vec, float scale);
+float vec_dot(t_xyz one, t_xyz two);
+t_xyz vec_cross(t_xyz one, t_xyz two);
+float vec_length(t_xyz vec);
+t_xyz vec_normalize(t_xyz vec);
+
 
 //DELETE!
 void print_elements_of_rt_file(t_minirt *data);

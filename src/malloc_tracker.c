@@ -6,13 +6,13 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:08:50 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/12 19:44:10 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/12 21:25:03 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/miniRT.h"
 
-static t_mallocs* head = NULL;
+static t_mallocs* head = NULL; //NO GLOBALS!!!
 
 void* tracked_malloc(size_t size)
 {
