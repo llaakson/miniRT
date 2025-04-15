@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/15 18:49:36 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:55:14 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,8 @@ a = D * D = dot product of the ray direction.
 b = 2(oc * D) = 2 * dot product of oc and ray direction.
 c = oc * oc - r2 = dot product of oc - sphere_radius * sphere_radius.
 
-In the function we call, quadratic equation, we will convert to the form where we find t.
+In the function we call, quadratic equation(), we will convert to the form where we find t.
+To find t means to find where on the ray, the ray intersects with a sphere (if it does so).
 
 Return:
 Closest ray intersection of the sphere.
