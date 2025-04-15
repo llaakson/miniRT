@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/14 19:41:00 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/15 12:37:10 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,11 @@ void raytracer(t_minirt *data)
 	//Tells how wide the camera view is at a certain distance.
 	//Object near the camera = camera sees a wide area of the object. Object is "big".
 	//Object further from the camera = camera sees a smaller area of the object. Object is "small".
-	FOV_scale = tan((data->camera->FOV * M_PI / 180) / 2);
+	FOV_scale = tanf((data->camera->FOV * M_PI / 180) / 2);
 
 
 	x = 0;
 	y = 0;
-
 
 	ray.origin = data->camera->coordinatesOfViewpoint; //can i even do this?
 	//loop through all pixels of screen
@@ -59,6 +58,15 @@ void raytracer(t_minirt *data)
 			ray.direction = vec_add(vec_scale(camera_right_view, ray_direction_x), vec_scale(world_up, ray_direction_y));
 			ray.direction = vec_add(ray.direction, camera_forward);
 			ray.direction = vec_normalize(ray.direction);
+			//printf("\n\n\nray direction: %f and %f and %f\n", ray.direction.x, ray.direction.y, ray.direction.z);
+			//printf("ray origin (coord of viewpoint): %f and %f and %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
+			float intersection = intersect(data, ray);
+			if (intersection > -1.0)
+			{
+				printf("HIT FOR SPHERE, intersect is %f\n", intersection);
+				return ;
+			}
+			//object and coordinate to leo
 			x++;
 		}
 		y++;

@@ -6,7 +6,7 @@
 #    By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 13:23:22 by aalbrech          #+#    #+#              #
-#    Updated: 2025/04/12 20:40:08 by aalbrech         ###   ########.fr        #
+#    Updated: 2025/04/15 12:04:42 by aalbrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,9 @@ src/setup_scene_description/set_element_arguments.c \
 src/setup_scene_description/set_elements_objects.c \
 src/malloc_tracker.c \
 src/setup_scene_description/object_nodes.c \
+src/raytracing/raytracing.c \
+src/raytracing/vector_math.c \
+src/raytracing/intersect.c \
 src/DEL_utils.c
 
 
@@ -30,7 +33,9 @@ NAME = miniRT
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
+
+FLAGS = -lm #for math.h
 
 .PHONY = all clean fclean re
 
@@ -41,7 +46,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 all: $(NAME) $(LIBFT)
 
 $(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)

@@ -142,6 +142,10 @@ t_xyz vec_cross(t_xyz one, t_xyz two);
 float vec_length(t_xyz vec);
 t_xyz vec_normalize(t_xyz vec);
 
+//raytracing
+void raytracer(t_minirt *data);
+float intersect(t_minirt *data, t_ray ray);
+
 
 //DELETE!
 void print_elements_of_rt_file(t_minirt *data);

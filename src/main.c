@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:13:57 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/12 20:40:44 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/15 10:45:08 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int main(int argc, char **argv)
 	}*/
 	setup_scene_description(argv[1], data);
 	print_elements_of_rt_file(data);
+	raytracer(data);
 
 	/*//Creates the image and fills all of it's pixels of chosen color
 	ft_render(&mlx);
