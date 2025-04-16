@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/16 12:34:53 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:42:17 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void raytracer(t_minirt *data)
 	x = 0;
 	y = 0;
 
-	ray.origin = data->camera->coordinatesOfViewpoint; //test transfer x,y,z
+	ray.origin = data->camera->coordinatesOfViewpoint; //test
 
 	//loop through all pixels of screen
 	while (y < IMG_HEIGHT)
@@ -75,7 +75,7 @@ void raytracer(t_minirt *data)
 				printf("HIT FOR SPHERE, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
 				return ;
 			}
-			//object and coordinate to leo
+
 			x++;
 		}
 		y++;

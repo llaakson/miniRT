@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/16 12:34:32 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:44:25 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ Closest ray intersection of the sphere.
 */
 static float intersect_sphere(t_sphere *sphere, t_ray ray)
 {
+	//have to check that a b c value is small enough to fit inside a float??? same goes for everywhere with maths
 	t_xyz oc;
 	float a;
 	float b;
