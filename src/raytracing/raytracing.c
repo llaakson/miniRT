@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/16 20:20:21 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:17:58 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,10 @@ direction = vec_add(vec_scale(camera->right_view, scalar_x), vec_scale(camera->w
 3. We also add the camera's normalized orientation vector (which way the camera is looking in the scene, it's forward direction). We add it because we're
 working in 3d. Move up and down, move sideways, and move forward and backwards.
 
-4. We normalize the vector to get a pure unit vector, only giving us a direction and no length. 
+4. We normalize the vector to get a pure unit vector, only giving us a direction and no length.
+
+Return:
+A unit vector pointing in the direction of the pixel at coordinate [pixel_x, pixel_y], in 3d space.
 
 */
 static t_xyz get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
@@ -89,9 +92,6 @@ static t_xyz get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
 	scalar_x = (2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio * camera->FOV_scale;
 	scalar_y = (-2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1) * camera->FOV_scale;
 
-	// Create the ray direction
-
-	//We scale cam_right_view according to ray_dir_x. same for world_up and ray_dir_y.
 	direction = vec_add(vec_scale(camera->right_view, scalar_x), vec_scale(camera->world_up, scalar_y));
 	direction = vec_add(direction, camera->normOrientVec);
 	direction = vec_normalize(direction);
@@ -100,13 +100,28 @@ static t_xyz get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
 
 /*
 Arguments:
-
+The camera struct.
 
 Description:
+We already have some basic information about the camera's orientation and so on, gotten from the file.rt.
+Here we add more esential information to the camera struct, needed to make rays pointing from the camera out into the scene.
 
+world_up: We need some base for the program to know what "up" means in a scene, what verticality means. Up means that the y-coordinate is bigger than 0.
+
+right_view: To the right of the camera. The program needs some sort of idea of what it would mean to move horizontally in a space.
+We get that by doing cross_product(), which returns a vector at a 90° angle from the two input vectors.
+World_up points upwards, normOrientVec points forwards. What is at at 90° to both up and forward? It's left or right.
+
+The reason why we don't need a world_down and left_view, is that world_up and right_view can be used for that aswell. A positive value
+would mean more up/more to the right, and a negative value would mean less up(meaning: down), and less to the right (meaning: to the left).
+
+aspect_ratio: The proportial relationship between the screen width and screen height.
+Essential for some calculations to not make the rendered scene-image look distorted.
+
+FOV_scale:
 
 Return:
-
+Nothing. Only sets values in the camera struct.
 */
 static void set_detailed_camera(t_camera *camera)
 {
