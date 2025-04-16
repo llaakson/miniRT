@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/16 22:44:57 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/16 23:08:21 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ This means that right_view now knows how far to the right/left to point in order
 and world_up now knows how far up/down to point in order to reach the pixel at [pixel_x, pixel_y].
 vec_scale(camera->right_view, scalar_x), vec_scale(camera->world_up, scalar_y)
 
-2. We add this together, to get a vector who knows both how far right/left and up/down to reach the pixel at [pixel_x, pixel_y].
+2. We add this together, to get a vector that knows both how far right/left and up/down to reach the pixel at [pixel_x, pixel_y].
 direction = vec_add(vec_scale(camera->right_view, scalar_x), vec_scale(camera->world_up, scalar_y));
 
 3. We also add the camera's normalized orientation vector (which way the camera is looking in the scene, it's forward direction). We add it because we're
@@ -145,10 +145,12 @@ Arguments:
 The t_minirt struct.
 
 Description:
-Goes through every pixel of the screen
+We go through every pixel of the screen. The screen is defined with the macros? IMG_HEIGHT and IMG_WIDTH.
+For every pixel we make a ray from the camera (coordinatesOfViewPoint), in the direction of the current pixel.
+We then see if the ray happens to intersect with an object (defined in the file.rt).
 
 Return:
-
+Nothing. 
 */
 void raytracer(t_minirt *data)
 {
