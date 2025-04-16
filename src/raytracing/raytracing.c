@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/16 21:17:58 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/16 22:44:57 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,18 @@ are horizontally. 0 meaning left edge, 1 meaning right edge, and 0.5 meaning in 
 going from -1 to 1. Vector scaling would work wrong if we don't fix this. -1 = left edge, 0 middle of screen, 1 right edge
 2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1
 
-4. For the width of the screen we only have a certain amount of rays to use. There's one ray for every pixel_y, but not a ray for every pixel_x
-(if the screen doesn't happen to be square). To cover the whole screen, we need to distribute the rays evenly. We do that by scaling scalar_x
-with the aspect ratio.
+CHANGE 4. We need to distribute the rays evenly horizontally.
+Pixels on a screen are evenly distributed, but in the real 3d world, a pixel represents a whole area, not only a dot. We have a certain amount of rays that need to cover the
+whole area, and we want the rays to do it evenly.
+If the screen is wide, the final rendered image depicts a broader space, and the rays will need more space between them to cover that wide space. Each ray will sample a bigger area of the scene.
+If the screen is narrow, the rays will need less space between them. Each ray will cover a smaller area.
+ We do this by scaling scalar_x with the aspect ratio (multiplication).
 (2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio
 
 5. The same goes for the camera field of view (FOV) and the scene we are making. We need to distribute the rays to correctly interpret the FOV.
 Camera zoomed out (wide FOV) = camera sees more of the scene = rays need to cover a larger area = rays are furher apart from each other.
 Camera zoomed in (narrow FOV) = camera sees less of the scene  = rays need to cover a smaller area = rays are closer to each other.
+(2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio * camera->FOV_scale
 
 ----Calculate scalar_y (how far the ray is pointing up or down)----------------------------------
 
@@ -57,9 +61,7 @@ We want the y-coordinates to work a bit more "stereotypically" according to spac
 (Ex. world up in unit vector is 0,1,0 and not 0,-1,0), so we use this formula to get -1 is down, 1 is up.
 -2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1
 
-4. In the scalar_x calculation we scale it according to the screen aspect ratio.
-We don't have to do that for scalar_y, since there is a ray for every pixel_y.
-(-2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1) * camera->FOV_scale;
+CHANGE 4.
 
 Return:
 The calculated ray direction as a unit vector.
@@ -140,10 +142,10 @@ static void set_detailed_camera(t_camera *camera)
 
 /*
 Arguments:
-
+The t_minirt struct.
 
 Description:
-
+Goes through every pixel of the screen
 
 Return:
 
@@ -176,6 +178,7 @@ void raytracer(t_minirt *data)
 
 			x++;
 		}
+		x = 0;
 		y++;
 	}
 }
