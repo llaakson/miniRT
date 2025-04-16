@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/16 18:32:01 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/16 20:20:21 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ vec_scale(camera->right_view, scalar_x), vec_scale(camera->world_up, scalar_y)
 2. We add this together, to get a vector who knows both how far right/left and up/down to reach the pixel at [pixel_x, pixel_y].
 direction = vec_add(vec_scale(camera->right_view, scalar_x), vec_scale(camera->world_up, scalar_y));
 
-3. We also add the camera's normalized orientation vector (which way the camera is looking in the scene)
+3. We also add the camera's normalized orientation vector (which way the camera is looking in the scene, it's forward direction). We add it because we're
+working in 3d. Move up and down, move sideways, and move forward and backwards.
+
+4. We normalize the vector to get a pure unit vector, only giving us a direction and no length. 
 
 */
 static t_xyz get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
