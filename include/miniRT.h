@@ -34,8 +34,13 @@ typedef struct s_ray
 typedef struct s_camera
 {
 	t_xyz coordinatesOfViewpoint;
-	t_xyz normOrientVec;
+	t_xyz normOrientVec; //camera forward
 	int FOV;
+	//added later
+	t_xyz world_up;
+	t_xyz right_view;
+	float aspect_ratio;
+	float FOV_scale;
 } t_camera;
 
 typedef struct s_ambientLight
@@ -86,6 +91,13 @@ typedef struct s_object
 	t_plane *planes;
 	t_cylinder *cylinders;
 } t_object;
+
+typedef struct s_intersection
+{
+	t_object object; //be aware of dangling ptrs
+	float rayClosestIntersect;
+	t_xyz coorinates;
+} t_intersection;
 
 typedef struct s_minirt
 {
@@ -144,7 +156,7 @@ t_xyz vec_normalize(t_xyz vec);
 
 //raytracing
 void raytracer(t_minirt *data);
-float intersect(t_minirt *data, t_ray ray);
+t_intersection intersect(t_minirt *data, t_ray ray);
 
 
 //DELETE!

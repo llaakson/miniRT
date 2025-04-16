@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/15 18:55:14 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:34:32 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ Description:
 We want to find out if the ray intersects with the sphere.
 We build up the mathematical formula for that.
 
-A sphere is defined by the fact that on which-ever point on the sphere border, the distance
+A sphere is defined by the fact that on which-ever point on the sphere surface, the distance
 to the sphere center will be the same. That distance is the same as the sphere radius.
 We can define this with an equation (P - C)^2 = r^2, where
 P = a point,
@@ -75,7 +75,7 @@ r = the radius.
 We can also define a ray (or a point in the ray) as P(t) = O + t * D, where
 P(t) = a point on the ray,
 O = ray origin,
-t = where on the ray we are
+t = where on the ray we are,
 D = ray direction.
 
 Since both P in the sphere formula, and P in the ray formula stands for a point in space,
@@ -131,39 +131,56 @@ static float intersect_sphere(t_sphere *sphere, t_ray ray)
 	return (quadratic_equation(a, b, c));
 }
 
-static float loop_intersect_sphere(t_sphere *spheres, t_ray ray)
+static void loop_intersect_sphere(t_sphere *spheres, t_ray ray, t_intersection *intersection)
 {
 	t_sphere *current;
 	float temp;
-	float closest_intersect;
 
 	if (!spheres)
-		return (-1.0);
+		return ;
 	current = spheres;
-	closest_intersect = INFINITY;
 	while (current != NULL)
 	{
 		temp = intersect_sphere(current, ray);
-		if (temp < closest_intersect && temp > -1.0)
-			closest_intersect = temp;
+		if (temp < (*intersection).rayClosestIntersect && temp > -1.0)
+		{
+			(*intersection).rayClosestIntersect = temp;
+			(*intersection).object.spheres = current;
+		}
 		current = current->next;
 	}
-	if (closest_intersect == INFINITY)
-		return (-1.0);
-	return (closest_intersect);
+}
+
+static t_intersection init_intersection(void)
+{
+	t_intersection intersect;
+
+	intersect.object.spheres = NULL;
+	intersect.object.planes = NULL;
+	intersect.object.cylinders = NULL;
+	intersect.rayClosestIntersect = INFINITY;
+	intersect.coorinates = (t_xyz){0,0,0};
+	return (intersect);
+}
+
+//using ray formula P(t)=O+t⋅D
+static void set_intersect_coordinates(t_intersection *intersect, t_ray ray)
+{
+	if ((*intersect).rayClosestIntersect == INFINITY)
+		return ;
+	(*intersect).coorinates = vec_add(ray.origin, vec_scale(ray.direction, (*intersect).rayClosestIntersect));
 }
 
 //check if a ray hits an object
-float intersect(t_minirt *data, t_ray ray)
+t_intersection intersect(t_minirt *data, t_ray ray)
 {
-	float closest_intersect;
-	float temp;
+	t_intersection intersection;
+	intersection = init_intersection();
 
-	closest_intersect = INFINITY;
-	temp = loop_intersect_sphere(data->objects->spheres, ray);
-	if (temp < closest_intersect && temp > -1.0)
-		closest_intersect = temp;
-	if (closest_intersect == INFINITY)
-		return(-1.0);
-	return (closest_intersect);
+	loop_intersect_sphere(data->objects->spheres, ray, &intersection);
+	//plane
+	//cylinder
+	set_intersect_coordinates(&intersection, ray);
+
+	return (intersection);
 }
