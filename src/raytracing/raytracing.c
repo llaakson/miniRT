@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/16 23:08:21 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:20:19 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,15 @@ are horizontally. 0 meaning left edge, 1 meaning right edge, and 0.5 meaning in 
 going from -1 to 1. Vector scaling would work wrong if we don't fix this. -1 = left edge, 0 middle of screen, 1 right edge
 2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1
 
-CHANGE 4. We need to distribute the rays evenly horizontally.
-Pixels on a screen are evenly distributed, but in the real 3d world, a pixel represents a whole area, not only a dot. We have a certain amount of rays that need to cover the
-whole area, and we want the rays to do it evenly.
-If the screen is wide, the final rendered image depicts a broader space, and the rays will need more space between them to cover that wide space. Each ray will sample a bigger area of the scene.
-If the screen is narrow, the rays will need less space between them. Each ray will cover a smaller area.
- We do this by scaling scalar_x with the aspect ratio (multiplication).
+4. It can happen that the screen isn't fully square. In that case every pixel isn't representing a square area of the scene anymore. 
+The pixel is representing a rectangular area. Since the ray then would sample a rectangular area, the rendered image result of the scene would look 
+distorted. To make the a pixel represent a square area again, we scale scalar_x with the aspect ratio (multiplication).
 (2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio
 
-5. The same goes for the camera field of view (FOV) and the scene we are making. We need to distribute the rays to correctly interpret the FOV.
-Camera zoomed out (wide FOV) = camera sees more of the scene = rays need to cover a larger area = rays are furher apart from each other.
-Camera zoomed in (narrow FOV) = camera sees less of the scene  = rays need to cover a smaller area = rays are closer to each other.
+5. The same goes for the camera field of view (FOV) and the scene we are making. 
+We need to scale the pixel grid to correctly represent what the camera sees. We scale scalar_x with the FOV_scale. 
+Camera zoomed out (wide FOV) = camera sees more of the scene.
+Camera zoomed in (narrow FOV) = camera sees less of the scene. 
 (2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio * camera->FOV_scale
 
 ----Calculate scalar_y (how far the ray is pointing up or down)----------------------------------
@@ -61,7 +59,10 @@ We want the y-coordinates to work a bit more "stereotypically" according to spac
 (Ex. world up in unit vector is 0,1,0 and not 0,-1,0), so we use this formula to get -1 is down, 1 is up.
 -2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1
 
-CHANGE 4.
+4. For scalar_y we don't need to take into account the aspect ratio. 
+Aspect ratio is calculated in relation to the screen_height, so scalar_y and aspect_ratio are already in sync.
+We however take into account the FOV_scale, just like with scalar_x.
+scalar_y = (-2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1) * camera->FOV_scale;
 
 Return:
 The calculated ray direction as a unit vector.
@@ -106,7 +107,7 @@ The camera struct.
 
 Description:
 We already have some basic information about the camera's orientation and so on, gotten from the file.rt.
-Here we add more esential information to the camera struct, needed to make rays pointing from the camera out into the scene.
+Here we add more esential information to the camera struct, needed to make rays correctly point from the camera out into the scene.
 
 world_up: We need some base for the program to know what "up" means in a scene, what verticality means. Up means that the y-coordinate is bigger than 0.
 
@@ -120,7 +121,12 @@ would mean more up/more to the right, and a negative value would mean less up(me
 aspect_ratio: The proportial relationship between the screen width and screen height.
 Essential for some calculations to not make the rendered scene-image look distorted.
 
-FOV_scale:
+FOV_scale: FOV is the total angle a camera can see. It tells us how much the camera is zoomed in/out when looking out into the 3d world. 
+Tan input needs to be a radian, which is calculated as degrees * PI / 180. We already have a FOV in degrees, but now we are making a scalar.
+Tan also need a right-angled triangle to work. We divide by two to get that. An angle = a triangle, half of an angle = a right-angled triangle. 
+FOV_scale is essential for some calculations, to correctly depict the cameras zooming and how it affects what it sees in the scene. 
+Tan gives us a ratio between the height and the depth of the scene. 
+The FOV_scale can tell us how far up/down in the scene the camera can capture, when you stand at a certain distance from the camera. 
 
 Return:
 Nothing. Only sets values in the camera struct.
@@ -130,13 +136,6 @@ static void set_detailed_camera(t_camera *camera)
 	camera->world_up = (t_xyz){0, 1, 0}; // can have problems?? The direction of up
 	camera->right_view = vec_normalize(vec_cross(camera->world_up, camera->normOrientVec)); //Direction to the right of the camera
 	camera->aspect_ratio = (float)IMG_WIDTH/IMG_HEIGHT;
-
-	//FOV is the total angle a camera can see
-	//tan input needs to be a radian, which is calculated as degrees * PI / 180.
-	//We divide by two to get the angle from the center of the view, to the edge.
-	//Tells how wide the camera view is at a certain distance.
-	//Object near the camera = camera sees a wide area of the object. Object is "big".
-	//Object further from the camera = camera sees a smaller area of the object. Object is "small".
 	camera->FOV_scale = tanf((camera->FOV * M_PI / 180) / 2);
 }
 
