@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/17 14:20:19 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:28:13 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,8 @@ Arguments:
 The t_minirt struct.
 
 Description:
-We go through every pixel of the screen. The screen is defined with the macros? IMG_HEIGHT and IMG_WIDTH.
+We go through every pixel of the screen, from the upper left corner, to the bottom right corner. 
+The screen is defined with the macros? IMG_HEIGHT and IMG_WIDTH.
 For every pixel we make a ray from the camera (coordinatesOfViewPoint), in the direction of the current pixel.
 We then see if the ray happens to intersect with an object (defined in the file.rt).
 
@@ -161,10 +162,7 @@ void raytracer(t_minirt *data)
 	set_detailed_camera(data->camera);
 	x = 0;
 	y = 0;
-
-	ray.origin = data->camera->coordinatesOfViewpoint; //test
-
-	//loop through all pixels of screen
+	ray.origin = data->camera->coordinatesOfViewpoint;
 	while (y < IMG_HEIGHT)
 	{
 		while (x < IMG_WIDTH)
@@ -176,7 +174,6 @@ void raytracer(t_minirt *data)
 				printf("HIT FOR SPHERE, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
 				return ;
 			}
-
 			x++;
 		}
 		x = 0;

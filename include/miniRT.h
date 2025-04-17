@@ -156,7 +156,11 @@ t_xyz vec_normalize(t_xyz vec);
 
 //raytracing
 void raytracer(t_minirt *data);
+
+//intersection
 t_intersection intersect(t_minirt *data, t_ray ray);
+void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *intersection);
+
 
 
 //DELETE!

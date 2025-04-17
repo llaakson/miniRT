@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   intersect.c                                        :+:      :+:    :+:   */
+/*   intersect_sphere.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/16 12:44:25 by aalbrech         ###   ########.fr       */
+/*   Created: 2025/04/17 14:31:36 by aalbrech          #+#    #+#             */
+/*   Updated: 2025/04/17 17:26:51 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/miniRT.h"
+#include "../../../include/miniRT.h"
 
 /*
 Arguments:
@@ -26,11 +26,14 @@ t = (-b + sqrt(b*b - 4 * a * c)) / (2 * a)
 )
 We get two different t because of this.
 Ideally, one where the ray enters the sphere, and one where the ray exits the sphere.
+It could also be that the sphere and the ray only has one intersection point. 
+That would mean that the ray bumps into the sphere. 
 
 Return:
 -1 if there's no intersection. (discriminant < 0).
 -1 if both the intersections are behind the camera. We can't see them in the scene.
 Else the smaller of the two t values, which means the hit is closer to the camera.
+
 */
 static float quadratic_equation(float a, float b, float c)
 {
@@ -44,7 +47,7 @@ static float quadratic_equation(float a, float b, float c)
 		return (-1.0);
 	t0 = (-b - sqrtf(discriminant)) / (2 * a);
 	t1 = (-b + sqrtf(discriminant)) / (2 * a);
-	if (t0 > t1) //set so t0 is always the smallest
+	if (t0 > t1)
 	{
 		temp = t0;
 		t0 = t1;
@@ -62,7 +65,7 @@ Arguments:
 A sphere, and a ray from the camera, going in the direction of a certain pixel of the screen.
 
 Description:
-We want to find out if the ray intersects with the sphere.
+We want to find out if the ray intersects with the sphere in the 3d scene.
 We build up the mathematical formula for that.
 
 A sphere is defined by the fact that on which-ever point on the sphere surface, the distance
@@ -132,7 +135,7 @@ static float intersect_sphere(t_sphere *sphere, t_ray ray)
 	return (quadratic_equation(a, b, c));
 }
 
-static void loop_intersect_sphere(t_sphere *spheres, t_ray ray, t_intersection *intersection)
+void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *intersection)
 {
 	t_sphere *current;
 	float temp;
@@ -150,38 +153,4 @@ static void loop_intersect_sphere(t_sphere *spheres, t_ray ray, t_intersection *
 		}
 		current = current->next;
 	}
-}
-
-static t_intersection init_intersection(void)
-{
-	t_intersection intersect;
-
-	intersect.object.spheres = NULL;
-	intersect.object.planes = NULL;
-	intersect.object.cylinders = NULL;
-	intersect.rayClosestIntersect = INFINITY;
-	intersect.coorinates = (t_xyz){0,0,0};
-	return (intersect);
-}
-
-//using ray formula P(t)=O+t⋅D
-static void set_intersect_coordinates(t_intersection *intersect, t_ray ray)
-{
-	if ((*intersect).rayClosestIntersect == INFINITY)
-		return ;
-	(*intersect).coorinates = vec_add(ray.origin, vec_scale(ray.direction, (*intersect).rayClosestIntersect));
-}
-
-//check if a ray hits an object
-t_intersection intersect(t_minirt *data, t_ray ray)
-{
-	t_intersection intersection;
-	intersection = init_intersection();
-
-	loop_intersect_sphere(data->objects->spheres, ray, &intersection);
-	//plane
-	//cylinder
-	set_intersect_coordinates(&intersection, ray);
-
-	return (intersection);
 }
