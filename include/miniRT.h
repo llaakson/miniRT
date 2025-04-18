@@ -160,6 +160,7 @@ void raytracer(t_minirt *data);
 //intersection
 t_intersection intersect(t_minirt *data, t_ray ray);
 void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *intersection);
+void loop_intersect_planes(t_plane *planes, t_ray ray, t_intersection *intersection);
 
 
 

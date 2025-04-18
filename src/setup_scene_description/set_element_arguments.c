@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/12 19:38:05 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:28:27 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void set_normalized_vector(char *element_info, t_xyz *vector)
 		error_exit("Normalized vector argument has to be -1 or bigger");
 	if (vector->x > 1.0 || vector->y > 1.0 || vector->z > 1.0)
 		error_exit("Normalized vector argument has to be 1 or smaller");
+	if ((vector->x + vector->y + vector->z) != 1.0)
+		error_exit("A normalized vector has the length of exactly 1.0. (x + y + z) = 1.0");
 }
 
 void set_horizontal_field_of_view_in_degrees(char *element_info, int *FOV)

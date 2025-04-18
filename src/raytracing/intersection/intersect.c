@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/17 17:27:00 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:31:55 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_intersection intersect(t_minirt *data, t_ray ray)
 	intersection = init_intersection();
 
 	loop_intersect_spheres(data->objects->spheres, ray, &intersection);
-	//plane
+	loop_intersect_planes(data->objects->planes, ray, &intersection);
 	//cylinder
 	set_intersect_coordinates(&intersection, ray);
 

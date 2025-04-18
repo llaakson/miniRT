@@ -6,7 +6,7 @@
 #    By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 13:23:22 by aalbrech          #+#    #+#              #
-#    Updated: 2025/04/15 12:04:42 by aalbrech         ###   ########.fr        #
+#    Updated: 2025/04/18 21:29:36 by aalbrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,9 @@ src/malloc_tracker.c \
 src/setup_scene_description/object_nodes.c \
 src/raytracing/raytracing.c \
 src/raytracing/vector_math.c \
-src/raytracing/intersect.c \
+src/raytracing/intersection/intersect.c \
+src/raytracing/intersection/intersect_plane.c \
+src/raytracing/intersection/intersect_sphere.c \
 src/DEL_utils.c
 
 

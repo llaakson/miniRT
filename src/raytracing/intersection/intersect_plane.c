@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:36:21 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/18 21:20:06 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:29:55 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void loop_intersect_planes(t_plane *planes, t_ray ray, t_intersection *intersect
 		if (temp < (*intersection).rayClosestIntersect && temp > -1.0)
 		{
 			(*intersection).rayClosestIntersect = temp;
-			(*intersection).object.spheres = current;
+			(*intersection).object.planes = current;
 		}
 		current = current->next;
 	}
