@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/17 14:28:13 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:39:14 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ are horizontally. 0 meaning left edge, 1 meaning right edge, and 0.5 meaning in 
 going from -1 to 1. Vector scaling would work wrong if we don't fix this. -1 = left edge, 0 middle of screen, 1 right edge
 2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1
 
-4. It can happen that the screen isn't fully square. In that case every pixel isn't representing a square area of the scene anymore. 
-The pixel is representing a rectangular area. Since the ray then would sample a rectangular area, the rendered image result of the scene would look 
+4. It can happen that the screen isn't fully square. In that case every pixel isn't representing a square area of the scene anymore.
+The pixel is representing a rectangular area. Since the ray then would sample a rectangular area, the rendered image result of the scene would look
 distorted. To make the a pixel represent a square area again, we scale scalar_x with the aspect ratio (multiplication).
 (2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio
 
-5. The same goes for the camera field of view (FOV) and the scene we are making. 
-We need to scale the pixel grid to correctly represent what the camera sees. We scale scalar_x with the FOV_scale. 
+5. The same goes for the camera field of view (FOV) and the scene we are making.
+We need to scale the pixel grid to correctly represent what the camera sees. We scale scalar_x with the FOV_scale.
 Camera zoomed out (wide FOV) = camera sees more of the scene.
-Camera zoomed in (narrow FOV) = camera sees less of the scene. 
+Camera zoomed in (narrow FOV) = camera sees less of the scene.
 (2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio * camera->FOV_scale
 
 ----Calculate scalar_y (how far the ray is pointing up or down)----------------------------------
@@ -59,7 +59,7 @@ We want the y-coordinates to work a bit more "stereotypically" according to spac
 (Ex. world up in unit vector is 0,1,0 and not 0,-1,0), so we use this formula to get -1 is down, 1 is up.
 -2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1
 
-4. For scalar_y we don't need to take into account the aspect ratio. 
+4. For scalar_y we don't need to take into account the aspect ratio.
 Aspect ratio is calculated in relation to the screen_height, so scalar_y and aspect_ratio are already in sync.
 We however take into account the FOV_scale, just like with scalar_x.
 scalar_y = (-2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1) * camera->FOV_scale;
@@ -121,12 +121,12 @@ would mean more up/more to the right, and a negative value would mean less up(me
 aspect_ratio: The proportial relationship between the screen width and screen height.
 Essential for some calculations to not make the rendered scene-image look distorted.
 
-FOV_scale: FOV is the total angle a camera can see. It tells us how much the camera is zoomed in/out when looking out into the 3d world. 
+FOV_scale: FOV is the total angle a camera can see. It tells us how much the camera is zoomed in/out when looking out into the 3d world.
 Tan input needs to be a radian, which is calculated as degrees * PI / 180. We already have a FOV in degrees, but now we are making a scalar.
-Tan also need a right-angled triangle to work. We divide by two to get that. An angle = a triangle, half of an angle = a right-angled triangle. 
-FOV_scale is essential for some calculations, to correctly depict the cameras zooming and how it affects what it sees in the scene. 
-Tan gives us a ratio between the height and the depth of the scene. 
-The FOV_scale can tell us how far up/down in the scene the camera can capture, when you stand at a certain distance from the camera. 
+Tan also need a right-angled triangle to work. We divide by two to get that. An angle = a triangle, half of an angle = a right-angled triangle.
+FOV_scale is essential for some calculations, to correctly depict the cameras zooming and how it affects what it sees in the scene.
+Tan gives us a ratio between the height and the depth of the scene.
+The FOV_scale can tell us how far up/down in the scene the camera can capture, when you stand at a certain distance from the camera.
 
 Return:
 Nothing. Only sets values in the camera struct.
@@ -144,13 +144,13 @@ Arguments:
 The t_minirt struct.
 
 Description:
-We go through every pixel of the screen, from the upper left corner, to the bottom right corner. 
+We go through every pixel of the screen, from the upper left corner, to the bottom right corner.
 The screen is defined with the macros? IMG_HEIGHT and IMG_WIDTH.
 For every pixel we make a ray from the camera (coordinatesOfViewPoint), in the direction of the current pixel.
 We then see if the ray happens to intersect with an object (defined in the file.rt).
 
 Return:
-Nothing. 
+Nothing.
 */
 void raytracer(t_minirt *data)
 {
@@ -172,6 +172,11 @@ void raytracer(t_minirt *data)
 			if (intersection.object.spheres)
 			{
 				printf("HIT FOR SPHERE, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
+				return ;
+			}
+			if (intersection.object.planes)
+			{
+				printf("HIT FOR PLANE, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
 				return ;
 			}
 			x++;

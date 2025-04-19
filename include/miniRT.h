@@ -144,6 +144,7 @@ float ft_atof(char *str, float *result);
 void* tracked_malloc(size_t size);
 void tracked_free(void* ptr);
 void tracked_free_all(void);
+void track_pointer(void* ptr);
 
 //vector math
 t_xyz vec_add(t_xyz one, t_xyz two);

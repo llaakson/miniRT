@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:28:09 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/12 20:50:04 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/19 12:05:37 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,16 @@ static void get_elements_from_file(char *file, t_minirt *data)
 		error_exit("Memory allocation failed");
 	ft_memset(data->objects, 0, sizeof(t_object));
 	line = get_next_line(fd);
+	track_pointer(line);
 	while (line != NULL)
 	{
 		if (!(line[0] == '\n' && line[1] == '\0'))
 			set_elements_to_struct(line, data);
-		//free line
+		tracked_free(line);
 		line = get_next_line(fd);
+		track_pointer(line);
 	}
-	//free line
+	tracked_free(line);
 }
 
 int setup_scene_description(char *file, t_minirt *data)

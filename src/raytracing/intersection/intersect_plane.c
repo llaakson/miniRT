@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:36:21 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/18 21:29:55 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:34:31 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ We want to solve the equation in regards to t (where on the ray a intersection w
 We organize the new formula for that.
 t =  (Po - O) * n / D * n
 
-If D *n is equal to 0, the ray and plane are parallell,
+If D *n is equal to 0, the ray and plane are parallell.
+
 If D * n = 0 AND (Po - O) * n = 0, the ray is perfectly aligned with and lies on the plan. In this case we
 return 0.0001 as a random point on the ray, to prevent the pixel the ray is
 sampling from to be missed in the result rendered image. We return such a small value (0.0001 units from the ray origin),
@@ -48,7 +49,6 @@ to make sure we realistically capture the plane in the scene. Since the ray is "
 and the plane is infinite, Returning a hit point as soon as we can from the camera is safest.
 
 Otherwise we calculate the result t. If t < 0, the intersection is behind the camera.
-
 */
 static float intersect_plane(t_plane *plane, t_ray ray)
 {

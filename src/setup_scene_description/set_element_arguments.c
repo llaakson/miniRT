@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/18 21:28:27 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/19 12:03:15 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,15 @@ void set_RGB(char *element_info, t_xyz *RGB)
 	if (ft_strchr(element_info, '.'))
 		error_exit("RGB color arguments must be whole numbers");
 	split_RGB = ft_split(element_info, ',');
-	//must save and free
 	if (!split_RGB)
 		error_exit("Memory allocation failed");
 	int i = 0;
 	while (split_RGB[i])
+	{
+		track_pointer(split_RGB[i]);
 		i++;
+	}
+	track_pointer(split_RGB);
 	if (i - 1 != 2 || !split_RGB[2])
 		error_exit("RGB colors must be three");
 	ft_atof(split_RGB[0], &RGB->x);
@@ -43,6 +46,10 @@ void set_RGB(char *element_info, t_xyz *RGB)
 		error_exit("RGB color argument has to be 0 or bigger");
 	if (RGB->x > 255 || RGB->y > 255 || RGB->z > 255)
 		error_exit("RGB color argument has to be 255 or smaller");
+	i = 0;
+	while (split_RGB[i])
+		tracked_free(split_RGB[i++]);
+	tracked_free(split_RGB);
 }
 
 void set_coordinates(char *element_info, t_xyz *coordinates)
@@ -52,15 +59,23 @@ void set_coordinates(char *element_info, t_xyz *coordinates)
 	split_coordinates = ft_split(element_info, ',');
 	if (!split_coordinates)
 		error_exit("Memory allocation failed");
-		//must save and free
 	int i = 0;
 	while (split_coordinates[i] != NULL)
+	{
+		track_pointer(split_coordinates[i]);
 		i++;
+	}
+	track_pointer(split_coordinates);
 	if (i - 1 != 2 || !split_coordinates[2])
 		error_exit("Coordinates has to be three numbers");
 	ft_atof(split_coordinates[0], &coordinates->x);
 	ft_atof(split_coordinates[1], &coordinates->y);
 	ft_atof(split_coordinates[2], &coordinates->z);
+	i = 0;
+	while (split_coordinates[i])
+		tracked_free(split_coordinates[i++]);
+	tracked_free(split_coordinates);
+
 }
 
 void set_normalized_vector(char *element_info, t_xyz *vector)
@@ -70,10 +85,13 @@ void set_normalized_vector(char *element_info, t_xyz *vector)
 	split_vector = ft_split(element_info, ',');
 	if (!split_vector)
 		error_exit("Memory allocation failed");
-		//must save and free
 	int i = 0;
 	while (split_vector[i])
+	{
+		track_pointer(split_vector[i]);
 		i++;
+	}
+	track_pointer(split_vector);
 	if (i - 1 != 2 || !split_vector[2])
 		error_exit("Normalized vectors need three ... ");
 	ft_atof(split_vector[0], &vector->x);
@@ -85,6 +103,10 @@ void set_normalized_vector(char *element_info, t_xyz *vector)
 		error_exit("Normalized vector argument has to be 1 or smaller");
 	if ((vector->x + vector->y + vector->z) != 1.0)
 		error_exit("A normalized vector has the length of exactly 1.0. (x + y + z) = 1.0");
+	i = 0;
+	while (split_vector[i])
+		tracked_free(split_vector[i++]);
+	tracked_free(split_vector);
 }
 
 void set_horizontal_field_of_view_in_degrees(char *element_info, int *FOV)

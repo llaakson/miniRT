@@ -6,7 +6,7 @@
 #    By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 13:23:22 by aalbrech          #+#    #+#              #
-#    Updated: 2025/04/18 21:29:36 by aalbrech         ###   ########.fr        #
+#    Updated: 2025/04/19 11:47:45 by aalbrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ src/setup_scene_description/set_elements_declared_once.c \
 src/setup_scene_description/setup_scene_utils.c \
 src/setup_scene_description/set_element_arguments.c \
 src/setup_scene_description/set_elements_objects.c \
-src/malloc_tracker.c \
+src/malloc_tracker/malloc_tracker.c \
 src/setup_scene_description/object_nodes.c \
 src/raytracing/raytracing.c \
 src/raytracing/vector_math.c \
