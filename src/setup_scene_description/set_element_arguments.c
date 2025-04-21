@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/19 12:03:15 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:15:21 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void set_normalized_vector(char *element_info, t_xyz *vector)
 		error_exit("Normalized vector argument has to be -1 or bigger");
 	if (vector->x > 1.0 || vector->y > 1.0 || vector->z > 1.0)
 		error_exit("Normalized vector argument has to be 1 or smaller");
-	if ((vector->x + vector->y + vector->z) != 1.0)
+	if (vec_length(*vector) != 1.0)
 		error_exit("A normalized vector has the length of exactly 1.0. (x + y + z) = 1.0");
 	i = 0;
 	while (split_vector[i])
