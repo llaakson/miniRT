@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/22 16:47:21 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:02:39 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static t_intersection init_intersection(void)
 	intersect.object.cylinders = NULL;
 	intersect.rayClosestIntersect = INFINITY;
 	intersect.coorinates = (t_xyz){0,0,0};
+	intersect.RGB = (t_xyz){0,0,0};
+	intersect.surface_normal = (t_xyz){0,0,0};
 	return (intersect);
 }
 
