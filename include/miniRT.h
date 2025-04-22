@@ -97,6 +97,8 @@ typedef struct s_intersection
 	t_object object; //be aware of dangling ptrs
 	float rayClosestIntersect;
 	t_xyz coorinates;
+	t_xyz RGB;
+	t_xyz surface_normal;
 } t_intersection;
 
 typedef struct s_minirt

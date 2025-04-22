@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:31:36 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/20 20:27:18 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:48:38 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *inters
 		{
 			(*intersection).rayClosestIntersect = temp;
 			(*intersection).object.spheres = current;
+			(*intersection).RGB = current->RGB;
+			//(*intersection).surface_normal =
 		}
 		current = current->next;
 	}
