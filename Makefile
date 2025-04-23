@@ -1,16 +1,16 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/04/10 13:23:22 by aalbrech          #+#    #+#              #
-#    Updated: 2025/04/23 13:25:41 by aalbrech         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME	:= miniRT
 
-SRC = src/main.c \
+CFLAGS	:= -Wextra -Wall -Werror
+
+LIBMLX	:= ./MLX42
+
+LIBLIBFT	:= ./libft
+
+HEADERS	:= -I ./include -I $(LIBMLX)/include -I $(LIBLIBFT)
+
+LIBS	:= $(LIBMLX)/build/libmlx42.a -L$(LIBLIBFT) -lft -ldl -lglfw -pthread -lm
+
+SRCS = src/main.c \
 src/setup_scene_description/setup_scene_checks.c \
 src/setup_scene_description/setup_scene_description.c \
 src/error_exit.c \
@@ -28,39 +28,44 @@ src/raytracing/intersection/intersect_plane.c \
 src/raytracing/intersection/intersect_sphere.c \
 src/raytracing/intersection/intersect_cylinder.c \
 src/raytracing/intersection/math_formulas.c \
-src/DEL_utils.c
+src/DEL_utils.c \
+src/lights/light_tracing.c \
+src/lights/color_math.c \
 
 
-OBJ = $(SRC:.c=.o)
+OBJS	:= ${SRCS:.c=.o}
 
-NAME = miniRT
+RM = rm -rf
 
-CC = cc
+all: libft libmlx $(NAME)
 
-CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
+libmlx:
+	@if [ ! -d "$(LIBMLX)" ]; then \
+		echo "MLX42 not found, cloning..."; \
+		git clone https://github.com/codam-coding-college/MLX42.git $(LIBMLX); \
+	fi
+	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
 
-FLAGS = -lm #for math.h
+libft:
+	@$(MAKE) -C $(LIBLIBFT)
 
-.PHONY = all clean fclean re
+%.o: %.c
+	@$(CC) $(CFLAGS) $< -c -o $@ $(HEADERS)
 
-LIBFT_DIR = ./libft
-
-LIBFT = $(LIBFT_DIR)/libft.a
-
-all: $(NAME) $(LIBFT)
-
-$(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
-
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+$(NAME): $(OBJS)
+	@$(CC) $(OBJS) -lm $(LIBS) $(HEADERS) -o $(NAME)
+	@echo "$(NAME) compiled successfully.\n"
 
 clean:
-	rm -f $(OBJ)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	$(RM) $(OBJS)
+	@$(RM) $(LIBMLX)/build
+	@$(MAKE) clean -C $(LIBLIBFT)
 
 fclean: clean
-	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	$(RM) $(NAME)
+	@$(RM) $(LIBMLX)
+	@$(MAKE) fclean -C $(LIBLIBFT)
 
 re: fclean all
+
+.PHONY: all clean fclean re libmlx libft

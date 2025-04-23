@@ -158,18 +158,27 @@ void raytracer(t_minirt *data)
 	int y;
 	t_ray ray;
 	t_intersection intersection;
+	uint32_t color;
 
 	set_detailed_camera(data->camera);
 	x = 0;
 	y = 0;
 	ray.origin = data->camera->coordinatesOfViewpoint;
+	data->ambLight->RGB = divide_color(data->ambLight->RGB);
 	while (y < IMG_HEIGHT)
 	{
 		while (x < IMG_WIDTH)
 		{
 			ray.direction = get_ray_direction(x, y, data->camera);
 			intersection = intersect(data, ray);
-			if (intersection.object.spheres)
+			if (intersection.object.spheres || intersection.object.planes || intersection.object.cylinders)
+			{
+				intersection.RGB = divide_color(intersection.RGB); // probably better way and place to do this.
+				color = calculate_light(data, intersection);
+				mlx_put_pixel(data->image_ptr, x, y, color);
+			}
+
+			/*if (intersection.object.spheres)
 			{
 				printf("HIT FOR SPHERE, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
 				//return ;
@@ -183,7 +192,7 @@ void raytracer(t_minirt *data)
 			{
 				printf("HIT FOR CYLINDER, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
 				return ;
-			}
+			}*/
 			x++;
 		}
 		x = 0;

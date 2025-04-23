@@ -5,12 +5,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-//#include "../MLX42/include/MLX42/MLX42.h"
+#include "../MLX42/include/MLX42/MLX42.h"
 #include "../libft/libft.h"
 #include <math.h>
 
-#define IMG_WIDTH 1280
-#define IMG_HEIGHT 720
+#define IMG_WIDTH 2560
+#define IMG_HEIGHT 1440
 
 typedef struct s_mallocs
 {
@@ -107,8 +107,8 @@ typedef struct s_minirt
 	t_ambientLight *ambLight;
 	t_lighting *light;
 	t_object *objects;
-	//mlx_t		*mlx_ptr;
-	//mlx_image_t	*image_ptr;
+	mlx_t		*mlx_ptr;
+	mlx_image_t	*image_ptr;
 } t_minirt;
 
 
@@ -172,5 +172,16 @@ void loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_intersection *
 
 //DELETE!
 void print_elements_of_rt_file(t_minirt *data);
+
+//Shadows and lightning
+int calculate_light(t_minirt *data, t_intersection intersection);
+int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a);
+t_xyz clamp_colors(t_xyz color);
+t_xyz add_colors(t_xyz color1, t_xyz color2);
+t_xyz multiply_color(t_xyz color1, t_xyz color2);
+t_xyz multiply_color_intensity(t_xyz color, double multiplier);
+void print_color(t_xyz color);
+uint32_t mix_color(t_xyz color);
+t_xyz divide_color(t_xyz color);
 
 #endif
