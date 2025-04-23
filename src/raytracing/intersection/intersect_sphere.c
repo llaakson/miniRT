@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:31:36 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 13:20:31 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:54:01 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ static float intersect_sphere(t_sphere *sphere, t_ray ray)
 	c = c - sphere_radius * sphere_radius;
 	return (quadratic_equation(a, b, c));
 }
+
 
 void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *intersection)
 {

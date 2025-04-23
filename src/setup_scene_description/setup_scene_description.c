@@ -6,12 +6,13 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:28:09 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/19 12:05:37 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:52:44 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
 //open header??
+
 
 static int line_has_valid_chars(char *line, int line_i)
 {

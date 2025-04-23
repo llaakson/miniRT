@@ -6,12 +6,11 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 13:26:50 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:54:23 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/miniRT.h"
-
 
 
 static t_intersection init_intersection(void)
@@ -28,7 +27,18 @@ static t_intersection init_intersection(void)
 	return (intersect);
 }
 
-//check if a ray hits an object
+/*
+Arguments:
+The t_minirt struct containing of important program data.
+A ray going from the camera in the direction of a certain pixel on the screen.
+
+Description:
+Find the intersect of the ray and a sphere, plane or a cylinder, that is closest to the camera.
+
+Return:
+A t_intersection struct containing important data of the intersection that possibly took place.
+Ex. coordinates of the intersection.
+*/
 t_intersection intersect(t_minirt *data, t_ray ray)
 {
 	t_intersection intersection;
