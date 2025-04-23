@@ -6,7 +6,7 @@
 #    By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/10 13:23:22 by aalbrech          #+#    #+#              #
-#    Updated: 2025/04/20 20:28:06 by aalbrech         ###   ########.fr        #
+#    Updated: 2025/04/23 13:25:41 by aalbrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ src/raytracing/vector_math.c \
 src/raytracing/intersection/intersect.c \
 src/raytracing/intersection/intersect_plane.c \
 src/raytracing/intersection/intersect_sphere.c \
+src/raytracing/intersection/intersect_cylinder.c \
 src/raytracing/intersection/math_formulas.c \
 src/DEL_utils.c
 

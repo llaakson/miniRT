@@ -166,6 +166,7 @@ void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *inters
 void loop_intersect_planes(t_plane *planes, t_ray ray, t_intersection *intersection);
 float quadratic_equation(float a, float b, float c);
 float intersect_plane(t_plane *plane, t_ray ray);
+void loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_intersection *intersection);
 
 
 

@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/18 21:39:14 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:40:15 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,11 +172,16 @@ void raytracer(t_minirt *data)
 			if (intersection.object.spheres)
 			{
 				printf("HIT FOR SPHERE, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
-				return ;
+				//return ;
 			}
 			if (intersection.object.planes)
 			{
 				printf("HIT FOR PLANE, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
+				//return ;
+			}
+			if (intersection.object.cylinders)
+			{
+				printf("HIT FOR CYLINDER, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
 				return ;
 			}
 			x++;

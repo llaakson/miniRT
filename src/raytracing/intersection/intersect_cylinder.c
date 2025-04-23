@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:53:31 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 13:08:52 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:39:17 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ A cylinder has two bases. Based on the check value, we decide what kind of cyl_b
 They have different center points, but other than that the plane struct will look the same for them both.
 
 Return:
-The newly made t_plane struct. 
+The newly made t_plane struct.
 */
 static t_plane init_cyl_base_as_plane(t_cylinder *cyl, int check)
 {
@@ -133,7 +133,10 @@ static void intersect_cylinder_bases(t_ray ray, t_cylinder *cyl, float cyl_radiu
 		cyl_base = init_cyl_base_as_plane(cyl, i);
 		temp = intersect_plane(&cyl_base, ray); //&cyl_base?
 		if (temp == -1)
+		{
+			i++;
 			continue ;
+		}
 		intersect_point = vec_add(ray.origin, vec_scale(ray.direction, temp));
 		vec_base_center_to_intersect_p = vec_subtract(intersect_point, cyl_base.pointInPlane);
 		if (vec_dot(vec_base_center_to_intersect_p, vec_base_center_to_intersect_p) <= cyl_radius * cyl_radius)
@@ -225,4 +228,28 @@ static float intersect_cylinder(t_cylinder *cyl, t_ray ray)
 	}
 	intersect_cylinder_bases(ray, cyl, cyl->diameter / 2, &t);
 	return (t);
+}
+
+
+void loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_intersection *intersection)
+{
+	t_cylinder *current;
+	float temp;
+
+	if (!cylinders)
+		return ;
+	current = cylinders;
+	while (current != NULL)
+	{
+		temp = intersect_cylinder(current, ray);
+		if (temp < (*intersection).rayClosestIntersect && temp > -1.0)
+		{
+			(*intersection).rayClosestIntersect = temp;
+			(*intersection).object.cylinders = current;
+			(*intersection).RGB = current->RGB;
+			(*intersection).coorinates = vec_add(ray.origin, vec_scale(ray.direction, temp));
+			(*intersection).surface_normal = current->normVecOfAxis;
+		}
+		current = current->next;
+	}
 }

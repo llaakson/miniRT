@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/22 17:02:39 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:26:50 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,6 @@ static t_intersection init_intersection(void)
 	return (intersect);
 }
 
-//using ray formula P(t)=O+t⋅D
-static void set_intersect_coordinates(t_intersection *intersect, t_ray ray)
-{
-	if ((*intersect).rayClosestIntersect == INFINITY)
-		return ;
-	(*intersect).coorinates = vec_add(ray.origin, vec_scale(ray.direction, (*intersect).rayClosestIntersect));
-}
-
 //check if a ray hits an object
 t_intersection intersect(t_minirt *data, t_ray ray)
 {
@@ -44,8 +36,7 @@ t_intersection intersect(t_minirt *data, t_ray ray)
 
 	loop_intersect_spheres(data->objects->spheres, ray, &intersection);
 	loop_intersect_planes(data->objects->planes, ray, &intersection);
-	//cylinder
-	set_intersect_coordinates(&intersection, ray);
+	loop_intersect_cylinders(data->objects->cylinders, ray, &intersection);
 
 	return (intersection);
 }
