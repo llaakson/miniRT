@@ -6,37 +6,143 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:53:31 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/22 18:24:06 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:08:52 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/miniRT.h"
+/*
+Arguments:
+D⊥, O⊥ and r of the equation (O⊥ + tD⊥)^2 = r^2.
 
-static float solve_t_quadratic_formula(t_xyz ray_dir_perpentual_to_axis, t_xyz cyl_to_cam_dir_perpentual_to_axis, float radius)
+Description:
+We re-organize our equation (O⊥ + tD⊥)^2 = r^2, to get the standard quadratic formula (at^2 + bt + c = 0).
+t^2(D⊥ * D⊥) + 2t(D⊥ * O⊥) + (O⊥ * O⊥) − r^2 = 0.
+
+We calculate our a, b and c according to our version of the standard quadratic formula,
+and then we solve for t in quadratic_equation().
+
+Return:
+t (where on the ray, the ray intersects with the cylinder)
+*/
+static float solve_t_quadratic_formula(t_xyz ray_dir_perp_to_axis, t_xyz cyl_to_cam_dir_perp_to_axis, float radius)
 {
 	float a;
 	float b;
 	float c;
 
-	a = vec_dot(ray_dir_perpentual_to_axis, ray_dir_perpentual_to_axis);
-	b = 2.0 * vec_dot(ray_dir_perpentual_to_axis, cyl_to_cam_dir_perpentual_to_axis);
-	c = vec_dot(cyl_to_cam_dir_perpentual_to_axis, cyl_to_cam_dir_perpentual_to_axis) - radius * radius;
+	a = vec_dot(ray_dir_perp_to_axis, ray_dir_perp_to_axis);
+	b = 2.0 * vec_dot(ray_dir_perp_to_axis, cyl_to_cam_dir_perp_to_axis);
+	c = vec_dot(cyl_to_cam_dir_perp_to_axis, cyl_to_cam_dir_perp_to_axis) - radius * radius;
 	return (quadratic_equation(a, b, c));
 }
 
-static float t_is_valid_hit_point(t_cylinder *cyl, t_ray ray, float t)
+/*
+Arguments:
+The cylinder, the ray, and t (where on the ray, the ray intersects with the cylinder)
+
+Description:
+t is calculated as a point on the ray, where the point intersects the cylinder curved surface if the cylinder is infinitely long.
+Here we check if the point is a valid point if the cylinder is finitely long (which it is).
+
+intersect_coords = The coordinates of the intersection. t is not a coordinate.
+
+vec_cyl_center_to_intersect_p = A vector from the cylinder center to the intersection point.
+
+axis_point_of_intersect = The intersection point is on the cylinder surface. Here we find out the distance from the cylinder center (middle point of cylinder, on the axis) to the point on the axis,
+where the intersection at a radius distance "horizontally" will happen.
+
+We make axis_point_of_intersect into a absolute value (the positive equivalent of the number, so -33 would be 33 and so on).
+The cylinder height is always positive, but the axis_point_of_intersect
+can be negative (since cylinder center is in the middle of the axis ("point 0"), the axis_point_of_intersect can be below it (negative), or above it (positive).
+Then we compare the absolute value against the cylinder height / 2.
+We divide the height by two, to compare the axis_point_of_intersect with either center_point to top of cylinder, or center_point, to bottom of cylinder.
+
+Return:
+-1 if the intersection point is not within the height of the cylinder. 0 if it is.
+*/
+static float t_is_valid_intersection(t_cylinder *cyl, t_ray ray, float t)
 {
-	t_xyz hit_point;
-	t_xyz vec_center_to_hit;
-	float hit_proj;
+	t_xyz intersect_coords;
+	t_xyz vec_cyl_center_to_intersect_p;
+	float axis_point_of_intersect;
 
-	hit_point = vec_add(ray.origin, vec_scale(ray.direction, t));
-	vec_center_to_hit = vec_subtract(hit_point, cyl->cylinderCenter);
-	hit_proj = vec_dot(vec_center_to_hit, cyl->normVecOfAxis);
+	intersect_coords = vec_add(ray.origin, vec_scale(ray.direction, t));
+	vec_cyl_center_to_intersect_p = vec_subtract(intersect_coords, cyl->cylinderCenter);
+	axis_point_of_intersect = vec_dot(vec_cyl_center_to_intersect_p, cyl->normVecOfAxis);
 
-	if (fabsf(hit_proj) > cyl->height / 2.0)
+	if (fabsf(axis_point_of_intersect) > cyl->height / 2.0)
 		return (-1);
 	return (0);
+}
+
+
+/*
+Arguments:
+The cylinder and a check for what kind of plane we want to make.
+
+Description:
+Initialize a t_plane struct based on cylinder base parameters.
+A cylinder has two bases. Based on the check value, we decide what kind of cyl_base we want the plane to represent, the cylinder upper base or the cylinder lower base.
+They have different center points, but other than that the plane struct will look the same for them both.
+
+Return:
+The newly made t_plane struct. 
+*/
+static t_plane init_cyl_base_as_plane(t_cylinder *cyl, int check)
+{
+	t_plane cyl_base;
+
+	cyl_base.prev = NULL;
+	cyl_base.next = NULL;
+	cyl_base.RGB = (t_xyz){0, 0, 0};
+	cyl_base.normNormalVec = cyl->normVecOfAxis;
+
+	if (check == 0) //top_base
+		cyl_base.pointInPlane = vec_add(cyl->cylinderCenter, vec_scale(cyl->normVecOfAxis, cyl->height / 2.0));
+	else if (check == 1) //lower_base
+		cyl_base.pointInPlane = vec_subtract(cyl->cylinderCenter, vec_scale(cyl->normVecOfAxis, cyl->height / 2.0));
+	return (cyl_base);
+}
+
+
+/*
+Arguments:
+The ray, the cylinder, the radius of the cylinder,
+and a pointer to t which we can modify if we find a closer intersection point to the camera along the ray.
+
+Description:
+See if the ray has an intersection point with either the upper base or the lower base of the cylinder.
+We first treat the bases (that are round), as planes, so we can use the already existing plane intersection function.
+Then we check if the potential intersection point is actually within the borders of the circular base.
+
+Return:
+Nothing. We modify t in case of intersection point.
+*/
+static void intersect_cylinder_bases(t_ray ray, t_cylinder *cyl, float cyl_radius, float *t)
+{
+	float temp;
+	t_plane cyl_base;
+	int i;
+	t_xyz intersect_point;
+	t_xyz vec_base_center_to_intersect_p;
+
+	i = 0;
+	while (i < 2)
+	{
+		cyl_base = init_cyl_base_as_plane(cyl, i);
+		temp = intersect_plane(&cyl_base, ray); //&cyl_base?
+		if (temp == -1)
+			continue ;
+		intersect_point = vec_add(ray.origin, vec_scale(ray.direction, temp));
+		vec_base_center_to_intersect_p = vec_subtract(intersect_point, cyl_base.pointInPlane);
+		if (vec_dot(vec_base_center_to_intersect_p, vec_base_center_to_intersect_p) <= cyl_radius * cyl_radius)
+		{
+			if (temp < *t && temp > -1)
+				*t = temp;
+		}
+		i++;
+	}
 }
 
 
@@ -50,16 +156,50 @@ Find out if the ray intersects with the cylinder in the 3d scene.
 A cylinder consists of two circular bases connected by a curved surface.
 We need to find if the ray intersects with either any of the circular bases, or if it intersects the curved surface.
 
+
+------Equations used------------------------------------------------------------------------------------------------------------
+We have the ray formula P(t) = O + t * D, where
+P(t) = a point on the ray,
+O = ray origin,
+t = where on the ray we are,
+D = ray direction.
+
+We have the cylinder formula for a infinitely long curved surface (P⊥)^2 = r^2,
+defining that every point at a radius distance from the cylinder axis, is part of the surface of the cylinder.
+r = radius
+P⊥ = a point perpendicular to the axis.
+
+We insert the ray formula into the cylinder formula, to get a formula that can satisfy both equations (a point both part of the cylinder and part of the ray).
+New formula: (O⊥ + tD⊥)^2 = r^2.
+
+
+
+-----PART 1----------------------------------------------------------------------------------------------------------------
+In this function we first want to figure out what our values D⊥ and O⊥ are. We already have the radius (cyl->diamteter / 2),
+and t is what we want to solve for later on (where on the ray, the ray could intersect with the cylinder).
+
 vec_cyl_axis: the direction of the cylinder axis.
 
-vec_cyl_to_cam: vector from the cylinder center (coordinates of the middle of the cylinder end cap) to the camera.
+vec_cyl_to_cam: vector from the cylinder center to the camera.
 
-ray_dir_perpentual_to_axis: The ray (a 3d vector) has a direction. The direction can be split into two components relative to the cylinder.
+!OUR D⊥! ray_dir_perp_to_axis: The ray (a 3d vector) has a direction. The direction can be split into two components relative to the cylinder.
 How much the ray is pointing towards the cylinder, and how much the ray is pointing along (parallell) the cylinder.
-ray_dir_perpentual_to_axis, is the component that is perpentual to the cylinder.
+ray_dir_perpentual_to_axis, is the component that is perpendicular to the cylinder (pointing towards it).
 
-cyl_to_cam_dir_perpentual_to_axis: Similar to ray_dir_perpentual_to_axis,
-but instead the component of the vector from the cylinder center to the camera, that is perpentual to the cylinder.
+!OUR O⊥! cyl_to_cam_dir_perp_to_axis: Similar to ray_dir_perpentual_to_axis,
+but instead the component of the vector from the cylinder center to the camera, that is perpendicular to the cylinder.
+
+
+----PART 2--------------------------------------------------------------------------------------------------------------------
+We solve t (where on the ray, the ray intersects with the cylinder curved surface) for our newly made formula, in solve_t_quadratic_formula().
+Since our formula is for an infinitely long cylinder,
+we afterwards find out if the intersection point is actually within the height of our finite cylinder curved surface (t_is_valid_intersection()).
+
+
+----PART 3--------------------------------------------------------------------------------------------------------------------
+We find out if the ray happens to intersect with any of the cylinder bases
+
+
 
 Return:
 Where on the ray, the ray intersects with the cylinder.
@@ -68,21 +208,21 @@ static float intersect_cylinder(t_cylinder *cyl, t_ray ray)
 {
 	t_xyz  vec_cyl_axis;
 	t_xyz  vec_cyl_to_cam;
-	t_xyz ray_dir_perpentual_to_axis;
-	t_xyz cyl_to_cam_dir_perpentual_to_axis;
+	t_xyz ray_dir_perp_to_axis;
+	t_xyz cyl_to_cam_dir_perp_to_axis;
 	float t;
 
 	vec_cyl_axis = cyl->normVecOfAxis;
 	vec_cyl_to_cam = vec_subtract(ray.origin, cyl->cylinderCenter);
-	ray_dir_perpentual_to_axis = vec_subtract(ray.direction, vec_scale(vec_cyl_axis, vec_dot(ray.direction, vec_cyl_axis)));
-	cyl_to_cam_dir_perpentual_to_axis = vec_subtract(vec_cyl_to_cam, vec_scale(vec_cyl_axis, vec_dot(vec_cyl_to_cam, vec_cyl_axis)));
+	ray_dir_perp_to_axis = vec_subtract(ray.direction, vec_scale(vec_cyl_axis, vec_dot(ray.direction, vec_cyl_axis)));
+	cyl_to_cam_dir_perp_to_axis = vec_subtract(vec_cyl_to_cam, vec_scale(vec_cyl_axis, vec_dot(vec_cyl_to_cam, vec_cyl_axis)));
 
-	t = solve_t_quadratic_formula(ray_dir_perpentual_to_axis, cyl_to_cam_dir_perpentual_to_axis, cyl->diameter / 2.0);
-
-	if (t_is_valid_hit_point(cyl, ray, t) == -1)
-		return (-1);
-
-	//also try the two bases
-
+	t = solve_t_quadratic_formula(ray_dir_perp_to_axis, cyl_to_cam_dir_perp_to_axis, cyl->diameter / 2.0);
+	if (t != -1)
+	{
+		if (t_is_valid_intersection(cyl, ray, t) == -1)
+			t = -1;
+	}
+	intersect_cylinder_bases(ray, cyl, cyl->diameter / 2, &t);
 	return (t);
 }

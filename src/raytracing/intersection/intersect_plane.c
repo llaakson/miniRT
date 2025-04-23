@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:36:21 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/22 16:49:03 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/23 12:35:49 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ and the plane is infinite, Returning a hit point as soon as we can from the came
 
 Otherwise we calculate the result t. If t < 0, the intersection is behind the camera.
 */
-static float intersect_plane(t_plane *plane, t_ray ray)
+float intersect_plane(t_plane *plane, t_ray ray)
 {
 	float t;
 	float numerator;
