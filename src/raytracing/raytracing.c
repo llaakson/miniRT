@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 15:05:04 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:25:28 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ void raytracer(t_minirt *data)
 	int y;
 	t_ray ray;
 	t_intersection intersection;
-	uint32_t color;
+	//uint32_t color;
 
 	set_detailed_camera(data->camera);
 	x = 0;
@@ -176,10 +176,13 @@ void raytracer(t_minirt *data)
 			intersection = intersect(data, ray);
 			if (intersection.object.spheres || intersection.object.planes || intersection.object.cylinders)
 			{
-				intersection.RGB = divide_color(intersection.RGB); // probably better way and place to do this.
+				/*intersection.RGB = divide_color(intersection.RGB); // probably better way and place to do this.
 				color = calculate_light(data, intersection);
-				mlx_put_pixel(data->image_ptr, x, y, color);
+				mlx_put_pixel(data->image_ptr, x, y, color);*/
+				mlx_put_pixel(data->image_ptr, x, y, 0xFF000000); //test
 			}
+			else
+				mlx_put_pixel(data->image_ptr, x, y, 0xFFFFFFFF); //test
 			x++;
 		}
 		x = 0;

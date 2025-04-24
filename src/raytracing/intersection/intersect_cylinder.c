@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:53:31 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 16:54:12 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:55:05 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,18 @@ static t_plane init_cyl_base_as_plane(t_cylinder *cyl, int check)
 	cyl_base.prev = NULL;
 	cyl_base.next = NULL;
 	cyl_base.RGB = (t_xyz){0, 0, 0};
-	cyl_base.normNormalVec = cyl->normVecOfAxis;
+	//cyl_base.normNormalVec = cyl->normVecOfAxis;
 
 	if (check == 0) //top_base
+	{
 		cyl_base.pointInPlane = vec_add(cyl->cylinderCenter, vec_scale(cyl->normVecOfAxis, cyl->height / 2.0));
+		cyl_base.normNormalVec = cyl->normVecOfAxis;
+	}
 	else if (check == 1) //lower_base
+	{
 		cyl_base.pointInPlane = vec_subtract(cyl->cylinderCenter, vec_scale(cyl->normVecOfAxis, cyl->height / 2.0));
+		cyl_base.normNormalVec = vec_scale(cyl->normVecOfAxis, -1);
+	}
 	return (cyl_base);
 }
 
@@ -131,7 +137,7 @@ static void intersect_cylinder_bases(t_ray ray, t_cylinder *cyl, float cyl_radiu
 	while (i < 2)
 	{
 		cyl_base = init_cyl_base_as_plane(cyl, i);
-		temp = intersect_plane(&cyl_base, ray); //&cyl_base?
+		temp = intersect_plane(&cyl_base, ray);
 		if (temp == -1)
 		{
 			i++;
@@ -141,7 +147,9 @@ static void intersect_cylinder_bases(t_ray ray, t_cylinder *cyl, float cyl_radiu
 		vec_base_center_to_intersect_p = vec_subtract(intersect_point, cyl_base.pointInPlane);
 		if (vec_dot(vec_base_center_to_intersect_p, vec_base_center_to_intersect_p) <= cyl_radius * cyl_radius)
 		{
-			if (temp < *t && temp > -1)
+			if (*t == -1)
+				*t = temp;
+			else if (temp < *t && temp > -1)
 				*t = temp;
 		}
 		i++;
@@ -219,6 +227,8 @@ static float intersect_cylinder(t_cylinder *cyl, t_ray ray)
 	vec_cyl_to_cam = vec_subtract(ray.origin, cyl->cylinderCenter);
 	ray_dir_perp_to_axis = vec_subtract(ray.direction, vec_scale(vec_cyl_axis, vec_dot(ray.direction, vec_cyl_axis)));
 	cyl_to_cam_dir_perp_to_axis = vec_subtract(vec_cyl_to_cam, vec_scale(vec_cyl_axis, vec_dot(vec_cyl_to_cam, vec_cyl_axis)));
+	//cyl_to_cam_dir_perp_to_axis = vec_scale(vec_cyl_axis, vec_dot(vec_subtract(ray.origin, cyl->cylinderCenter), vec_cyl_axis));
+	//cyl_to_cam_dir_perp_to_axis = vec_subtract(vec_subtract(ray.origin, cyl->cylinderCenter), cyl_to_cam_dir_perp_to_axis);
 
 	t = solve_t_quadratic_formula(ray_dir_perp_to_axis, cyl_to_cam_dir_perp_to_axis, cyl->diameter / 2.0);
 	if (t != -1)
