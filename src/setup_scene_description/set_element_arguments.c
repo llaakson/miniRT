@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 14:38:53 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:41:58 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void set_light_ratio(char *element_info, float *light_ratio)
 		error_exit("Light ratio argument consists of only one number");
 	ft_atof(element_info, light_ratio);
 	if (*light_ratio < 0.0 || *light_ratio > 1.0)
-		error_exit("Light ratio argument or A and L has to be in range 0.0-1.0");
+		error_exit("Light ratio argument for A and L has to be in range 0.0-1.0");
 }
 
 void set_RGB(char *element_info, t_xyz *RGB)
@@ -81,7 +81,7 @@ void set_coordinates(char *element_info, t_xyz *coordinates)
 void set_normalized_vector(char *element_info, t_xyz *vector)
 {
 	char **split_vector;
-	float vector_length;
+	//float vector_length;
 
 	split_vector = ft_split(element_info, ',');
 	if (!split_vector)
@@ -102,9 +102,10 @@ void set_normalized_vector(char *element_info, t_xyz *vector)
 		error_exit("Normalized vector argument has to be -1 or bigger");
 	if (vector->x > 1.0 || vector->y > 1.0 || vector->z > 1.0)
 		error_exit("Normalized vector argument has to be 1 or smaller");
-	vector_length = vec_length(*vector);
-	if (fabsf(vector_length - 1.0f) > 1e-6f)
-		error_exit("A normalized vector has the length of exactly 1.0. √(x² + y² + z²) = 1.0");
+	//vector_length = vec_length(*vector);
+	//if (fabsf(vector_length - 1.0f) > 1e-6f)
+	//	error_exit("A normalized vector has the length of exactly 1.0. √(x² + y² + z²) = 1.0");
+	*vector = vec_normalize(*vector); //instead normalize here?
 	i = 0;
 	while (split_vector[i])
 		tracked_free(split_vector[i++]);
