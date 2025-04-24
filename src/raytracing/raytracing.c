@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 16:25:28 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:28:36 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static t_xyz get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
 	t_xyz direction;
 
 	scalar_x = (2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio * camera->FOV_scale;
-	scalar_y = (-2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1) * camera->FOV_scale;
+	scalar_y = (1 - 2 * ((pixel_y + 0.5f) / IMG_HEIGHT)) * camera->FOV_scale;
 
 	direction = vec_add(vec_scale(camera->right_view, scalar_x), vec_scale(camera->world_up, scalar_y));
 	direction = vec_add(direction, camera->normOrientVec);
@@ -136,7 +136,7 @@ static void set_detailed_camera(t_camera *camera)
 	camera->world_up = (t_xyz){0, 1, 0}; // can have problems?? The direction of up
 	if (camera->normOrientVec.x == 0 && fabs(camera->normOrientVec.y) == 1 && camera->normOrientVec.z == 0)
 		camera->right_view = (t_xyz){1, 0, 0};
-	else 
+	else
 		camera->right_view = vec_normalize(vec_cross(camera->world_up, camera->normOrientVec));
 	camera->aspect_ratio = (float)IMG_WIDTH/IMG_HEIGHT;
 	camera->FOV_scale = tanf((camera->FOV * M_PI / 180) / 2);
@@ -161,7 +161,7 @@ void raytracer(t_minirt *data)
 	int y;
 	t_ray ray;
 	t_intersection intersection;
-	//uint32_t color;
+	uint32_t color;
 
 	set_detailed_camera(data->camera);
 	x = 0;
@@ -176,13 +176,10 @@ void raytracer(t_minirt *data)
 			intersection = intersect(data, ray);
 			if (intersection.object.spheres || intersection.object.planes || intersection.object.cylinders)
 			{
-				/*intersection.RGB = divide_color(intersection.RGB); // probably better way and place to do this.
+				intersection.RGB = divide_color(intersection.RGB); // probably better way and place to do this.
 				color = calculate_light(data, intersection);
-				mlx_put_pixel(data->image_ptr, x, y, color);*/
-				mlx_put_pixel(data->image_ptr, x, y, 0xFF000000); //test
+				mlx_put_pixel(data->image_ptr, x, y, color);
 			}
-			else
-				mlx_put_pixel(data->image_ptr, x, y, 0xFFFFFFFF); //test
 			x++;
 		}
 		x = 0;

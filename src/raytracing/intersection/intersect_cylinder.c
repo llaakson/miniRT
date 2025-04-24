@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:53:31 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 16:55:05 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:08:40 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,10 +147,22 @@ static void intersect_cylinder_bases(t_ray ray, t_cylinder *cyl, float cyl_radiu
 		vec_base_center_to_intersect_p = vec_subtract(intersect_point, cyl_base.pointInPlane);
 		if (vec_dot(vec_base_center_to_intersect_p, vec_base_center_to_intersect_p) <= cyl_radius * cyl_radius)
 		{
-			if (*t == -1)
+			if (*t == -1 && temp != -1)
+			{
 				*t = temp;
+				if (i == 0)
+					cyl->base_or_side_hit = 2;
+				else
+					cyl->base_or_side_hit = 3;
+			}
 			else if (temp < *t && temp > -1)
+			{
 				*t = temp;
+				if (i == 0)
+					cyl->base_or_side_hit = 2;
+				else
+					cyl->base_or_side_hit = 3;
+			}
 		}
 		i++;
 	}
@@ -235,6 +247,8 @@ static float intersect_cylinder(t_cylinder *cyl, t_ray ray)
 	{
 		if (t_is_valid_intersection(cyl, ray, t) == -1)
 			t = -1;
+		else
+			cyl->base_or_side_hit = 1;
 	}
 	intersect_cylinder_bases(ray, cyl, cyl->diameter / 2, &t);
 	return (t);
@@ -258,7 +272,17 @@ void loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_intersection *
 			(*intersection).object.cylinders = current;
 			(*intersection).RGB = current->RGB;
 			(*intersection).coorinates = vec_add(ray.origin, vec_scale(ray.direction, temp));
-			(*intersection).surface_normal = current->normVecOfAxis;
+			if (current->base_or_side_hit == 1)
+			{
+				t_xyz toHit = vec_subtract((*intersection).coorinates, current->cylinderCenter);
+				float projection = vec_dot(toHit, current->normVecOfAxis);
+				t_xyz axisPoint = vec_add(current->cylinderCenter, vec_scale(current->normVecOfAxis, projection));
+				(*intersection).surface_normal = vec_normalize(vec_subtract((*intersection).coorinates, axisPoint));
+			}
+			else if (current->base_or_side_hit == 2)
+				(*intersection).surface_normal = current->normVecOfAxis;
+			else if (current->base_or_side_hit == 3)
+				(*intersection).surface_normal = vec_scale(current->normVecOfAxis, -1);
 		}
 		current = current->next;
 	}

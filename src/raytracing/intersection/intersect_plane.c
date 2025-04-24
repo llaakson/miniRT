@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:36:21 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 16:53:55 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:47:22 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ void loop_intersect_planes(t_plane *planes, t_ray ray, t_intersection *intersect
 			(*intersection).object.planes = current;
 			(*intersection).RGB = current->RGB;
 			(*intersection).coorinates = vec_add(ray.origin, vec_scale(ray.direction, temp));
-			(*intersection).surface_normal = current->normNormalVec;
+			if (vec_dot(ray.direction, current->normNormalVec) > 0)
+				(*intersection).surface_normal = vec_scale(current->normNormalVec, -1);
+			else
+				(*intersection).surface_normal = current->normNormalVec;
 		}
 		current = current->next;
 	}

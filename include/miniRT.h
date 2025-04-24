@@ -83,6 +83,9 @@ typedef struct s_cylinder
 	float diameter;
 	float height;
 	t_xyz RGB;
+	//added
+	int base_or_side_hit;
+	//
 	struct s_cylinder *next;
 	struct s_cylinder *prev;
 } t_cylinder;
