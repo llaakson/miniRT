@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 14:35:13 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:05:04 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,10 @@ Nothing. Only sets values in the camera struct.
 static void set_detailed_camera(t_camera *camera)
 {
 	camera->world_up = (t_xyz){0, 1, 0}; // can have problems?? The direction of up
-	camera->right_view = vec_normalize(vec_cross(camera->world_up, camera->normOrientVec)); //Direction to the right of the camera
+	if (camera->normOrientVec.x == 0 && fabs(camera->normOrientVec.y) == 1 && camera->normOrientVec.z == 0)
+		camera->right_view = (t_xyz){1, 0, 0};
+	else 
+		camera->right_view = vec_normalize(vec_cross(camera->world_up, camera->normOrientVec));
 	camera->aspect_ratio = (float)IMG_WIDTH/IMG_HEIGHT;
 	camera->FOV_scale = tanf((camera->FOV * M_PI / 180) / 2);
 }
@@ -177,22 +180,6 @@ void raytracer(t_minirt *data)
 				color = calculate_light(data, intersection);
 				mlx_put_pixel(data->image_ptr, x, y, color);
 			}
-
-			/*if (intersection.object.spheres)
-			{
-				printf("HIT FOR SPHERE, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
-				//return ;
-			}
-			if (intersection.object.planes)
-			{
-				printf("HIT FOR PLANE, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
-				//return ;
-			}
-			if (intersection.object.cylinders)
-			{
-				printf("HIT FOR CYLINDER, intersect coordinate is (%f, %f, %f)\n", intersection.coorinates.x, intersection.coorinates.y, intersection.coorinates.z);
-				return ;
-			}*/
 			x++;
 		}
 		x = 0;

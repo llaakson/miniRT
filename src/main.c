@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:13:57 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/15 10:45:08 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:41:58 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,13 @@ int main(int argc, char **argv)
 	t_minirt *data;
 
 	if (argc != 2)
-	{
-		printf("Wrong amount of arguments. Ex: ./miniRT file.rt");
-		return (1);
-	}
+		error_exit("Wrong amount of arguments. Ex: ./miniRT file.rt");
 	data = tracked_malloc(sizeof(t_minirt));
 	if (!data)
 		error_exit("Memory allocation failed");
 	ft_bzero(data, sizeof(t_minirt));
-	//ft_memset(data, 0, sizeof(t_minirt)); //not everyting is 0, like camera FOV
 	if (!(data->mlx_ptr = mlx_init(IMG_WIDTH, IMG_HEIGHT, "miniRT", true)))
-	{
-		ft_printf("Error\n");
-		return (1);
-	}
+		error_exit("?");
 	ft_render(data);
 	setup_scene_description(argv[1], data);
 	print_elements_of_rt_file(data);

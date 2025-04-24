@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 13:46:08 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:38:53 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,8 @@ void set_coordinates(char *element_info, t_xyz *coordinates)
 	if (!split_coordinates)
 		error_exit("Memory allocation failed");
 	int i = 0;
-	printf("NEW ROUND\n");
 	while (split_coordinates[i] != NULL)
 	{
-		printf("%s\n", split_coordinates[i]);
 		track_pointer(split_coordinates[i]);
 		i++;
 	}
@@ -119,7 +117,6 @@ void set_horizontal_field_of_view_in_degrees(char *element_info, int *FOV)
 		error_exit("Camera FOV argument must be a whole number");
 	no_extra_minus_in_str(element_info, 1);
 	*FOV = ft_atoi_overflow_checked(element_info);
-	printf("MY FOV: %d\n", *FOV);
 	if (*FOV < 0 || *FOV > 180)
 		error_exit("Camera FOV argument must be in the range 0-180");
 
