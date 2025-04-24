@@ -28,6 +28,7 @@ src/raytracing/intersection/intersect_plane.c \
 src/raytracing/intersection/intersect_sphere.c \
 src/raytracing/intersection/intersect_cylinder.c \
 src/raytracing/intersection/math_formulas.c \
+src/raytracing/intersection/intersect_utils.c \
 src/DEL_utils.c \
 src/lights/light_tracing.c \
 src/lights/color_math.c \

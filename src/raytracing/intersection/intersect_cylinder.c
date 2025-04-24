@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:53:31 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 21:08:40 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 22:27:32 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,8 +239,6 @@ static float intersect_cylinder(t_cylinder *cyl, t_ray ray)
 	vec_cyl_to_cam = vec_subtract(ray.origin, cyl->cylinderCenter);
 	ray_dir_perp_to_axis = vec_subtract(ray.direction, vec_scale(vec_cyl_axis, vec_dot(ray.direction, vec_cyl_axis)));
 	cyl_to_cam_dir_perp_to_axis = vec_subtract(vec_cyl_to_cam, vec_scale(vec_cyl_axis, vec_dot(vec_cyl_to_cam, vec_cyl_axis)));
-	//cyl_to_cam_dir_perp_to_axis = vec_scale(vec_cyl_axis, vec_dot(vec_subtract(ray.origin, cyl->cylinderCenter), vec_cyl_axis));
-	//cyl_to_cam_dir_perp_to_axis = vec_subtract(vec_subtract(ray.origin, cyl->cylinderCenter), cyl_to_cam_dir_perp_to_axis);
 
 	t = solve_t_quadratic_formula(ray_dir_perp_to_axis, cyl_to_cam_dir_perp_to_axis, cyl->diameter / 2.0);
 	if (t != -1)
@@ -268,21 +266,9 @@ void loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_intersection *
 		temp = intersect_cylinder(current, ray);
 		if (temp < (*intersection).rayClosestIntersect && temp > -1.0)
 		{
-			(*intersection).rayClosestIntersect = temp;
 			(*intersection).object.cylinders = current;
-			(*intersection).RGB = current->RGB;
-			(*intersection).coorinates = vec_add(ray.origin, vec_scale(ray.direction, temp));
-			if (current->base_or_side_hit == 1)
-			{
-				t_xyz toHit = vec_subtract((*intersection).coorinates, current->cylinderCenter);
-				float projection = vec_dot(toHit, current->normVecOfAxis);
-				t_xyz axisPoint = vec_add(current->cylinderCenter, vec_scale(current->normVecOfAxis, projection));
-				(*intersection).surface_normal = vec_normalize(vec_subtract((*intersection).coorinates, axisPoint));
-			}
-			else if (current->base_or_side_hit == 2)
-				(*intersection).surface_normal = current->normVecOfAxis;
-			else if (current->base_or_side_hit == 3)
-				(*intersection).surface_normal = vec_scale(current->normVecOfAxis, -1);
+			set_intersection_data(intersection, current->RGB, temp, ray);
+			set_cyl_intersect_surface_normal(current, intersection);
 		}
 		current = current->next;
 	}
