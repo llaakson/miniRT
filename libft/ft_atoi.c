@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llaakson <llaakson@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:38:05 by llaakson          #+#    #+#             */
-/*   Updated: 2024/11/04 20:38:33 by llaakson         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:40:34 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ int	ft_atoi(const char *str)
 			return (-1);
 		result = prev;
 	}
+	
 	return (result * sign);
 }

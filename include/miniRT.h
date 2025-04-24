@@ -8,6 +8,8 @@
 //#include "../MLX42/include/MLX42/MLX42.h"
 #include "../libft/libft.h"
 #include <math.h>
+#include <float.h> //can include? for limits
+#include <limits.h>
 
 #define IMG_WIDTH 1280
 #define IMG_HEIGHT 720
@@ -135,18 +137,20 @@ t_cylinder *add_new_cylinder_node(t_minirt *data);
 
 //error
 void error_exit(char *error);
-void free_2d_array(char ***arr);
+void track_rt_file_fd(int fd);
 
 //basic utils
 int	is_whitespace(char c);
 int ft_strcmp(char *s1, char *s2);
 float ft_atof(char *str, float *result);
+int	ft_atoi_overflow_checked(const char *str);
 
 //tracked malloc
 void* tracked_malloc(size_t size);
 void tracked_free(void* ptr);
 void tracked_free_all(void);
 void track_pointer(void* ptr);
+char	*tracked_realloc(char *str, size_t len);
 
 //vector math
 t_xyz vec_add(t_xyz one, t_xyz two);

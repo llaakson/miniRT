@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 13:38:20 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:46:08 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,16 @@ void set_coordinates(char *element_info, t_xyz *coordinates)
 	if (!split_coordinates)
 		error_exit("Memory allocation failed");
 	int i = 0;
+	printf("NEW ROUND\n");
 	while (split_coordinates[i] != NULL)
 	{
+		printf("%s\n", split_coordinates[i]);
 		track_pointer(split_coordinates[i]);
 		i++;
 	}
 	track_pointer(split_coordinates);
 	if (i - 1 != 2 || !split_coordinates[2])
-		error_exit("Coordinates has to be three numbers");
+		error_exit("Coordinates has to be three numbers, x, y and z");
 	ft_atof(split_coordinates[0], &coordinates->x);
 	ft_atof(split_coordinates[1], &coordinates->y);
 	ft_atof(split_coordinates[2], &coordinates->z);
@@ -94,7 +96,7 @@ void set_normalized_vector(char *element_info, t_xyz *vector)
 	}
 	track_pointer(split_vector);
 	if (i - 1 != 2 || !split_vector[2])
-		error_exit("Normalized vectors need three ... ");
+		error_exit("Normalized vectors need three components, x, y and z");
 	ft_atof(split_vector[0], &vector->x);
 	ft_atof(split_vector[1], &vector->y);
 	ft_atof(split_vector[2], &vector->z);
@@ -116,7 +118,8 @@ void set_horizontal_field_of_view_in_degrees(char *element_info, int *FOV)
 	if (ft_strchr(element_info, '.'))
 		error_exit("Camera FOV argument must be a whole number");
 	no_extra_minus_in_str(element_info, 1);
-	*FOV = ft_atoi(element_info);
+	*FOV = ft_atoi_overflow_checked(element_info);
+	printf("MY FOV: %d\n", *FOV);
 	if (*FOV < 0 || *FOV > 180)
 		error_exit("Camera FOV argument must be in the range 0-180");
 

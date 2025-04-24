@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:28:09 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 16:52:44 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:20:15 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static void get_elements_from_file(char *file, t_minirt *data)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		error_exit("Couldn't open file");
+	track_rt_file_fd(fd);
 	data->objects = tracked_malloc(sizeof(t_object));
 	if (!data->objects)
 		error_exit("Memory allocation failed");
@@ -83,6 +84,7 @@ static void get_elements_from_file(char *file, t_minirt *data)
 		line = get_next_line(fd);
 		track_pointer(line);
 	}
+	track_rt_file_fd(-1);
 	tracked_free(line);
 }
 

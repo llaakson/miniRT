@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 13:40:15 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 12:04:54 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ void raytracer(t_minirt *data)
 	x = 0;
 	y = 0;
 	ray.origin = data->camera->coordinatesOfViewpoint;
+	error_exit("i finish here");
 	while (y < IMG_HEIGHT)
 	{
 		while (x < IMG_WIDTH)

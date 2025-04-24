@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llaakson <llaakson@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 16:40:55 by llaakson          #+#    #+#             */
-/*   Updated: 2024/07/24 12:33:34 by llaakson         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:15:18 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ char	*get_next_line(int fd)
 	static char		*remain;
 	char			*ret;
 
+	if (fd == -2 && remain)
+		return (ft_free(&remain));
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
 	buffer = malloc(sizeof(char *) * BUFFER_SIZE + 1);
