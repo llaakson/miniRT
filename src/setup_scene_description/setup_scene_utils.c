@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:45:32 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/12 20:43:21 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:19:20 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ char *get_next_element_info(char *line, int *line_i)
 {
 	char *info;
 	int info_i;
+	int buffer_size;
 
-	info = tracked_malloc(20); //must be big enough, how big?
+	buffer_size = 20;
+	info = tracked_malloc(buffer_size);
 	if (!info)
 		error_exit("Memory allocation failed");
 	info_i = 0;
@@ -27,11 +29,31 @@ char *get_next_element_info(char *line, int *line_i)
 		*line_i = *line_i + 1;
 	if (!line[*line_i]) //after whitespace line is done
 		return (NULL);
-	while (line[*line_i] && line[*line_i] != 32 && info_i < 19)
+	while (line[*line_i] && line[*line_i] != 32)
 	{
+		if (info_i >= buffer_size - 1)
+		{
+			buffer_size *= 2;
+			info = tracked_realloc(info, buffer_size);
+			if (!info)
+				error_exit("memory allocation failed");
+		}
 		info[info_i++] = line[*line_i];
 		*line_i = *line_i + 1;
 	}
 	info[info_i] = '\0';
 	return (info);
+}
+
+void track_rt_file_fd(int fd)
+{
+	static int saved_fd = -2;
+	
+	if (fd > -1)
+		saved_fd = fd;
+	if (fd == -1 && saved_fd != -2)
+	{
+		close(saved_fd);
+		saved_fd = -2;
+	}
 }

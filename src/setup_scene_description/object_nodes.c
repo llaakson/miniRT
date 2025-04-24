@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 20:22:16 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/12 20:51:49 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/24 12:18:06 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ t_cylinder *add_new_cylinder_node(t_minirt *data)
 		prev = current;
 		current = current->next;
 	}
-
 	new_node = tracked_malloc(sizeof(t_cylinder));
 	if (!new_node)
 		error_exit("Memory allocation failed");
