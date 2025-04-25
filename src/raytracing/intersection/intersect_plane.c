@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:36:21 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 22:40:11 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:38:45 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ and the plane is infinite, Returning a hit point as soon as we can from the came
 
 Otherwise we calculate the result t. If t < 0, the intersection is behind the camera.
 */
-float intersect_plane(t_plane *plane, t_ray ray)
+float	intersect_plane(t_plane *plane, t_ray ray)
 {
-	float t;
-	float numerator;
-	float denominator;
+	float	t;
+	float	numerator;
+	float	denominator;
 
 	numerator = vec_dot(vec_subtract(plane->pointInPlane, ray.origin), plane->normNormalVec);
 	denominator = vec_dot(ray.direction, plane->normNormalVec);
@@ -62,17 +62,16 @@ float intersect_plane(t_plane *plane, t_ray ray)
 		return (-1);
 	else if (numerator == 0 && denominator == 0)
 		return (0.0001);
-	t =  numerator / denominator;
+	t = numerator / denominator;
 	if (t < 0)
 		return (-1);
 	return (t);
 }
 
-
-void loop_intersect_planes(t_plane *planes, t_ray ray, t_intersection *intersection)
+void	loop_intersect_planes(t_plane *planes, t_ray ray, t_intersection *intersection)
 {
-	t_plane *current;
-	float temp;
+	t_plane	*current;
+	float	temp;
 
 	if (!planes)
 		return ;

@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:53:31 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 22:27:32 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:41:38 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ and then we solve for t in quadratic_equation().
 Return:
 t (where on the ray, the ray intersects with the cylinder)
 */
-static float solve_t_quadratic_formula(t_xyz ray_dir_perp_to_axis, t_xyz cyl_to_cam_dir_perp_to_axis, float radius)
+static float	solve_t_quadratic_formula(t_xyz ray_dir_perp_to_axis, t_xyz cyl_to_cam_dir_perp_to_axis, float radius)
 {
-	float a;
-	float b;
-	float c;
+	float	a;
+	float	b;
+	float	c;
 
 	a = vec_dot(ray_dir_perp_to_axis, ray_dir_perp_to_axis);
 	b = 2.0 * vec_dot(ray_dir_perp_to_axis, cyl_to_cam_dir_perp_to_axis);
@@ -61,21 +61,19 @@ We divide the height by two, to compare the axis_point_of_intersect with either 
 Return:
 -1 if the intersection point is not within the height of the cylinder. 0 if it is.
 */
-static float t_is_valid_intersection(t_cylinder *cyl, t_ray ray, float t)
+static float	t_is_valid_intersection(t_cylinder *cyl, t_ray ray, float t)
 {
-	t_xyz intersect_coords;
-	t_xyz vec_cyl_center_to_intersect_p;
-	float axis_point_of_intersect;
+	t_xyz	intersect_coords;
+	t_xyz	vec_cyl_center_to_intersect_p;
+	float	axis_point_of_intersect;
 
 	intersect_coords = vec_add(ray.origin, vec_scale(ray.direction, t));
 	vec_cyl_center_to_intersect_p = vec_subtract(intersect_coords, cyl->cylinderCenter);
 	axis_point_of_intersect = vec_dot(vec_cyl_center_to_intersect_p, cyl->normVecOfAxis);
-
 	if (fabsf(axis_point_of_intersect) > cyl->height / 2.0)
 		return (-1);
 	return (0);
 }
-
 
 /*
 Arguments:
@@ -89,15 +87,13 @@ They have different center points, but other than that the plane struct will loo
 Return:
 The newly made t_plane struct.
 */
-static t_plane init_cyl_base_as_plane(t_cylinder *cyl, int check)
+static t_plane	init_cyl_base_as_plane(t_cylinder *cyl, int check)
 {
-	t_plane cyl_base;
+	t_plane	cyl_base;
 
 	cyl_base.prev = NULL;
 	cyl_base.next = NULL;
 	cyl_base.RGB = (t_xyz){0, 0, 0};
-	//cyl_base.normNormalVec = cyl->normVecOfAxis;
-
 	if (check == 0) //top_base
 	{
 		cyl_base.pointInPlane = vec_add(cyl->cylinderCenter, vec_scale(cyl->normVecOfAxis, cyl->height / 2.0));
@@ -110,7 +106,6 @@ static t_plane init_cyl_base_as_plane(t_cylinder *cyl, int check)
 	}
 	return (cyl_base);
 }
-
 
 /*
 Arguments:
@@ -125,13 +120,13 @@ Then we check if the potential intersection point is actually within the borders
 Return:
 Nothing. We modify t in case of intersection point.
 */
-static void intersect_cylinder_bases(t_ray ray, t_cylinder *cyl, float cyl_radius, float *t)
+static void	intersect_cylinder_bases(t_ray ray, t_cylinder *cyl, float cyl_radius, float *t)
 {
-	float temp;
-	t_plane cyl_base;
-	int i;
-	t_xyz intersect_point;
-	t_xyz vec_base_center_to_intersect_p;
+	float	temp;
+	t_plane	cyl_base;
+	int		i;
+	t_xyz	intersect_point;
+	t_xyz	vec_base_center_to_intersect_p;
 
 	i = 0;
 	while (i < 2)
@@ -167,7 +162,6 @@ static void intersect_cylinder_bases(t_ray ray, t_cylinder *cyl, float cyl_radiu
 		i++;
 	}
 }
-
 
 /*
 Arguments;
@@ -227,19 +221,18 @@ We find out if the ray happens to intersect with any of the cylinder bases
 Return:
 Where on the ray, the ray intersects with the cylinder.
 */
-static float intersect_cylinder(t_cylinder *cyl, t_ray ray)
+static float	intersect_cylinder(t_cylinder *cyl, t_ray ray)
 {
-	t_xyz  vec_cyl_axis;
-	t_xyz  vec_cyl_to_cam;
-	t_xyz ray_dir_perp_to_axis;
-	t_xyz cyl_to_cam_dir_perp_to_axis;
-	float t;
+	t_xyz	vec_cyl_axis;
+	t_xyz	vec_cyl_to_cam;
+	t_xyz	ray_dir_perp_to_axis;
+	t_xyz	cyl_to_cam_dir_perp_to_axis;
+	float	t;
 
 	vec_cyl_axis = cyl->normVecOfAxis;
 	vec_cyl_to_cam = vec_subtract(ray.origin, cyl->cylinderCenter);
 	ray_dir_perp_to_axis = vec_subtract(ray.direction, vec_scale(vec_cyl_axis, vec_dot(ray.direction, vec_cyl_axis)));
 	cyl_to_cam_dir_perp_to_axis = vec_subtract(vec_cyl_to_cam, vec_scale(vec_cyl_axis, vec_dot(vec_cyl_to_cam, vec_cyl_axis)));
-
 	t = solve_t_quadratic_formula(ray_dir_perp_to_axis, cyl_to_cam_dir_perp_to_axis, cyl->diameter / 2.0);
 	if (t != -1)
 	{
@@ -252,11 +245,10 @@ static float intersect_cylinder(t_cylinder *cyl, t_ray ray)
 	return (t);
 }
 
-
-void loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_intersection *intersection)
+void	loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_intersection *intersection)
 {
-	t_cylinder *current;
-	float temp;
+	t_cylinder	*current;
+	float		temp;
 
 	if (!cylinders)
 		return ;

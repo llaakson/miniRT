@@ -6,19 +6,18 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 22:15:14 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/25 10:21:11 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:33:55 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/miniRT.h"
 
-void set_intersection_data(t_intersection *intersect, t_xyz RGB, float closest_intersect, t_ray ray)
+void	set_intersection_data(t_intersection *intersect, t_xyz RGB, float closest_intersect, t_ray ray)
 {
 	(*intersect).rayClosestIntersect = closest_intersect;
 	(*intersect).RGB = RGB;
 	(*intersect).coorinates = vec_add(ray.origin, vec_scale(ray.direction, closest_intersect));
 }
-
 
 /*
 ----Note----------------------------------
@@ -40,13 +39,13 @@ the surface normal:
 a unit vector pointing outward from the axis point of intersect,
 to the actual cylinder surface point of intersect.
 
-A surface normal is a unit vector pointing directly outward from the point of intersect. 
+A surface normal is a unit vector pointing directly outward from the point of intersect.
 */
-void set_cyl_intersect_surface_normal(t_cylinder *cyl, t_intersection *intersect)
+void	set_cyl_intersect_surface_normal(t_cylinder *cyl, t_intersection *intersect)
 {
-	t_xyz cyl_center_to_intersect;
-	t_xyz axis_p_closest_to_intersect;
-	float intersect_distance_on_axis;
+	t_xyz	cyl_center_to_intersect;
+	t_xyz	axis_p_closest_to_intersect;
+	float	intersect_distance_on_axis;
 
 	if (cyl->base_or_side_hit == 1)
 	{

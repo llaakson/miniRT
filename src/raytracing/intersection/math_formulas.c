@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 20:27:38 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 16:45:37 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:42:41 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ Return:
 Else the smaller of the two t values, which means the hit is closer to the camera.
 
 */
-float quadratic_equation(float a, float b, float c)
+float	quadratic_equation(float a, float b, float c)
 {
-	float discriminant;
-	float t0;
-	float t1;
-	float temp;
+	float	discriminant;
+	float	t0;
+	float	t1;
+	float	temp;
 
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0.0)
@@ -54,8 +54,8 @@ float quadratic_equation(float a, float b, float c)
 		t1 = temp;
 	}
 	if (t0 > 0.0)
-		return t0;
+		return (t0);
 	if (t1 > 0.0)
-		return t1;
+		return (t1);
 	return (-1.0);
 }

@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 11:38:05 by llaakson          #+#    #+#             */
-/*   Updated: 2025/04/24 13:40:34 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:29:41 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,5 @@ int	ft_atoi(const char *str)
 			return (-1);
 		result = prev;
 	}
-	
 	return (result * sign);
 }
