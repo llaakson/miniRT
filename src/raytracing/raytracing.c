@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/25 10:26:20 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:26:55 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ static void set_detailed_camera(t_camera *camera)
 		camera->right_view = (t_xyz){1, 0, 0};
 	else
 		camera->right_view = vec_normalize(vec_cross(camera->world_up, camera->normOrientVec));
-	camera->aspect_ratio = (float)IMG_WIDTH/IMG_HEIGHT;
+	camera->aspect_ratio = (float)IMG_WIDTH / (float)IMG_HEIGHT;
 	camera->FOV_scale = tanf((camera->FOV * M_PI / 180) / 2);
 }
 
