@@ -88,10 +88,35 @@ static void get_elements_from_file(char *file, t_minirt *data)
 	tracked_free(line);
 }
 
+static void check_missing_elements(t_minirt *data)
+{
+	if (data->ambLight == NULL)
+	{
+		data->ambLight = tracked_malloc(sizeof(t_ambientLight));
+		if (!data->ambLight)
+			error_exit("Memory allocation failed");
+		ft_bzero(data->ambLight, sizeof(t_ambientLight));
+		data->ambLight->ambientLightRatio = 0;
+		data->ambLight->RGB.x = 0, data->ambLight->RGB.y = 0, data->ambLight->RGB.z = 0;
+	}
+
+	if (data->light == NULL)
+	{
+		data->light = tracked_malloc(sizeof(t_lighting));
+		if (!data->light)
+			error_exit("Memory allocation failed");
+		ft_bzero(data->light, sizeof(t_lighting));
+		data->light->lightBrightnessRatio = 0;
+		data->light->coordinatesOfLightPoint.x = 0, data->light->coordinatesOfLightPoint.y = 0, data->light->coordinatesOfLightPoint.z = 0;
+		data->light->RGB.x = 0, data->light->RGB.y = 0, data->light->RGB.z = 0;
+	}
+}
+
 int setup_scene_description(char *file, t_minirt *data)
 {
 	if (file_extension_is_rt(file) == -1)
 		error_exit("Wrong file extension");
 	get_elements_from_file(file, data);
+	check_missing_elements(data);
 	return (0);
 }

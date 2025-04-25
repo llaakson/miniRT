@@ -5,7 +5,7 @@ t_xyz calculate_ambience(t_minirt *data, t_intersection intersection)
 {
     t_xyz result;
     t_xyz temp;
-
+    
     temp = multiply_color_intensity(data->ambLight->RGB, data->ambLight->ambientLightRatio);
     result = multiply_color(temp, intersection.RGB);
     return (result);
@@ -69,17 +69,23 @@ int calculate_light(t_minirt *data, t_intersection intersection)
     lightning_direction = vec_subtract(data->light->coordinatesOfLightPoint,intersection.coorinates);
     light_distance = vec_length(lightning_direction);
     lightning_direction = vec_normalize(lightning_direction);
-    shadow_ray.origin = vec_add(intersection.coorinates, vec_scale(intersection.surface_normal, 0.001f)); //need intersection.normal
+    shadow_ray.origin = vec_add(intersection.coorinates, vec_scale(intersection.surface_normal, 0.001f));
     shadow_ray.direction = lightning_direction;
     color = calculate_shadow(data, shadow_ray, light_distance);
     if (color != 0)
-        return (mix_color(color_str));
+    {
+        if (data->ambLight->ambientLightRatio == 0)
+            return (mix_color(multiply_color_intensity(intersection.RGB, 0.1)));
+        else
+            return (mix_color(color_str));
+    }
     dot_product = vec_dot(intersection.surface_normal,lightning_direction);
     dot_product = fmax(0.0f, dot_product);
     color_dot = multiply_color_intensity(color_dot, dot_product);
     color_dot = multiply_color_intensity(color_dot, data->light->lightBrightnessRatio);
     color_specular = calculate_specular(data,intersection, lightning_direction);
     color_dot = add_colors(color_dot, color_specular);
-    color_dot = add_colors(color_dot, color_str);
+    if (!(data->ambLight->ambientLightRatio == 0))
+        color_dot = add_colors(color_dot, color_str);
     return(mix_color(color_dot));
 }
