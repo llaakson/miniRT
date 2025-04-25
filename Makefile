@@ -31,6 +31,7 @@ src/raytracing/intersection/math_formulas.c \
 src/DEL_utils.c \
 src/lights/light_tracing.c \
 src/lights/color_math.c \
+src/lights/color_math2.c \
 
 
 OBJS	:= ${SRCS:.c=.o}
