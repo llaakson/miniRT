@@ -75,7 +75,7 @@ int calculate_light(t_minirt *data, t_intersection intersection)
     if (color != 0)
     {
         if (data->ambLight->ambientLightRatio == 0)
-            return (mix_color(multiply_color_intensity(intersection.RGB, 0.1)));
+            return (mix_color(multiply_color_intensity(intersection.RGB, 0)));
         else
             return (mix_color(color_str));
     }
