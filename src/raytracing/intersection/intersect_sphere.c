@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:31:36 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/23 16:54:01 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:37:46 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ To find t means to find where on the ray, the ray intersects with a sphere (if i
 Return:
 Closest ray intersection of the sphere.
 */
-static float intersect_sphere(t_sphere *sphere, t_ray ray)
+static float	intersect_sphere(t_sphere *sphere, t_ray ray)
 {
 	//have to check that a b c value is small enough to fit inside a float??? same goes for everywhere with maths
-	t_xyz oc;
-	float a;
-	float b;
-	float c;
-	float sphere_radius;
+	t_xyz	oc;
+	float	a;
+	float	b;
+	float	c;
+	float	sphere_radius;
 
 	sphere_radius = sphere->diameter / 2;
 	oc = vec_subtract(ray.origin, sphere->sphereCenter);
@@ -87,11 +87,10 @@ static float intersect_sphere(t_sphere *sphere, t_ray ray)
 	return (quadratic_equation(a, b, c));
 }
 
-
-void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *intersection)
+void	loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *intersection)
 {
-	t_sphere *current;
-	float temp;
+	t_sphere	*current;
+	float		temp;
 
 	if (!spheres)
 		return ;
@@ -101,11 +100,9 @@ void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *inters
 		temp = intersect_sphere(current, ray);
 		if (temp < (*intersection).rayClosestIntersect && temp > -1.0)
 		{
-			(*intersection).rayClosestIntersect = temp;
 			(*intersection).object.spheres = current;
-			(*intersection).RGB = current->RGB;
-			(*intersection).coorinates = vec_add(ray.origin, vec_scale(ray.direction, temp));
-			(*intersection).surface_normal =  vec_normalize(vec_subtract((*intersection).coorinates, current->sphereCenter));
+			set_intersection_data(intersection, current->RGB, temp, ray);
+			(*intersection).surface_normal = vec_normalize(vec_subtract((*intersection).coorinates, current->sphereCenter));
 		}
 		current = current->next;
 	}

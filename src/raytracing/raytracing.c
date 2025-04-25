@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 21:28:36 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:26:55 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ world_up: We need some base for the program to know what "up" means in a scene, 
 right_view: To the right of the camera. The program needs some sort of idea of what it would mean to move horizontally in a space.
 We get that by doing cross_product(), which returns a vector at a 90° angle from the two input vectors.
 World_up points upwards, normOrientVec points forwards. What is at at 90° to both up and forward? It's left or right.
+Note: we immediately set right_view to 1,0,0 if world_up and the normOrientVec of camera are parallell. The cross product would not work in that case.
 
 The reason why we don't need a world_down and left_view, is that world_up and right_view can be used for that aswell. A positive value
 would mean more up/more to the right, and a negative value would mean less up(meaning: down), and less to the right (meaning: to the left).
@@ -138,7 +139,7 @@ static void set_detailed_camera(t_camera *camera)
 		camera->right_view = (t_xyz){1, 0, 0};
 	else
 		camera->right_view = vec_normalize(vec_cross(camera->world_up, camera->normOrientVec));
-	camera->aspect_ratio = (float)IMG_WIDTH/IMG_HEIGHT;
+	camera->aspect_ratio = (float)IMG_WIDTH / (float)IMG_HEIGHT;
 	camera->FOV_scale = tanf((camera->FOV * M_PI / 180) / 2);
 }
 

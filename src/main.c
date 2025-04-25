@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:13:57 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 14:41:58 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:32:17 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,18 @@ void key_input(void *param)
 		mlx_close_window(mlx);
 }
 
+/*void key_press_detector(mlx_key_data_t keydata, t_minirt *data)
+{
+	if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
+	move_camera_forward(game);
+	else if (keydata.key == MLX_KEY_A && keydata.action == MLX_RELEASE)
+	move_camera_left(game);
+	else if (keydata.key == MLX_KEY_S && keydata.action == MLX_RELEASE)
+	move_(game);
+	else if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
+	move_right(game);
+}*/
+
 int main(int argc, char **argv)
 {
 	t_minirt *data;
@@ -52,6 +64,7 @@ int main(int argc, char **argv)
 	if (!(data->mlx_ptr = mlx_init(IMG_WIDTH, IMG_HEIGHT, "miniRT", true)))
 		error_exit("?");
 	ft_render(data);
+	mlx_set_setting(MLX_STRETCH_IMAGE, 1); //???
 	setup_scene_description(argv[1], data);
 	print_elements_of_rt_file(data);
 	raytracer(data);
