@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:13:57 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/25 14:32:17 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/26 11:22:34 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,6 @@ void key_input(void *param)
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx);
 }
-
-/*void key_press_detector(mlx_key_data_t keydata, t_minirt *data)
-{
-	if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
-	move_camera_forward(game);
-	else if (keydata.key == MLX_KEY_A && keydata.action == MLX_RELEASE)
-	move_camera_left(game);
-	else if (keydata.key == MLX_KEY_S && keydata.action == MLX_RELEASE)
-	move_(game);
-	else if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
-	move_right(game);
-}*/
 
 int main(int argc, char **argv)
 {

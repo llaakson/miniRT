@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/25 14:26:55 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/26 11:31:18 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,8 @@ void raytracer(t_minirt *data)
 	t_intersection intersection;
 	uint32_t color;
 
+	if (data->camera == NULL)
+		return ;
 	set_detailed_camera(data->camera);
 	x = 0;
 	y = 0;
