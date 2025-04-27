@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 12:43:40 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:27:40 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,8 @@ static t_xyz get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
    float phi_angle;
 
 
-   scalar_x = (2 * (((float)pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio * camera->FOV_scale;
-   scalar_y = (1 - 2 * (((float)pixel_y + 0.5f) / IMG_HEIGHT)) * camera->FOV_scale;
-
+   	scalar_x = (2 * (((float)pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio * camera->FOV_scale;
+   	scalar_y = (1 - 2 * (((float)pixel_y + 0.5f) / IMG_HEIGHT)) * camera->FOV_scale;
 
    // Step 2: Calculate fisheye radius (distance from the center of the image)
    fisheye_radius = sqrt(scalar_x * scalar_x + scalar_y * scalar_y);
@@ -130,7 +129,7 @@ static t_xyz get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
 
 
    direction = vec_add(vec_scale(camera->right_view, scalar_x), vec_scale(camera->world_up, scalar_y));
-   direction = vec_add(direction, camera->normOrientVec);
+   direction = vec_add(direction, camera->orientation);
    direction = vec_normalize(direction);
 
 
@@ -151,8 +150,8 @@ world_up: We need some base for the program to know what "up" means in a scene, 
 
 right_view: To the right of the camera. The program needs some sort of idea of what it would mean to move horizontally in a space.
 We get that by doing cross_product(), which returns a vector at a 90° angle from the two input vectors.
-World_up points upwards, normOrientVec points forwards. What is at at 90° to both up and forward? It's left or right.
-Note: we immediately set right_view to 1,0,0 if world_up and the normOrientVec of camera are parallell. The cross product would not work in that case.
+World_up points upwards, orientation points forwards. What is at at 90° to both up and forward? It's left or right.
+Note: we immediately set right_view to 1,0,0 if world_up and the orientation of camera are parallell. The cross product would not work in that case.
 
 The reason why we don't need a world_down and left_view, is that world_up and right_view can be used for that aswell. A positive value
 would mean more up/more to the right, and a negative value would mean less up(meaning: down), and less to the right (meaning: to the left).
@@ -173,10 +172,10 @@ Nothing. Only sets values in the camera struct.
 static void set_detailed_camera(t_camera *camera)
 {
 	camera->world_up = (t_xyz){0, 1, 0};
-	if (camera->normOrientVec.x == 0.0 && fabs(camera->normOrientVec.y) == 1.0 && camera->normOrientVec.z == 0.0)
+	if (camera->orientation.x == 0.0 && fabs(camera->orientation.y) == 1.0 && camera->orientation.z == 0.0)
 		camera->right_view = (t_xyz){1, 0, 0};
 	else
-		camera->right_view = vec_normalize(vec_cross(camera->world_up, camera->normOrientVec));
+		camera->right_view = vec_normalize(vec_cross(camera->world_up, camera->orientation));
 	camera->aspect_ratio = (float)IMG_WIDTH / (float)IMG_HEIGHT;
 	camera->FOV_scale = tanf(((float)camera->FOV * M_PI / 180.0) / 2.0);
 }
@@ -188,7 +187,7 @@ The t_minirt struct.
 Description:
 We go through every pixel of the screen, from the upper left corner, to the bottom right corner.
 The screen is defined with the macros? IMG_HEIGHT and IMG_WIDTH.
-For every pixel we make a ray from the camera (coordinatesOfViewPoint), in the direction of the current pixel.
+For every pixel we make a ray from the camera (coordinates), in the direction of the current pixel.
 We then see if the ray happens to intersect with an object (defined in the file.rt).
 
 Return:
@@ -199,7 +198,7 @@ void raytracer(t_minirt *data)
 	int x;
 	int y;
 	t_ray ray;
-	t_intersection intersection;
+	t_hit intersection;
 	uint32_t color;
 
 	if (data->camera == NULL)
@@ -207,17 +206,17 @@ void raytracer(t_minirt *data)
 	set_detailed_camera(data->camera);
 	x = 0;
 	y = 0;
-	ray.origin = data->camera->coordinatesOfViewpoint;
-	data->ambLight->RGB = divide_color(data->ambLight->RGB);
+	ray.origin = data->camera->coordinates;
+	data->amb_light->rgb = divide_color(data->amb_light->rgb);
 	while (y < IMG_HEIGHT)
 	{
 		while (x < IMG_WIDTH)
 		{
-			ray.direction = get_ray_direction(x, y, data->camera);
+			ray.dir = get_ray_direction(x, y, data->camera);
 			intersection = intersect(data, ray);
 			if (intersection.object.spheres || intersection.object.planes || intersection.object.cylinders)
 			{
-				intersection.RGB = divide_color(intersection.RGB); // probably better way and place to do this.
+				intersection.rgb = divide_color(intersection.rgb); // probably better way and place to do this.
 				color = calculate_light(data, intersection);
 				mlx_put_pixel(data->image_ptr, x, y, color);
 			}

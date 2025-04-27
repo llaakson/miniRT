@@ -6,65 +6,61 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/24 21:41:58 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:29:45 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
 
-void set_light_ratio(char *element_info, float *light_ratio)
+void	set_light_ratio(char *element_info, float *light_ratio)
 {
 	if (ft_strchr(element_info, ','))
 		error_exit("Light ratio argument consists of only one number");
 	ft_atof(element_info, light_ratio);
 	if (*light_ratio < 0.0 || *light_ratio > 1.0)
-		error_exit("Light ratio argument for A and L has to be in range 0.0-1.0");
+		error_exit("Light ratio argument has to be in range 0.0-1.0");
 }
 
-void set_RGB(char *element_info, t_xyz *RGB)
+void	set_rgb(char *element_info, t_xyz *rgb)
 {
-	char **split_RGB;
+	char	**split_rgb;
+	int		i;
 
 	if (ft_strchr(element_info, '.'))
-		error_exit("RGB color arguments must be whole numbers");
-	split_RGB = ft_split(element_info, ',');
-	if (!split_RGB)
+		error_exit("rgb color arguments must be whole numbers");
+	split_rgb = ft_split(element_info, ',');
+	if (!split_rgb)
 		error_exit("Memory allocation failed");
-	int i = 0;
-	while (split_RGB[i])
-	{
-		track_pointer(split_RGB[i]);
-		i++;
-	}
-	track_pointer(split_RGB);
-	if (i - 1 != 2 || !split_RGB[2])
-		error_exit("RGB colors must be three");
-	ft_atof(split_RGB[0], &RGB->x);
-	ft_atof(split_RGB[1], &RGB->y);
-	ft_atof(split_RGB[2], &RGB->z);
-	if (RGB->x < 0 || RGB->y < 0 || RGB->z < 0)
-		error_exit("RGB color argument has to be 0 or bigger");
-	if (RGB->x > 255 || RGB->y > 255 || RGB->z > 255)
-		error_exit("RGB color argument has to be 255 or smaller");
 	i = 0;
-	while (split_RGB[i])
-		tracked_free(split_RGB[i++]);
-	tracked_free(split_RGB);
+	while (split_rgb[i])
+		track_pointer(split_rgb[i++]);
+	track_pointer(split_rgb);
+	if (i - 1 != 2 || !split_rgb[2])
+		error_exit("rgb colors must be three");
+	ft_atof(split_rgb[0], &rgb->x);
+	ft_atof(split_rgb[1], &rgb->y);
+	ft_atof(split_rgb[2], &rgb->z);
+	if (rgb->x < 0 || rgb->y < 0 || rgb->z < 0)
+		error_exit("rgb color argument has to be 0 or bigger");
+	if (rgb->x > 255 || rgb->y > 255 || rgb->z > 255)
+		error_exit("rgb color argument has to be 255 or smaller");
+	i = 0;
+	while (split_rgb[i])
+		tracked_free(split_rgb[i++]);
+	tracked_free(split_rgb);
 }
 
-void set_coordinates(char *element_info, t_xyz *coordinates)
+void	set_coordinates(char *element_info, t_xyz *coordinates)
 {
-	char **split_coordinates;
+	char	**split_coordinates;
+	int		i;
 
 	split_coordinates = ft_split(element_info, ',');
 	if (!split_coordinates)
 		error_exit("Memory allocation failed");
-	int i = 0;
+	i = 0;
 	while (split_coordinates[i] != NULL)
-	{
-		track_pointer(split_coordinates[i]);
-		i++;
-	}
+		track_pointer(split_coordinates[i++]);
 	track_pointer(split_coordinates);
 	if (i - 1 != 2 || !split_coordinates[2])
 		error_exit("Coordinates has to be three numbers, x, y and z");
@@ -75,23 +71,19 @@ void set_coordinates(char *element_info, t_xyz *coordinates)
 	while (split_coordinates[i])
 		tracked_free(split_coordinates[i++]);
 	tracked_free(split_coordinates);
-
 }
 
-void set_normalized_vector(char *element_info, t_xyz *vector)
+void	set_normalized_vector(char *element_info, t_xyz *vector)
 {
-	char **split_vector;
-	//float vector_length;
+	char	**split_vector;
+	int		i;
 
 	split_vector = ft_split(element_info, ',');
 	if (!split_vector)
 		error_exit("Memory allocation failed");
-	int i = 0;
+	i = 0;
 	while (split_vector[i])
-	{
-		track_pointer(split_vector[i]);
-		i++;
-	}
+		track_pointer(split_vector[i++]);
 	track_pointer(split_vector);
 	if (i - 1 != 2 || !split_vector[2])
 		error_exit("Normalized vectors need three components, x, y and z");
@@ -102,32 +94,10 @@ void set_normalized_vector(char *element_info, t_xyz *vector)
 		error_exit("Normalized vector argument has to be -1 or bigger");
 	if (vector->x > 1.0 || vector->y > 1.0 || vector->z > 1.0)
 		error_exit("Normalized vector argument has to be 1 or smaller");
-	//vector_length = vec_length(*vector);
-	//if (fabsf(vector_length - 1.0f) > 1e-6f)
-	//	error_exit("A normalized vector has the length of exactly 1.0. √(x² + y² + z²) = 1.0");
-	*vector = vec_normalize(*vector); //instead normalize here?
+	if (fabsf(vec_length(*vector) - 1.0f) > 1e-6f)
+		error_exit("Normalized vector has length 1.0. √(x² + y² + z²) = 1.0");
 	i = 0;
 	while (split_vector[i])
 		tracked_free(split_vector[i++]);
 	tracked_free(split_vector);
-}
-
-void set_horizontal_field_of_view_in_degrees(char *element_info, int *FOV)
-{
-	if (ft_strchr(element_info, '.'))
-		error_exit("Camera FOV argument must be a whole number");
-	no_extra_minus_in_str(element_info, 1);
-	*FOV = ft_atoi_overflow_checked(element_info);
-	if (*FOV < 0 || *FOV > 180)
-		error_exit("Camera FOV argument must be in the range 0-180");
-
-}
-
-void set_diameter_or_height(char *element_info, float *measurement)
-{
-	if (ft_strchr(element_info, ','))
-		error_exit("Object diameter or height consists of only one number");
-	ft_atof(element_info, measurement);
-	if (*measurement < 0.0) //????????
-		error_exit("Object diameter or height can't be negative");
 }

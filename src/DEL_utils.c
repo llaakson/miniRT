@@ -3,25 +3,25 @@
 
 void print_elements_of_rt_file(t_minirt *data)
 {
-	if (data->ambLight)
+	if (data->amb_light)
 	{
 		printf("\nAMBIENT LIGHT\n");
-		printf("%f\n", data->ambLight->ambientLightRatio);
-		printf("%f and %f and %f\n\n\n", data->ambLight->RGB.x, data->ambLight->RGB.y, data->ambLight->RGB.z);
+		printf("%f\n", data->amb_light->ratio);
+		printf("%f and %f and %f\n\n\n", data->amb_light->rgb.x, data->amb_light->rgb.y, data->amb_light->rgb.z);
 	}
 	if (data->camera)
 	{
 		printf("\nCAMERA\n");
-		printf("%f and %f and %f\n", data->camera->coordinatesOfViewpoint.x, data->camera->coordinatesOfViewpoint.y, data->camera->coordinatesOfViewpoint.z);
-		printf("%f and %f and %f\n", data->camera->normOrientVec.x, data->camera->normOrientVec.y, data->camera->normOrientVec.z);
+		printf("%f and %f and %f\n", data->camera->coordinates.x, data->camera->coordinates.y, data->camera->coordinates.z);
+		printf("%f and %f and %f\n", data->camera->orientation.x, data->camera->orientation.y, data->camera->orientation.z);
 		printf("%d\n", data->camera->FOV);
 	}
 	if (data->light)
 	{
 		printf("\nLIGHT\n");
-		printf("%f and %f and %f\n", data->light->coordinatesOfLightPoint.x, data->light->coordinatesOfLightPoint.y, data->light->coordinatesOfLightPoint.z);
-		printf("%f\n", data->light->lightBrightnessRatio);
-		printf("%f and %f and %f\n", data->light->RGB.x, data->light->RGB.y, data->light->RGB.z);
+		printf("%f and %f and %f\n", data->light->coordinates.x, data->light->coordinates.y, data->light->coordinates.z);
+		printf("%f\n", data->light->ratio);
+		printf("%f and %f and %f\n", data->light->rgb.x, data->light->rgb.y, data->light->rgb.z);
 	}
 	if (data->objects->spheres)
 	{
@@ -31,9 +31,9 @@ void print_elements_of_rt_file(t_minirt *data)
 		while (current != NULL)
 		{
 			printf("\nSphere %d:\n", i++);
-			printf("%f and %f and %f\n", current->sphereCenter.x, current->sphereCenter.y, current->sphereCenter.z);
+			printf("%f and %f and %f\n", current->center.x, current->center.y, current->center.z);
 			printf("%f\n", current->diameter);
-			printf("%f and %f and %f\n", current->RGB.x, current->RGB.y, current->RGB.z);
+			printf("%f and %f and %f\n", current->rgb.x, current->rgb.y, current->rgb.z);
 			current = current->next;
 		}
 	}
@@ -45,9 +45,9 @@ void print_elements_of_rt_file(t_minirt *data)
 		while (current != NULL)
 		{
 			printf("\nPlane %d:\n", i++);
-			printf("%f and %f and %f\n", current->pointInPlane.x, current->pointInPlane.y, current->pointInPlane.z);
-			printf("%f and %f and %f\n", current->normNormalVec.x, current->normNormalVec.y, current->normNormalVec.z);
-			printf("%f and %f and %f\n", current->RGB.x, current->RGB.y, current->RGB.z);
+			printf("%f and %f and %f\n", current->point_in_plane.x, current->point_in_plane.y, current->point_in_plane.z);
+			printf("%f and %f and %f\n", current->orientation.x, current->orientation.y, current->orientation.z);
+			printf("%f and %f and %f\n", current->rgb.x, current->rgb.y, current->rgb.z);
 			current = current->next;
 		}
 	}
@@ -59,11 +59,11 @@ void print_elements_of_rt_file(t_minirt *data)
 		while (current != NULL)
 		{
 			printf("\nCylinder %d:\n", i++);
-			printf("%f and %f and %f\n", current->cylinderCenter.x, current->cylinderCenter.y, current->cylinderCenter.z);
-			printf("%f and %f and %f\n", current->normVecOfAxis.x, current->normVecOfAxis.y, current->normVecOfAxis.z);
+			printf("%f and %f and %f\n", current->center.x, current->center.y, current->center.z);
+			printf("%f and %f and %f\n", current->orientation.x, current->orientation.y, current->orientation.z);
 			printf("%f\n", current->diameter);
 			printf("%f\n", current->height);
-			printf("%f and %f and %f\n", current->RGB.x, current->RGB.y, current->RGB.z);
+			printf("%f and %f and %f\n", current->rgb.x, current->rgb.y, current->rgb.z);
 			current = current->next;
 		}
 	}

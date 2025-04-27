@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:25:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/25 10:43:36 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:25:17 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ Subtraction of the two vectors.
 Return:
 A new vector that is the result of the subtraction.
 */
-t_xyz	vec_subtract(t_xyz one, t_xyz two)
+t_xyz	vec_sub(t_xyz one, t_xyz two)
 {
 	t_xyz	result;
 

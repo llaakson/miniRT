@@ -6,17 +6,17 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 22:05:18 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/12 20:54:50 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:41:48 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
 
-void set_object_sphere(char *line, int line_i, t_minirt *data)
+void	set_object_sphere(char *line, int line_i, t_minirt *data)
 {
-	char *element_info;
-	int info_num;
-	t_sphere *new_node;
+	char		*element_info;
+	int			info_num;
+	t_sphere	*new_node;
 
 	new_node = add_new_sphere_node(data);
 	info_num = -1;
@@ -25,11 +25,11 @@ void set_object_sphere(char *line, int line_i, t_minirt *data)
 	{
 		info_num++;
 		if (info_num == 0)
-			set_coordinates(element_info, &new_node->sphereCenter);
+			set_coordinates(element_info, &new_node->center);
 		else if (info_num == 1)
 			set_diameter_or_height(element_info, &new_node->diameter);
 		else if (info_num == 2)
-			set_RGB(element_info, &new_node->RGB);
+			set_rgb(element_info, &new_node->rgb);
 		else
 			error_exit("Too many element arguments for sphere");
 		tracked_free(element_info);
@@ -39,11 +39,11 @@ void set_object_sphere(char *line, int line_i, t_minirt *data)
 		error_exit("Too few element arguments for sphere");
 }
 
-void set_object_plane(char *line, int line_i, t_minirt *data)
+void	set_object_plane(char *line, int line_i, t_minirt *data)
 {
-	char *element_info;
-	int info_num;
-	t_plane *new_node;
+	char	*element_info;
+	int		info_num;
+	t_plane	*new_node;
 
 	new_node = add_new_plane_node(data);
 	info_num = -1;
@@ -52,11 +52,11 @@ void set_object_plane(char *line, int line_i, t_minirt *data)
 	{
 		info_num++;
 		if (info_num == 0)
-			set_coordinates(element_info, &new_node->pointInPlane);
+			set_coordinates(element_info, &new_node->point_in_plane);
 		else if (info_num == 1)
-			set_normalized_vector(element_info, &new_node->normNormalVec);
+			set_normalized_vector(element_info, &new_node->orientation);
 		else if (info_num == 2)
-			set_RGB(element_info, &new_node->RGB);
+			set_rgb(element_info, &new_node->rgb);
 		else
 			error_exit("Too many element arguments for plane");
 		tracked_free(element_info);
@@ -66,11 +66,11 @@ void set_object_plane(char *line, int line_i, t_minirt *data)
 		error_exit("Too few element arguments for plane");
 }
 
-void set_object_cylinder(char *line, int line_i, t_minirt *data)
+void	set_object_cylinder(char *line, int line_i, t_minirt *data)
 {
-	char *element_info;
-	int info_num;
-	t_cylinder *new_node;
+	char		*element_info;
+	int			info_num;
+	t_cylinder	*new_node;
 
 	new_node = add_new_cylinder_node(data);
 	info_num = -1;
@@ -79,15 +79,15 @@ void set_object_cylinder(char *line, int line_i, t_minirt *data)
 	{
 		info_num++;
 		if (info_num == 0)
-			set_coordinates(element_info, &new_node->cylinderCenter);
+			set_coordinates(element_info, &new_node->center);
 		else if (info_num == 1)
-			set_normalized_vector(element_info, &new_node->normVecOfAxis);
+			set_normalized_vector(element_info, &new_node->orientation);
 		else if (info_num == 2)
 			set_diameter_or_height(element_info, &new_node->diameter);
 		else if (info_num == 3)
 			set_diameter_or_height(element_info, &new_node->height);
 		else if (info_num == 4)
-			set_RGB(element_info, &new_node->RGB);
+			set_rgb(element_info, &new_node->rgb);
 		else
 			error_exit("Too many element arguments for plane");
 		tracked_free(element_info);

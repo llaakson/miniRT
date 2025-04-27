@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:31:36 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/25 10:37:46 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:27:40 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,15 @@ static float	intersect_sphere(t_sphere *sphere, t_ray ray)
 	float	sphere_radius;
 
 	sphere_radius = sphere->diameter / 2;
-	oc = vec_subtract(ray.origin, sphere->sphereCenter);
-	a = vec_dot(ray.direction, ray.direction);
-	b = 2.0 * vec_dot(oc, ray.direction);
+	oc = vec_sub(ray.origin, sphere->center);
+	a = vec_dot(ray.dir, ray.dir);
+	b = 2.0 * vec_dot(oc, ray.dir);
 	c = vec_dot(oc, oc);
 	c = c - sphere_radius * sphere_radius;
 	return (quadratic_equation(a, b, c));
 }
 
-void	loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *intersection)
+void	loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_hit *intersection)
 {
 	t_sphere	*current;
 	float		temp;
@@ -98,11 +98,11 @@ void	loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *inters
 	while (current != NULL)
 	{
 		temp = intersect_sphere(current, ray);
-		if (temp < (*intersection).rayClosestIntersect && temp > -1.0)
+		if (temp < (*intersection).closest_intersect && temp > -1.0)
 		{
 			(*intersection).object.spheres = current;
-			set_intersection_data(intersection, current->RGB, temp, ray);
-			(*intersection).surface_normal = vec_normalize(vec_subtract((*intersection).coorinates, current->sphereCenter));
+			set_intersection_data(intersection, current->rgb, temp, ray);
+			(*intersection).surface_normal = vec_normalize(vec_sub((*intersection).coordinates, current->center));
 		}
 		current = current->next;
 	}

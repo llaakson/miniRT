@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:36:21 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/25 10:38:45 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:27:40 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ float	intersect_plane(t_plane *plane, t_ray ray)
 	float	numerator;
 	float	denominator;
 
-	numerator = vec_dot(vec_subtract(plane->pointInPlane, ray.origin), plane->normNormalVec);
-	denominator = vec_dot(ray.direction, plane->normNormalVec);
+	numerator = vec_dot(vec_sub(plane->point_in_plane, ray.origin), plane->orientation);
+	denominator = vec_dot(ray.dir, plane->orientation);
 	if (denominator == 0)
 		return (-1);
 	else if (numerator == 0 && denominator == 0)
@@ -68,7 +68,7 @@ float	intersect_plane(t_plane *plane, t_ray ray)
 	return (t);
 }
 
-void	loop_intersect_planes(t_plane *planes, t_ray ray, t_intersection *intersection)
+void	loop_intersect_planes(t_plane *planes, t_ray ray, t_hit *intersection)
 {
 	t_plane	*current;
 	float	temp;
@@ -79,14 +79,14 @@ void	loop_intersect_planes(t_plane *planes, t_ray ray, t_intersection *intersect
 	while (current != NULL)
 	{
 		temp = intersect_plane(current, ray);
-		if (temp < (*intersection).rayClosestIntersect && temp > -1.0)
+		if (temp < (*intersection).closest_intersect && temp > -1.0)
 		{
 			(*intersection).object.planes = current;
-			set_intersection_data(intersection, current->RGB, temp, ray);
-			if (vec_dot(ray.direction, current->normNormalVec) > 0)
-				(*intersection).surface_normal = vec_scale(current->normNormalVec, -1);
+			set_intersection_data(intersection, current->rgb, temp, ray);
+			if (vec_dot(ray.dir, current->orientation) > 0)
+				(*intersection).surface_normal = vec_scale(current->orientation, -1);
 			else
-				(*intersection).surface_normal = current->normNormalVec;
+				(*intersection).surface_normal = current->orientation;
 		}
 		current = current->next;
 	}

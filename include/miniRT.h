@@ -30,13 +30,13 @@ typedef struct s_xyz
 typedef struct s_ray
 {
 	t_xyz origin;
-	t_xyz direction;
+	t_xyz dir;
 } t_ray;
 
 typedef struct s_camera
 {
-	t_xyz coordinatesOfViewpoint;
-	t_xyz normOrientVec; //camera forward
+	t_xyz coordinates;
+	t_xyz orientation; //camera forward
 	int FOV;
 	//added later
 	t_xyz world_up;
@@ -47,42 +47,42 @@ typedef struct s_camera
 
 typedef struct s_ambientLight
 {
-	float ambientLightRatio;
-	t_xyz RGB;
+	float ratio;
+	t_xyz rgb;
 } t_ambientLight;
 
 typedef struct s_lighting
 {
-	t_xyz coordinatesOfLightPoint;
-	float lightBrightnessRatio;
-	t_xyz RGB;
+	t_xyz coordinates;
+	float ratio;
+	t_xyz rgb;
 }t_lighting;
 
 typedef struct s_sphere
 {
-	t_xyz sphereCenter;
+	t_xyz center;
 	float diameter;
-	t_xyz RGB;
+	t_xyz rgb;
 	struct s_sphere *next;
 	struct s_sphere *prev;
 } t_sphere;
 
 typedef struct s_plane
 {
-	t_xyz pointInPlane;
-	t_xyz normNormalVec;
-	t_xyz RGB;
+	t_xyz point_in_plane;
+	t_xyz orientation;
+	t_xyz rgb;
 	struct s_plane *next;
 	struct s_plane *prev;
 }t_plane;
 
 typedef struct s_cylinder
 {
-	t_xyz cylinderCenter;
-	t_xyz normVecOfAxis;
+	t_xyz center;
+	t_xyz orientation;
 	float diameter;
 	float height;
-	t_xyz RGB;
+	t_xyz rgb;
 	//added
 	int base_or_side_hit;
 	//
@@ -100,16 +100,16 @@ typedef struct s_object
 typedef struct s_intersection
 {
 	t_object object; //be aware of dangling ptrs
-	float rayClosestIntersect;
-	t_xyz coorinates;
-	t_xyz RGB;
+	float closest_intersect;
+	t_xyz coordinates;
+	t_xyz rgb;
 	t_xyz surface_normal;
-} t_intersection;
+} t_hit;
 
 typedef struct s_minirt
 {
 	t_camera *camera;
-	t_ambientLight *ambLight;
+	t_ambientLight *amb_light;
 	t_lighting *light;
 	t_object *objects;
 	mlx_t		*mlx_ptr;
@@ -120,16 +120,18 @@ typedef struct s_minirt
 //setup scene
 int setup_scene_description(char *file, t_minirt *data);
 int file_extension_is_rt(char *file);
+void	check_missing_elements(t_minirt *data);
+int	line_has_valid_chars(char *line, int line_i);
 void set_ambient_light(char *line, int line_i, t_minirt *data);
 void set_camera(char *line, int line_i, t_minirt *data);
 void set_light(char *line, int line_i, t_minirt *data);
 char *get_next_element_info(char *line, int *line_i);
 int no_extra_minus_in_str(char *str, int i);
 void set_light_ratio(char *element_info, float *light_ratio);
-void set_RGB(char *element_info, t_xyz *RGB);
+void set_rgb(char *element_info, t_xyz *rgb);
 void set_coordinates(char *element_info, t_xyz *coordinates);
 void set_normalized_vector(char *element_info, t_xyz *vector);
-void set_horizontal_field_of_view_in_degrees(char *element_info, int *FOV);
+void	set_fov(char *element_info, int *FOV);
 void set_object_sphere(char *line, int line_i, t_minirt *data);
 void set_diameter_or_height(char *element_info, float *measurement);
 void set_object_plane(char *line, int line_i, t_minirt *data);
@@ -157,7 +159,7 @@ char	*tracked_realloc(char *str, size_t len);
 
 //vector math
 t_xyz vec_add(t_xyz one, t_xyz two);
-t_xyz vec_subtract(t_xyz one, t_xyz two);
+t_xyz vec_sub(t_xyz one, t_xyz two);
 t_xyz vec_scale(t_xyz vec, float scale);
 float vec_dot(t_xyz one, t_xyz two);
 t_xyz vec_cross(t_xyz one, t_xyz two);
@@ -168,14 +170,14 @@ t_xyz vec_normalize(t_xyz vec);
 void raytracer(t_minirt *data);
 
 //intersection
-t_intersection intersect(t_minirt *data, t_ray ray);
-void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_intersection *intersection);
-void loop_intersect_planes(t_plane *planes, t_ray ray, t_intersection *intersection);
+t_hit intersect(t_minirt *data, t_ray ray);
+void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_hit *intersection);
+void loop_intersect_planes(t_plane *planes, t_ray ray, t_hit *intersection);
 float quadratic_equation(float a, float b, float c);
 float intersect_plane(t_plane *plane, t_ray ray);
-void loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_intersection *intersection);
-void set_intersection_data(t_intersection *intersect, t_xyz RGB, float closest_intersect, t_ray ray);
-void set_cyl_intersect_surface_normal(t_cylinder *cyl, t_intersection *intersect);
+void loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_hit *intersection);
+void set_intersection_data(t_hit *intersect, t_xyz rgb, float closest_hit, t_ray ray);
+void set_cyl_intersect_surface_normal(t_cylinder *cyl, t_hit *intersect);
 
 
 
@@ -183,7 +185,7 @@ void set_cyl_intersect_surface_normal(t_cylinder *cyl, t_intersection *intersect
 void print_elements_of_rt_file(t_minirt *data);
 
 //Shadows and lightning
-int calculate_light(t_minirt *data, t_intersection intersection);
+int calculate_light(t_minirt *data, t_hit intersection);
 int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a);
 t_xyz clamp_colors(t_xyz color);
 t_xyz add_colors(t_xyz color1, t_xyz color2);
