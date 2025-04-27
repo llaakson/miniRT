@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/26 11:31:18 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/27 12:43:40 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,24 +82,62 @@ working in 3d. Move up and down, move sideways, and move forward and backwards.
 
 4. We normalize the vector to get a pure unit vector, only giving us a direction and no length.
 
+
+-------Fixing fisheye distortion----------
+
+fisheye_radius: the distance between the pixel [pixel_x, pixel_y] and the center of the image.
+
+We can multiply it by how strong we want the fisheye effect to be. 0 = no effect, more positive = more fisheye effect.
+fisheye_radius = fisheye_radius * 0.1;
+
+The next calculations help us scale scalar_x and scalar_y according to the fisheye_radius we got.
+phi_angle = atan2(scalar_y, scalar_x);
+scalar_x = fisheye_radius * cos(phi_angle);
+scalar_y = fisheye_radius * sin(phi_angle);
+
 Return:
 A unit vector pointing in the direction of the pixel at coordinate [pixel_x, pixel_y], in 3d space.
 
 */
+
+
 static t_xyz get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
 {
-	float scalar_x;
-	float scalar_y;
-	t_xyz direction;
+   float scalar_x;
+   float scalar_y;
+   t_xyz direction;
+   float fisheye_radius;
+   float phi_angle;
 
-	scalar_x = (2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio * camera->FOV_scale;
-	scalar_y = (1 - 2 * ((pixel_y + 0.5f) / IMG_HEIGHT)) * camera->FOV_scale;
 
-	direction = vec_add(vec_scale(camera->right_view, scalar_x), vec_scale(camera->world_up, scalar_y));
-	direction = vec_add(direction, camera->normOrientVec);
-	direction = vec_normalize(direction);
-	return (direction);
+   scalar_x = (2 * (((float)pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio * camera->FOV_scale;
+   scalar_y = (1 - 2 * (((float)pixel_y + 0.5f) / IMG_HEIGHT)) * camera->FOV_scale;
+
+
+   // Step 2: Calculate fisheye radius (distance from the center of the image)
+   fisheye_radius = sqrt(scalar_x * scalar_x + scalar_y * scalar_y);
+
+
+   // Step 3: Apply fisheye distortion
+   // Adjust fisheye strength by scaling the radius
+   fisheye_radius = fisheye_radius * 0.1; // Adjust this factor to control fisheye strength
+
+
+   // Step 4: Convert polar coordinates back to Cartesian coordinates
+   phi_angle = atan2(scalar_y, scalar_x);
+   scalar_x = fisheye_radius * cos(phi_angle);
+   scalar_y = fisheye_radius * sin(phi_angle);
+
+
+   direction = vec_add(vec_scale(camera->right_view, scalar_x), vec_scale(camera->world_up, scalar_y));
+   direction = vec_add(direction, camera->normOrientVec);
+   direction = vec_normalize(direction);
+
+
+   return direction;
 }
+
+
 
 /*
 Arguments:
@@ -134,13 +172,13 @@ Nothing. Only sets values in the camera struct.
 */
 static void set_detailed_camera(t_camera *camera)
 {
-	camera->world_up = (t_xyz){0, 1, 0}; // can have problems?? The direction of up
-	if (camera->normOrientVec.x == 0 && fabs(camera->normOrientVec.y) == 1 && camera->normOrientVec.z == 0)
+	camera->world_up = (t_xyz){0, 1, 0};
+	if (camera->normOrientVec.x == 0.0 && fabs(camera->normOrientVec.y) == 1.0 && camera->normOrientVec.z == 0.0)
 		camera->right_view = (t_xyz){1, 0, 0};
 	else
 		camera->right_view = vec_normalize(vec_cross(camera->world_up, camera->normOrientVec));
 	camera->aspect_ratio = (float)IMG_WIDTH / (float)IMG_HEIGHT;
-	camera->FOV_scale = tanf((camera->FOV * M_PI / 180) / 2);
+	camera->FOV_scale = tanf(((float)camera->FOV * M_PI / 180.0) / 2.0);
 }
 
 /*
