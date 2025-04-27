@@ -24,6 +24,7 @@ src/malloc_tracker/malloc_tracker.c \
 src/setup_scene_description/object_nodes.c \
 src/raytracing/raytracing.c \
 src/raytracing/vector_math.c \
+src/raytracing/vector_math2.c \
 src/raytracing/intersection/intersect.c \
 src/raytracing/intersection/intersect_plane.c \
 src/raytracing/intersection/intersect_sphere.c \

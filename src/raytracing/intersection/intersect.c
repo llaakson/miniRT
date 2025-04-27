@@ -6,11 +6,82 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 14:27:40 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:08:42 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/miniRT.h"
+
+static void	loop_intersect_spheres(t_sphere *spheres,
+		t_ray ray, t_hit *intersection)
+{
+	t_sphere	*current;
+	float		temp;
+
+	if (!spheres)
+		return ;
+	current = spheres;
+	while (current != NULL)
+	{
+		temp = intersect_sphere(current, ray);
+		if (temp < (*intersection).closest_intersect && temp > -1.0)
+		{
+			(*intersection).object.spheres = current;
+			set_intersection_data(intersection, current->rgb, temp, ray);
+			(*intersection).surface_normal = vec_normalize(vec_sub(
+						(*intersection).coordinates, current->center));
+		}
+		current = current->next;
+	}
+}
+
+static void	loop_intersect_planes(t_plane *planes,
+	t_ray ray, t_hit *intersection)
+{
+	t_plane	*current;
+	float	temp;
+
+	if (!planes)
+		return ;
+	current = planes;
+	while (current != NULL)
+	{
+		temp = intersect_plane(current, ray);
+		if (temp < (*intersection).closest_intersect && temp > -1.0)
+		{
+			(*intersection).object.planes = current;
+			set_intersection_data(intersection, current->rgb, temp, ray);
+			if (vec_dot(ray.dir, current->orientation) > 0)
+				(*intersection).surface_normal = vec_scale(
+						current->orientation, -1);
+			else
+				(*intersection).surface_normal = current->orientation;
+		}
+		current = current->next;
+	}
+}
+
+static void	loop_intersect_cylinders(t_cylinder *cylinders,
+	t_ray ray, t_hit *intersection)
+{
+	t_cylinder	*current;
+	float		temp;
+
+	if (!cylinders)
+		return ;
+	current = cylinders;
+	while (current != NULL)
+	{
+		temp = intersect_cylinder(current, ray);
+		if (temp < (*intersection).closest_intersect && temp > -1.0)
+		{
+			(*intersection).object.cylinders = current;
+			set_intersection_data(intersection, current->rgb, temp, ray);
+			set_cyl_intersect_surface_normal(current, intersection);
+		}
+		current = current->next;
+	}
+}
 
 static t_hit	init_hit_struct(void)
 {
@@ -32,10 +103,12 @@ The t_minirt struct containing of important program data.
 A ray going from the camera in the direction of a certain pixel on the screen.
 
 Description:
-Find the intersect of the ray and a sphere, plane or a cylinder, that is closest to the camera.
+Find the intersect of the ray and a sphere, plane or a cylinder,
+that is closest to the camera.
 
 Return:
-A t_hit struct containing important data of the intersection that possibly took place.
+A t_hit struct containing important data of the
+intersection that possibly took place.
 Ex. coordinates of the intersection.
 */
 t_hit	intersect(t_minirt *data, t_ray ray)

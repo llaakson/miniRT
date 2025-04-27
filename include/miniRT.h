@@ -171,11 +171,11 @@ void raytracer(t_minirt *data);
 
 //intersection
 t_hit intersect(t_minirt *data, t_ray ray);
-void loop_intersect_spheres(t_sphere *spheres, t_ray ray, t_hit *intersection);
-void loop_intersect_planes(t_plane *planes, t_ray ray, t_hit *intersection);
+
 float quadratic_equation(float a, float b, float c);
 float intersect_plane(t_plane *plane, t_ray ray);
-void loop_intersect_cylinders(t_cylinder *cylinders, t_ray ray, t_hit *intersection);
+float	intersect_cylinder(t_cylinder *cyl, t_ray ray);
+float	intersect_sphere(t_sphere *sphere, t_ray ray);
 void set_intersection_data(t_hit *intersect, t_xyz rgb, float closest_hit, t_ray ray);
 void set_cyl_intersect_surface_normal(t_cylinder *cyl, t_hit *intersect);
 

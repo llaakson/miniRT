@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:18:04 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/25 10:32:53 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:22:12 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,29 @@ int	ft_strcmp(char *s1, char *s2)
 	return (0);
 }
 
+static float	atof_decimal(char *str, int i, double *res_as_double)
+{
+	float	decimal_place;
+
+	decimal_place = 0.1;
+	i++;
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		*res_as_double += (str[i] - '0') * decimal_place;
+		decimal_place *= 0.1;
+		i++;
+	}
+}
+
 float	ft_atof(char *str, float *result)
 {
 	int		i;
 	float	sign;
-	float	decimal_place;
 	double	res_as_double;
 
 	i = 0;
 	sign = 1;
 	res_as_double = 0;
-	decimal_place = 0.1;
 	if (str[i] == '-')
 	{
 		sign = -1;
@@ -52,15 +64,7 @@ float	ft_atof(char *str, float *result)
 		i++;
 	}
 	if (str[i] == '.')
-	{
-		i++;
-		while (str[i] >= '0' && str[i] <= '9')
-		{
-			res_as_double += (str[i] - '0') * decimal_place;
-			decimal_place *= 0.1;
-			i++;
-		}
-	}
+		atof_decimal(str, i, &res_as_double);
 	if (res_as_double > FLT_MAX || res_as_double < -FLT_MAX)
 		error_exit("Float overflow detected");
 	*result = (float)res_as_double * sign;
