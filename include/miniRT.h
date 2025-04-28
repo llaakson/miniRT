@@ -49,6 +49,7 @@ typedef struct s_ambientLight
 {
 	float ratio;
 	t_xyz rgb;
+	t_xyz rgb_ratio;
 } t_ambientLight;
 
 typedef struct s_lighting
@@ -105,6 +106,19 @@ typedef struct s_intersection
 	t_xyz rgb;
 	t_xyz surface_normal;
 } t_hit;
+
+typedef struct s_lights
+{
+	t_ray shadow_ray;
+    t_xyz lightning_direction;
+    t_xyz color_str;
+    t_xyz color_dot;
+    double dot_product;
+    double light_distance;
+    uint32_t	color;
+    t_xyz color_specular;
+
+} t_lights;
 
 typedef struct s_minirt
 {

@@ -44,6 +44,8 @@ void	check_missing_elements(t_minirt *data)
 		data->amb_light = tracked_malloc(sizeof(t_ambientLight));
 		data->amb_light->ratio = 0;
 		data->amb_light->rgb = (t_xyz){0, 0, 0};
+		data->amb_light->rgb = divide_color(data->amb_light->rgb);
+		data->amb_light->rgb_ratio = multiply_color_intensity(data->amb_light->rgb, data->amb_light->ratio);
 	}
 	if (data->light == NULL)
 	{

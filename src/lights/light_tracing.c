@@ -1,13 +1,11 @@
 
 #include "../../include/miniRT.h"
 
-t_xyz calculate_ambience(t_minirt *data, t_hit intersection)
+t_xyz	calculate_ambience(t_minirt *data, t_hit intersection)
 {
-    t_xyz result;
-    t_xyz temp;
-
-    temp = multiply_color_intensity(data->amb_light->rgb, data->amb_light->ratio);
-    result = multiply_color(temp, intersection.rgb);
+	t_xyz result;
+ 
+    result = multiply_color(data->amb_light->rgb_ratio, intersection.rgb);
     return (result);
 }
 
@@ -43,10 +41,10 @@ t_xyz calculate_specular(t_minirt *data, t_hit intersection, t_xyz light_directi
     double spec;
 
     specular_strength = 0.5;
-    specular.x = 1, specular.y = 1, specular.z = 1;
+    specular = (t_xyz){1, 1, 1};
     view_direction = vec_normalize(vec_sub(data->camera->coordinates,intersection.coordinates));
     reflect_direction = calculate_reflection(vec_scale(light_direction,-1),intersection);
-    spec = pow(fmax(vec_dot(view_direction,reflect_direction),0.0f), 68);
+    spec = pow(fmax(vec_dot(view_direction,reflect_direction),0.0f), 64);
     spec = spec * specular_strength;
     specular = multiply_color_intensity(specular, spec);
     return (specular);
@@ -54,38 +52,31 @@ t_xyz calculate_specular(t_minirt *data, t_hit intersection, t_xyz light_directi
 
 int calculate_light(t_minirt *data, t_hit intersection)
 {
-    t_ray shadow_ray;
-    t_xyz lightning_direction;
-    t_xyz color_str;
-    t_xyz color_dot;
-    double dot_product;
-    double light_distance;
-    uint32_t	color;
-    t_xyz color_specular;
+    t_lights light;
 
-	color = 0;
-    color_dot = intersection.rgb;
-   	color_str = calculate_ambience(data, intersection);
-    lightning_direction = vec_sub(data->light->coordinates,intersection.coordinates);
-    light_distance = vec_length(lightning_direction);
-    lightning_direction = vec_normalize(lightning_direction);
-    shadow_ray.origin = vec_add(intersection.coordinates, vec_scale(intersection.surface_normal, 0.001f));
-    shadow_ray.dir = lightning_direction;
-    color = calculate_shadow(data, shadow_ray, light_distance);
-    if (color != 0)
+	light.color = 0;
+    light.color_dot = intersection.rgb;
+   	light.color_str = calculate_ambience(data, intersection);
+    light.lightning_direction = vec_sub(data->light->coordinates,intersection.coordinates);
+    light.light_distance = vec_length(light.lightning_direction);
+    light.lightning_direction = vec_normalize(light.lightning_direction);
+    light.shadow_ray.origin = vec_add(intersection.coordinates, vec_scale(intersection.surface_normal,  0.1f));
+    light.shadow_ray.dir = light.lightning_direction;
+    light.color = calculate_shadow(data, light.shadow_ray, light.light_distance);
+    if (light.color != 0)
     {
         if (data->amb_light->ratio == 0)
             return (mix_color(multiply_color_intensity(intersection.rgb, 0)));
         else
-            return (mix_color(color_str));
+            return (mix_color(light.color_str));
     }
-    dot_product = vec_dot(intersection.surface_normal,lightning_direction);
-    dot_product = fmax(0.0f, dot_product);
-    color_dot = multiply_color_intensity(color_dot, dot_product);
-    color_dot = multiply_color_intensity(color_dot, data->light->ratio);
-    color_specular = calculate_specular(data,intersection, lightning_direction);
-    color_dot = add_colors(color_dot, color_specular);
+    light.dot_product = vec_dot(intersection.surface_normal,light.lightning_direction);
+    light.dot_product = fmax(0.0f, light.dot_product);
+    light.color_dot = multiply_color_intensity(light.color_dot, light.dot_product);
+    light.color_dot = multiply_color_intensity(light.color_dot, data->light->ratio);
+    light.color_specular = calculate_specular(data,intersection, light.lightning_direction);
+    light.color_dot = add_colors(light.color_dot, light.color_specular);
     if (!(data->amb_light->ratio == 0))
-        color_dot = add_colors(color_dot, color_str);
-    return(mix_color(color_dot));
+        light.color_dot = add_colors(light.color_dot, light.color_str);
+    return(mix_color(light.color_dot));
 }

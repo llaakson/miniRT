@@ -248,7 +248,6 @@ void	raytracer(t_minirt *data)
 	x = 0;
 	y = 0;
 	ray.origin = data->camera->coordinates;
-	data->amb_light->rgb = divide_color(data->amb_light->rgb);
 	while (y < IMG_HEIGHT)
 	{
 		while (x < IMG_WIDTH)
