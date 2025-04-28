@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 22:15:14 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 14:27:40 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:35:06 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ to the actual cylinder surface point of intersect.
 A surface normal is a unit vector
 pointing directly outward from the point of intersect.
 */
-void	set_cyl_intersect_surface_normal(t_cylinder *cyl, t_hit *inter)
+void	set_cyl_intersect_surface_normal(t_cylinder *cyl, t_hit *inter, t_ray ray)
 {
 	t_xyz	cyl_center_to_inter_p;
 	t_xyz	axis_inter_p;
@@ -62,4 +62,7 @@ void	set_cyl_intersect_surface_normal(t_cylinder *cyl, t_hit *inter)
 		(*inter).surface_normal = cyl->orientation;
 	else if (cyl->base_or_side_hit == 3)
 		(*inter).surface_normal = vec_scale(cyl->orientation, -1);
+	//test
+	if (vec_dot(ray.dir, (*inter).surface_normal) > 0.0)
+		(*inter).surface_normal = vec_scale((*inter).surface_normal, -1);
 }

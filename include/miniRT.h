@@ -177,7 +177,7 @@ float intersect_plane(t_plane *plane, t_ray ray);
 float	intersect_cylinder(t_cylinder *cyl, t_ray ray);
 float	intersect_sphere(t_sphere *sphere, t_ray ray);
 void set_intersection_data(t_hit *intersect, t_xyz rgb, float closest_hit, t_ray ray);
-void set_cyl_intersect_surface_normal(t_cylinder *cyl, t_hit *intersect);
+void set_cyl_intersect_surface_normal(t_cylinder *cyl, t_hit *intersect, t_ray ray);
 
 
 

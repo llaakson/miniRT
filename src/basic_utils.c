@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:18:04 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 20:22:12 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:54:25 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_strcmp(char *s1, char *s2)
 	return (0);
 }
 
-static float	atof_decimal(char *str, int i, double *res_as_double)
+static void	atof_decimal(char *str, int i, double *res_as_double)
 {
 	float	decimal_place;
 
