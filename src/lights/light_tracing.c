@@ -63,14 +63,15 @@ int calculate_light(t_minirt *data, t_hit intersection)
     light.shadow_ray.origin = vec_add(intersection.coordinates, vec_scale(intersection.surface_normal,  0.1f));
     light.shadow_ray.dir = light.lightning_direction;
     light.color = calculate_shadow(data, light.shadow_ray, light.light_distance);
-    if (light.color != 0)
+    
+    light.dot_product = vec_dot(intersection.surface_normal,light.lightning_direction);
+    if (light.color != 0 || light.dot_product < 0)
     {
         if (data->amb_light->ratio == 0)
             return (mix_color(multiply_color_intensity(intersection.rgb, 0)));
         else
             return (mix_color(light.color_str));
     }
-    light.dot_product = vec_dot(intersection.surface_normal,light.lightning_direction);
     light.dot_product = fmax(0.0f, light.dot_product);
     light.color_dot = multiply_color_intensity(light.color_dot, light.dot_product);
     light.color_dot = multiply_color_intensity(light.color_dot, data->light->ratio);
