@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/28 11:33:15 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:44:42 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static void	loop_intersect_spheres(t_sphere *spheres,
 						(*intersection).coordinates, current->center));
 			//test
 			if (vec_dot(ray.dir, (*intersection).surface_normal) > 0.0)
-				(*intersection).surface_normal = vec_scale((*intersection).surface_normal, -1);
+				(*intersection).surface_normal = vec_scale(
+						(*intersection).surface_normal, -1);
 		}
 		current = current->next;
 	}
