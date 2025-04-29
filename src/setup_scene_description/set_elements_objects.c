@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 22:05:18 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/28 12:11:18 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:10:53 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void	set_cylinder_elements(int info_num,
 	else if (info_num == 4)
 		set_rgb(element_info, &new_node->rgb);
 	else
-		error_exit("Too many element arguments for plane");
+		error_exit("Too many element arguments for cylinder");
 }
 
 void	set_object_cylinder(char *line, int line_i, t_minirt *data)
@@ -100,5 +100,5 @@ void	set_object_cylinder(char *line, int line_i, t_minirt *data)
 		element_info = get_next_element_info(line, &line_i);
 	}
 	if (info_num != 4)
-		error_exit("Too few element arguments for plane");
+		error_exit("Too few element arguments for cylinder");
 }
