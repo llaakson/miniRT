@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/28 11:44:42 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:21:07 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,9 @@ static void	loop_intersect_spheres(t_sphere *spheres,
 		temp = intersect_sphere(current, ray);
 		if (temp < (*intersection).closest_intersect && temp > -1.0)
 		{
-			(*intersection).object.spheres = current;
 			set_intersection_data(intersection, current->rgb, temp, ray);
 			(*intersection).surface_normal = vec_normalize(vec_sub(
 						(*intersection).coordinates, current->center));
-			//test
 			if (vec_dot(ray.dir, (*intersection).surface_normal) > 0.0)
 				(*intersection).surface_normal = vec_scale(
 						(*intersection).surface_normal, -1);
@@ -53,7 +51,6 @@ static void	loop_intersect_planes(t_plane *planes,
 		temp = intersect_plane(current, ray);
 		if (temp < (*intersection).closest_intersect && temp > -1.0)
 		{
-			(*intersection).object.planes = current;
 			set_intersection_data(intersection, current->rgb, temp, ray);
 			if (vec_dot(ray.dir, current->orientation) > 0)
 				(*intersection).surface_normal = vec_scale(
@@ -79,7 +76,6 @@ static void	loop_intersect_cylinders(t_cylinder *cylinders,
 		temp = intersect_cylinder(current, ray);
 		if (temp < (*intersection).closest_intersect && temp > -1.0)
 		{
-			(*intersection).object.cylinders = current;
 			set_intersection_data(intersection, current->rgb, temp, ray);
 			set_cyl_intersect_surface_normal(current, intersection, ray);
 		}
@@ -91,9 +87,6 @@ static t_hit	init_hit_struct(void)
 {
 	t_hit	intersect;
 
-	intersect.object.spheres = NULL;
-	intersect.object.planes = NULL;
-	intersect.object.cylinders = NULL;
 	intersect.closest_intersect = INFINITY;
 	intersect.coordinates = (t_xyz){0, 0, 0};
 	intersect.rgb = (t_xyz){0, 0, 0};

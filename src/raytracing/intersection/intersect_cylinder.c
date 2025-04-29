@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:53:31 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 19:56:21 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:19:12 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ static t_plane	init_cyl_base_as_plane(t_cylinder *cyl, int check)
 {
 	t_plane	cyl_base;
 
-	cyl_base.prev = NULL;
 	cyl_base.next = NULL;
 	cyl_base.rgb = (t_xyz){0, 0, 0};
 	if (check == 0)

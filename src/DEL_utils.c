@@ -14,7 +14,7 @@ void print_elements_of_rt_file(t_minirt *data)
 		printf("\nCAMERA\n");
 		printf("%f and %f and %f\n", data->camera->coordinates.x, data->camera->coordinates.y, data->camera->coordinates.z);
 		printf("%f and %f and %f\n", data->camera->orientation.x, data->camera->orientation.y, data->camera->orientation.z);
-		printf("%d\n", data->camera->FOV);
+		printf("%d\n", data->camera->fov);
 	}
 	if (data->light)
 	{

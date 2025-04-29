@@ -20,7 +20,8 @@ src/setup_scene_description/setup_scene_utils.c \
 src/setup_scene_description/set_element_arguments.c \
 src/setup_scene_description/set_element_arguments_2.c \
 src/setup_scene_description/set_elements_objects.c \
-src/malloc_tracker/malloc_tracker.c \
+src/malloc_tracker/malloc_tracked.c \
+src/malloc_tracker/free_tracked.c \
 src/setup_scene_description/object_nodes.c \
 src/raytracing/raytracing.c \
 src/raytracing/vector_math.c \

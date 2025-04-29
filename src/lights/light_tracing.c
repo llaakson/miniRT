@@ -15,7 +15,7 @@ int calculate_shadow(t_minirt *data, t_ray ray, double light_distance)
     t_hit intersection;
 
     intersection = intersect(data, ray);
-    if (intersection.object.spheres || intersection.object.planes || intersection.object.cylinders)
+    if (intersection.closest_intersect != INFINITY) //changed
     {
         shadow_distance = vec_length(vec_sub(intersection.coordinates, ray.origin));
         if (light_distance > shadow_distance)

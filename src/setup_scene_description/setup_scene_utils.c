@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:45:32 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 15:09:26 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:40:50 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ char	*get_next_element_info(char *line, int *line_i)
 	buffer_size = 20;
 	info = tracked_malloc(buffer_size);
 	info_i = 0;
-	if (!line || line[*line_i] == '\0') //needed?
+	if (!line)
 		return (NULL);
 	while (line[*line_i] && line[*line_i] == 32)
 		*line_i = *line_i + 1;
-	if (!line[*line_i]) //after whitespace line is done
+	if (!line[*line_i])
 		return (NULL);
 	while (line[*line_i] && line[*line_i] != 32)
 	{

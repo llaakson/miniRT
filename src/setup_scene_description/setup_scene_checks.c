@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:21:00 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 15:10:28 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:06:31 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ void	check_missing_elements(t_minirt *data)
 {
 	if (data->amb_light == NULL)
 	{
-		data->amb_light = tracked_malloc(sizeof(t_ambientLight));
+		data->amb_light = tracked_malloc(sizeof(t_ambient_light));
 		data->amb_light->ratio = 0;
 		data->amb_light->rgb = (t_xyz){0, 0, 0};
 		data->amb_light->rgb = divide_color(data->amb_light->rgb);
-		data->amb_light->rgb_ratio = multiply_color_intensity(data->amb_light->rgb, data->amb_light->ratio);
+		data->amb_light->rgb_ratio = multiply_color_intensity(
+				data->amb_light->rgb, data->amb_light->ratio);
 	}
 	if (data->light == NULL)
 	{

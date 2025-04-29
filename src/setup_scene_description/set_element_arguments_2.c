@@ -6,20 +6,20 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 14:21:23 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 13:21:35 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:05:49 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
 
-void	set_fov(char *element_info, int *FOV)
+void	set_fov(char *element_info, int *fov)
 {
 	if (ft_strchr(element_info, '.'))
-		error_exit("Camera FOV argument must be a whole number");
+		error_exit("Camera fov argument must be a whole number");
 	no_extra_minus_in_str(element_info, 1);
-	*FOV = ft_atoi_overflow_checked(element_info);
-	if (*FOV < 0 || *FOV > 180)
-		error_exit("Camera FOV argument must be in the range 0-180");
+	*fov = ft_atoi_overflow_checked(element_info);
+	if (*fov < 0 || *fov > 180)
+		error_exit("Camera fov argument must be in the range 0-180");
 }
 
 void	set_diameter_or_height(char *element_info, float *measurement)

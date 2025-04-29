@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/28 11:57:48 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:21:36 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ distorted. To make the a pixel represent a square area again,
 we scale scalar_x with the aspect ratio (multiplication).
 (2 * ((pixel_x + 0.5f) / IMG_WIDTH) - 1) * camera->aspect_ratio
 
-5. The same goes for the camera field of view (FOV) and the scene we are making.
+5. The same goes for the camera field of view (fov) and the scene we are making.
 We need to scale the pixel grid to correctly represent what
-the camera sees. We scale scalar_x with the FOV_scale.
-Camera zoomed out (wide FOV) = camera sees more of the scene.
-Camera zoomed in (narrow FOV) = camera sees less of the scene.
-(2*((pixel_x + 0.5f) /IMG_WIDTH)-1) * camera->aspect_ratio * camera->FOV_scale
+the camera sees. We scale scalar_x with the fov_scale.
+Camera zoomed out (wide fov) = camera sees more of the scene.
+Camera zoomed in (narrow fov) = camera sees less of the scene.
+(2*((pixel_x + 0.5f) /IMG_WIDTH)-1) * camera->aspect_ratio * camera->fov_scale
 
 ----Calculate scalar_y (how far the ray is pointing up or down)-----------------
 
@@ -76,8 +76,8 @@ formula to get -1 is down, 1 is up.
 4. For scalar_y we don't need to take into account the aspect ratio.
 Aspect ratio is calculated in relation to the screen_height,
 so scalar_y and aspect_ratio are already in sync.
-We however take into account the FOV_scale, just like with scalar_x.
-scalar_y = (-2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1) * camera->FOV_scale;
+We however take into account the fov_scale, just like with scalar_x.
+scalar_y = (-2 * ((pixel_y + 0.5f) / IMG_HEIGHT) + 1) * camera->fov_scale;
 
 Return:
 The calculated ray direction as a unit vector.
@@ -135,9 +135,9 @@ static t_xyz	get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
 	float	phi_angle;
 
 	scalar_x = (2 * (((float)pixel_x + 0.5f) / IMG_WIDTH) - 1)
-		* camera->aspect_ratio * camera->FOV_scale;
+		* camera->aspect_ratio * camera->fov_scale;
 	scalar_y = (1 - 2 * (((float)pixel_y + 0.5f) / IMG_HEIGHT))
-		* camera->FOV_scale;
+		* camera->fov_scale;
 	fisheye_radius = sqrt(scalar_x * scalar_x + scalar_y * scalar_y);
 	fisheye_radius = fisheye_radius * 0.1;
 	phi_angle = atan2(scalar_y, scalar_x);
@@ -186,20 +186,20 @@ the screen width and screen height.
 Essential for some calculations to not
 make the rendered scene-image look distorted.
 
-FOV_scale: FOV is the total angle a camera can see.
+fov_scale: fov is the total angle a camera can see.
 It tells us how much the camera is zoomed in/out
 when looking out into the 3d world.
 Tan input needs to be a radian,
  which is calculated as degrees * PI / 180.
-We already have a FOV in degrees, but now we are making a scalar.
+We already have a fov in degrees, but now we are making a scalar.
 Tan also need a right-angled triangle to work.
 We divide by two to get that.
 An angle = a triangle, half of an angle = a right-angled triangle.
-FOV_scale is essential for some calculations,
+fov_scale is essential for some calculations,
 to correctly depict the cameras zooming
 and how it affects what it sees in the scene.
 Tan gives us a ratio between the height and the depth of the scene.
-The FOV_scale can tell us how far up/down in the scene the camera can capture,
+The fov_scale can tell us how far up/down in the scene the camera can capture,
 when you stand at a certain distance from the camera.
 
 Return:
@@ -215,7 +215,7 @@ static void	set_detailed_camera(t_camera *camera)
 		camera->right_view = vec_normalize(
 				vec_cross(camera->world_up, camera->orientation));
 	camera->aspect_ratio = (float)IMG_WIDTH / (float)IMG_HEIGHT;
-	camera->FOV_scale = tanf(((float)camera->FOV * M_PI / 180.0) / 2.0);
+	camera->fov_scale = tanf(((float)camera->fov * M_PI / 180.0) / 2.0);
 }
 
 /*
@@ -254,7 +254,7 @@ void	raytracer(t_minirt *data)
 		{
 			ray.dir = get_ray_direction(x, y, data->camera);
 			intersection = intersect(data, ray);
-			if (intersection.object.spheres || intersection.object.planes || intersection.object.cylinders)
+			if (intersection.closest_intersect != INFINITY)
 			{
 				intersection.rgb = divide_color(intersection.rgb); // probably better way and place to do this.
 				color = calculate_light(data, intersection);
