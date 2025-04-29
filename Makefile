@@ -57,7 +57,7 @@ libft:
 %.o: %.c
 	@$(CC) $(CFLAGS) $< -c -o $@ $(HEADERS)
 
-$(NAME): $(OBJS)
+$(NAME): libmlx libft $(OBJS)
 	@$(CC) $(OBJS) -lm $(LIBS) $(HEADERS) -o $(NAME)
 	@echo "$(NAME) compiled successfully.\n"
 
