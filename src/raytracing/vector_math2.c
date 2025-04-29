@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 20:10:01 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 20:10:36 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:32:47 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ Description:
 Calculates the length of the argument vector.
 
 Return:
-A float value representing the vector length.
+A double value representing the vector length.
 */
-float	vec_length(t_xyz vec)
+double	vec_length(t_xyz vec)
 {
 	return (sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z));
 }
@@ -51,7 +51,7 @@ the unit vector result has no information about the length anymore.
 t_xyz	vec_normalize(t_xyz vec)
 {
 	t_xyz	result;
-	float	length;
+	double	length;
 
 	length = vec_length(vec);
 	if (length == 0.0f)

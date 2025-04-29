@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:31:36 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 20:02:05 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:32:47 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,13 @@ the ray intersects with a sphere (if it does so).
 Return:
 Closest ray intersection of the sphere.
 */
-float	intersect_sphere(t_sphere *sphere, t_ray ray)
+double	intersect_sphere(t_sphere *sphere, t_ray ray)
 {
 	t_xyz	oc;
-	float	a;
-	float	b;
-	float	c;
-	float	sphere_radius;
+	double	a;
+	double	b;
+	double	c;
+	double	sphere_radius;
 
 	sphere_radius = sphere->diameter / 2;
 	oc = vec_sub(ray.origin, sphere->center);

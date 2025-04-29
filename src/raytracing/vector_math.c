@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:25:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 20:10:32 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:32:47 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ A new vector with the same direction as the argument vector,
 but with a different length.
 
 */
-t_xyz	vec_scale(t_xyz vec, float scale)
+t_xyz	vec_scale(t_xyz vec, double scale)
 {
 	t_xyz	result;
 
@@ -83,10 +83,10 @@ Description:
 - Calculation of dot product.
 - Comparison the direction of the two vectors.
 - If u need to do vector * vector and want
-a float answer, you can use this function.
+a double answer, you can use this function.
 
 Return:
-A float number telling us how alike the directions of the vectors are.
+A double number telling us how alike the directions of the vectors are.
 
 If return value is
 Positive: The directions point in similar directions,
@@ -98,7 +98,7 @@ If the two argument vectors are normalized, return values mean
 0: The directions point 90° apart,
 -1: The directions are completely opposite
 */
-float	vec_dot(t_xyz one, t_xyz two)
+double	vec_dot(t_xyz one, t_xyz two)
 {
 	return (one.x * two.x + one.y * two.y + one.z * two.z);
 }

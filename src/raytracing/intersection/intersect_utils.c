@@ -6,13 +6,13 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 22:15:14 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 14:44:46 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:32:47 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/miniRT.h"
 
-void	set_intersection_data(t_hit *inter, t_xyz rgb, float inter_p, t_ray ray)
+void	set_intersection_data(t_hit *inter, t_xyz rgb, double inter_p, t_ray ray)
 {
 	(*inter).closest_intersect = inter_p;
 	(*inter).rgb = rgb;
@@ -41,7 +41,7 @@ the surface normal:
 a unit vector pointing outward from the axis point of intersect,
 to the actual cylinder surface point of intersect.
 If we are inside the cylinder, we make the surface normal point
-inwards instead. 
+inwards instead.
 
 A surface normal is a unit vector
 pointing directly outward from the point of intersect.
@@ -51,7 +51,7 @@ void	set_cyl_intersect_surface_normal(t_cylinder *cyl,
 {
 	t_xyz	cyl_center_to_inter_p;
 	t_xyz	axis_inter_p;
-	float	inter_dist_on_axis;
+	double	inter_dist_on_axis;
 
 	if (cyl->base_or_side_hit == 1)
 	{

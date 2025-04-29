@@ -6,13 +6,13 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 13:47:31 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:34:53 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
 
-void	set_light_ratio(char *element_info, float *light_ratio)
+void	set_light_ratio(char *element_info, double *light_ratio)
 {
 	if (ft_strchr(element_info, ','))
 		error_exit("Light ratio argument consists of only one number");
@@ -94,7 +94,7 @@ void	set_normalized_vector(char *element_info, t_xyz *vector)
 		error_exit("Normalized vector argument has to be -1 or bigger");
 	if (vector->x > 1.0 || vector->y > 1.0 || vector->z > 1.0)
 		error_exit("Normalized vector argument has to be 1 or smaller");
-	if (fabsf(vec_length(*vector) - 1.0f) > 0.000001)
+	if (fabs(vec_length(*vector) - 1.0f) > 0.000001)
 		error_exit("Normalized vector has length 1.0. √(x² + y² + z²) = 1.0");
 	i = 0;
 	while (split_vector[i])

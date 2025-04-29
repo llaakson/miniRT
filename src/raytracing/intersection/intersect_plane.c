@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 14:36:21 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 19:59:11 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:32:47 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ as soon as we can from the camera is safest.
 Otherwise we calculate the result t.
 If t < 0, the intersection is behind the camera.
 */
-float	intersect_plane(t_plane *plane, t_ray ray)
+double	intersect_plane(t_plane *plane, t_ray ray)
 {
-	float	t;
-	float	numerator;
-	float	denominator;
+	double	t;
+	double	numerator;
+	double	denominator;
 
 	numerator = vec_dot(vec_sub(plane->point_in_plane,
 				ray.origin), plane->orientation);

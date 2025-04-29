@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:06:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 14:21:07 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:32:47 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	loop_intersect_spheres(t_sphere *spheres,
 		t_ray ray, t_hit *intersection)
 {
 	t_sphere	*current;
-	float		temp;
+	double		temp;
 
 	if (!spheres)
 		return ;
@@ -41,7 +41,7 @@ static void	loop_intersect_planes(t_plane *planes,
 	t_ray ray, t_hit *intersection)
 {
 	t_plane	*current;
-	float	temp;
+	double	temp;
 
 	if (!planes)
 		return ;
@@ -66,7 +66,7 @@ static void	loop_intersect_cylinders(t_cylinder *cylinders,
 	t_ray ray, t_hit *intersection)
 {
 	t_cylinder	*current;
-	float		temp;
+	double		temp;
 
 	if (!cylinders)
 		return ;

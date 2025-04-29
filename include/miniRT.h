@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:56:06 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 14:36:41 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:33:20 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ typedef struct s_mallocs
 
 typedef struct s_xyz
 {
-	float	x;
-	float	y;
-	float	z;
+	double	x;
+	double	y;
+	double	z;
 }	t_xyz;
 
 typedef struct s_ray
@@ -51,13 +51,13 @@ typedef struct s_camera
 	int		fov;
 	t_xyz	world_up;
 	t_xyz	right_view;
-	float	aspect_ratio;
-	float	fov_scale;
+	double	aspect_ratio;
+	double	fov_scale;
 }	t_camera;
 
 typedef struct s_ambient_light
 {
-	float	ratio;
+	double	ratio;
 	t_xyz	rgb;
 	t_xyz	rgb_ratio;
 }	t_ambient_light;
@@ -65,14 +65,14 @@ typedef struct s_ambient_light
 typedef struct s_lighting
 {
 	t_xyz	coordinates;
-	float	ratio;
+	double	ratio;
 	t_xyz	rgb;
 }	t_lighting;
 
 typedef struct s_sphere
 {
 	t_xyz			center;
-	float			diameter;
+	double			diameter;
 	t_xyz			rgb;
 	struct s_sphere	*next;
 }	t_sphere;
@@ -89,8 +89,8 @@ typedef struct s_cylinder
 {
 	t_xyz				center;
 	t_xyz				orientation;
-	float				diameter;
-	float				height;
+	double				diameter;
+	double				height;
 	t_xyz				rgb;
 	int					base_or_side_hit;
 	struct s_cylinder	*next;
@@ -105,7 +105,7 @@ typedef struct s_object
 
 typedef struct s_intersection
 {
-	float		closest_intersect;
+	double		closest_intersect;
 	t_xyz		coordinates;
 	t_xyz		rgb;
 	t_xyz		surface_normal;
@@ -144,13 +144,13 @@ void		set_camera(char *line, int line_i, t_minirt *data);
 void		set_light(char *line, int line_i, t_minirt *data);
 char		*get_next_element_info(char *line, int *line_i);
 int			no_extra_minus_in_str(char *str, int i);
-void		set_light_ratio(char *element_info, float *light_ratio);
+void		set_light_ratio(char *element_info, double *light_ratio);
 void		set_rgb(char *element_info, t_xyz *rgb);
 void		set_coordinates(char *element_info, t_xyz *coordinates);
 void		set_normalized_vector(char *element_info, t_xyz *vector);
 void		set_fov(char *element_info, int *fov);
 void		set_object_sphere(char *line, int line_i, t_minirt *data);
-void		set_diameter_or_height(char *element_info, float *measurement);
+void		set_diameter_or_height(char *element_info, double *measurement);
 void		set_object_plane(char *line, int line_i, t_minirt *data);
 void		set_object_cylinder(char *line, int line_i, t_minirt *data);
 t_sphere	*add_new_sphere_node(t_minirt *data);
@@ -164,7 +164,7 @@ void		track_rt_file_fd(int fd);
 //basic utils
 int			is_whitespace(char c);
 int			ft_strcmp(char *s1, char *s2);
-float		ft_atof(char *str, float *result);
+double		ft_atof(char *str, double *result);
 int			ft_atoi_overflow_checked(const char *str);
 
 //tracked malloc
@@ -179,10 +179,10 @@ void		*store_pointer(int i,  void *ptr);
 //vector math
 t_xyz		vec_add(t_xyz one, t_xyz two);
 t_xyz		vec_sub(t_xyz one, t_xyz two);
-t_xyz		vec_scale(t_xyz vec, float scale);
-float		vec_dot(t_xyz one, t_xyz two);
+t_xyz		vec_scale(t_xyz vec, double scale);
+double		vec_dot(t_xyz one, t_xyz two);
 t_xyz		vec_cross(t_xyz one, t_xyz two);
-float		vec_length(t_xyz vec);
+double		vec_length(t_xyz vec);
 t_xyz		vec_normalize(t_xyz vec);
 
 //raytracing
@@ -191,12 +191,12 @@ void		raytracer(t_minirt *data);
 //intersection
 t_hit		intersect(t_minirt *data, t_ray ray);
 
-float		quadratic_equation(float a, float b, float c);
-float		intersect_plane(t_plane *plane, t_ray ray);
-float		intersect_cylinder(t_cylinder *cyl, t_ray ray);
-float		intersect_sphere(t_sphere *sphere, t_ray ray);
+double		quadratic_equation(double a, double b, double c);
+double		intersect_plane(t_plane *plane, t_ray ray);
+double		intersect_cylinder(t_cylinder *cyl, t_ray ray);
+double		intersect_sphere(t_sphere *sphere, t_ray ray);
 void		set_intersection_data(t_hit *inter,
-				t_xyz rgb, float inter_p, t_ray ray);
+				t_xyz rgb, double inter_p, t_ray ray);
 void		set_cyl_intersect_surface_normal(t_cylinder *cyl,
 				t_hit *inter, t_ray ray);
 
