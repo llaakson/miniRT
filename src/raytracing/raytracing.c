@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 21:36:30 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/30 00:15:20 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,18 +131,18 @@ static t_xyz	get_ray_direction(int pixel_x, int pixel_y, t_camera *camera)
 	double	scalar_x;
 	double	scalar_y;
 	t_xyz	direction;
-	double	fisheye_radius;
-	double	phi_angle;
+	//double	fisheye_radius;
+	//double	phi_angle;
 
 	scalar_x = (2 * (((double)pixel_x + 0.5f) / IMG_WIDTH) - 1)
 		* camera->aspect_ratio * camera->fov_scale;
 	scalar_y = (1 - 2 * (((double)pixel_y + 0.5f) / IMG_HEIGHT))
 		* camera->fov_scale;
-	fisheye_radius = sqrt(scalar_x * scalar_x + scalar_y * scalar_y);
+	/*fisheye_radius = sqrt(scalar_x * scalar_x + scalar_y * scalar_y);
 	fisheye_radius = fisheye_radius * 0.1;
 	phi_angle = atan2(scalar_y, scalar_x);
 	scalar_x = fisheye_radius * cos(phi_angle);
-	scalar_y = fisheye_radius * sin(phi_angle);
+	scalar_y = fisheye_radius * sin(phi_angle);*/
 	direction = vec_add(vec_scale(camera->right_view, scalar_x),
 			vec_scale(camera->world_up, scalar_y));
 	direction = vec_add(direction, camera->orientation);
@@ -217,6 +217,7 @@ static void	set_detailed_camera(t_camera *camera)
 	camera->aspect_ratio = (double)IMG_WIDTH / (double)IMG_HEIGHT;
 	camera->fov_scale = tan(((double)camera->fov * M_PI / 180.0) / 2.0);
 }
+
 
 /*
 Arguments:

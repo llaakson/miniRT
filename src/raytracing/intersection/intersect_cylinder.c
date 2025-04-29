@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:53:31 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 21:35:30 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/30 00:12:49 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,9 @@ static double	t_is_valid_intersection(t_cylinder *cyl, t_ray ray, double t)
 	vec_cyl_center_to_intersect_p = vec_sub(intersect_coords, cyl->center);
 	axis_point_of_intersect = vec_dot(vec_cyl_center_to_intersect_p,
 			cyl->orientation);
-	if (fabs(axis_point_of_intersect) > cyl->height / 2.0)
+	//if (fabs(axis_point_of_intersect) > cyl->height / 2.0)
+	//	return (-1);
+	if (axis_point_of_intersect < 0.0 || axis_point_of_intersect > cyl->height)
 		return (-1);
 	return (0);
 }
@@ -113,15 +115,20 @@ static t_plane	init_cyl_base_as_plane(t_cylinder *cyl, int check)
 	cyl_base.rgb = (t_xyz){0, 0, 0};
 	if (check == 0)
 	{
-		cyl_base.point_in_plane = vec_add(cyl->center,
-				vec_scale(cyl->orientation, cyl->height / 2.0));
+		//cyl_base.point_in_plane = vec_add(cyl->center,
+				//vec_scale(cyl->orientation, cyl->height / 2.0));
+		cyl_base.point_in_plane = vec_add(cyl->center, vec_scale(cyl->orientation, cyl->height));
 		cyl_base.orientation = cyl->orientation;
+		//printf("up base %f %f %f\n", cyl_base.point_in_plane.x,  cyl_base.point_in_plane.y,  cyl_base.point_in_plane.z);
 	}
 	else if (check == 1)
 	{
-		cyl_base.point_in_plane = vec_sub(cyl->center,
-				vec_scale(cyl->orientation, cyl->height / 2.0));
+		//cyl_base.point_in_plane = vec_sub(cyl->center,
+		//		vec_scale(cyl->orientation, cyl->height / 2.0));
+		cyl_base.point_in_plane = cyl->center;
 		cyl_base.orientation = vec_scale(cyl->orientation, -1);
+		//printf("down base %f %f %f\n", cyl_base.point_in_plane.x,  cyl_base.point_in_plane.y,  cyl_base.point_in_plane.z);
+		//error_exit("i finish here\n");
 	}
 	return (cyl_base);
 }
@@ -167,7 +174,7 @@ static void	intersect_cylinder_bases(t_ray ray, t_cylinder *cyl,
 		if (vec_dot(base_to_inter_p, base_to_inter_p)
 			<= cyl_radius * cyl_radius)
 		{
-			if ((*t == -1 && temp != -1) || (temp < *t && temp > -1))
+			if (temp > -1 && (*t == -1 || temp < *t))
 			{
 				*t = temp;
 				cyl->base_or_side_hit = i + 2;
@@ -176,6 +183,8 @@ static void	intersect_cylinder_bases(t_ray ray, t_cylinder *cyl,
 		i++;
 	}
 }
+
+
 
 /*
 Arguments;
@@ -274,3 +283,12 @@ double	intersect_cylinder(t_cylinder *cyl, t_ray ray)
 	intersect_cylinder_bases(ray, cyl, cyl->diameter / 2, &t);
 	return (t);
 }
+
+
+
+
+
+
+
+
+
