@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 22:15:14 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 13:54:48 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:44:46 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,14 @@ base_or_side_hit: a number between 1 and 3.
 3 = intersection with "lower base" of cylinder.
 
 CALCUATION FOR 1 (intersection with curved surface)
-cyl_center_to_intersect: a vector between the
+cyl_center_to_inter_p: a vector between the
 cylinder center and the intersection point.
 
-intersect_distance_on_axis: a scalar projection where we see
+inter_dist_on_axis: (intersection distance on axis), a scalar projection where we see
 how har up on the cylinder axis, the intersection point is.
 
-axis_p_closest_to_intersect: make the intersect_distance_to_axis,
+axis_inter_p: (axis point closest to intersection point),
+make the intersect_distance_to_axis,
 into an actual point x,y,z on the axis.
 
 the surface normal:
