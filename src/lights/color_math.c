@@ -12,7 +12,7 @@
 
 #include "../../include/miniRT.h"
 
-t_xyz	multiply_color_intensity(t_xyz color, double multiplier)
+t_xyz	multiply_intensity(t_xyz color, double multiplier)
 {
 	t_xyz	result;
 

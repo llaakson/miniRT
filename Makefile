@@ -8,7 +8,7 @@ LIBLIBFT	:= ./libft
 
 HEADERS	:= -I ./include -I $(LIBMLX)/include -I $(LIBLIBFT)
 
-LIBS	:= $(LIBMLX)/build/libmlx42.a -L$(LIBLIBFT) -lft -ldl -lglfw -pthread -lm
+LIBS	:= $(LIBMLX)/build/libmlx42.a -L$(LIBLIBFT) -lft -ldl -lglfw -pthread -lm -O3
 
 SRCS = src/main.c \
 src/setup_scene_description/setup_scene_checks.c \

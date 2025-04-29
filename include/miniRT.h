@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:56:06 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 14:36:41 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:06:15 by llaakson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,13 @@ typedef struct s_intersection
 typedef struct s_lights
 {
 	t_ray		shadow_ray;
-	t_xyz		lightning_direction;
-	t_xyz		color_str;
-	t_xyz		color_dot;
+	t_xyz		direction;
+	t_xyz		c_str;
+	t_xyz		c_dot;
 	double		dot_product;
 	double		light_distance;
 	uint32_t	color;
-	t_xyz		color_specular;
+	t_xyz		c_specular;
 
 }	t_lights;
 
@@ -174,7 +174,7 @@ void		tracked_free_all(void);
 void		track_pointer(void *ptr);
 char		*tracked_realloc(char *str, size_t len);
 t_mallocs	**get_set_tracker_head(void);
-void		*store_pointer(int i,  void *ptr);
+void		*store_pointer(int i, void *ptr);
 
 //vector math
 t_xyz		vec_add(t_xyz one, t_xyz two);
@@ -209,10 +209,9 @@ int32_t		ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a);
 t_xyz		clamp_colors(t_xyz color);
 t_xyz		add_colors(t_xyz color1, t_xyz color2);
 t_xyz		multiply_color(t_xyz color1, t_xyz color2);
-t_xyz		multiply_color_intensity(t_xyz color, double multiplier);
+t_xyz		multiply_intensity(t_xyz color, double multiplier);
 void		print_color(t_xyz color);
 uint32_t	mix_color(t_xyz color);
 t_xyz		divide_color(t_xyz color);
-
 
 #endif
