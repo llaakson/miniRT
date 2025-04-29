@@ -174,6 +174,7 @@ void		tracked_free_all(void);
 void		track_pointer(void *ptr);
 char		*tracked_realloc(char *str, size_t len);
 t_mallocs	**get_set_tracker_head(void);
+void		*store_pointer(int i,  void *ptr);
 
 //vector math
 t_xyz		vec_add(t_xyz one, t_xyz two);
@@ -212,5 +213,6 @@ t_xyz		multiply_color_intensity(t_xyz color, double multiplier);
 void		print_color(t_xyz color);
 uint32_t	mix_color(t_xyz color);
 t_xyz		divide_color(t_xyz color);
+
 
 #endif

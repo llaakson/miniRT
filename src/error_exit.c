@@ -12,9 +12,25 @@
 
 #include "../include/miniRT.h"
 
+void *store_pointer(int i,  void *ptr) 
+{
+    static void* stored_ptr = NULL;
+
+    if (i == 1) 
+        stored_ptr = ptr;
+    return stored_ptr;
+}
+
 void	error_exit(char *error)
 {
+	void *ptr = NULL;
+	ptr = store_pointer(0, ptr);
 	printf("Error: %s\n", error);
+	if (ptr != NULL)
+	{
+		mlx_close_window(ptr);
+		mlx_terminate(ptr);
+	}
 	tracked_free_all();
 	track_rt_file_fd(-1);
 	get_next_line(-2);
