@@ -6,24 +6,27 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 13:38:57 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/28 11:43:57 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:28:03 by llaakson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/miniRT.h"
 
-void *store_pointer(int i,  void *ptr) 
+void	*store_pointer(int i, void *ptr)
 {
-    static void* stored_ptr = NULL;
+	static void	*stored_ptr;
 
-    if (i == 1) 
-        stored_ptr = ptr;
-    return stored_ptr;
+	stored_ptr = NULL;
+	if (i == 1)
+		stored_ptr = ptr;
+	return (stored_ptr);
 }
 
 void	error_exit(char *error)
 {
-	void *ptr = NULL;
+	void	*ptr;
+
+	ptr = NULL;
 	ptr = store_pointer(0, ptr);
 	printf("Error: %s\n", error);
 	if (ptr != NULL)

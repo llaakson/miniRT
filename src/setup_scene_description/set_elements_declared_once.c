@@ -37,7 +37,7 @@ void	set_ambient_light(char *line, int line_i, t_minirt *data)
 	if (info_num != 1)
 		error_exit("Too few element arguments for ambient light");
 	data->amb_light->rgb = divide_color(data->amb_light->rgb);
-	data->amb_light->rgb_ratio = multiply_color_intensity(
+	data->amb_light->rgb_ratio = multiply_intensity(
 			data->amb_light->rgb, data->amb_light->ratio);
 }
 
