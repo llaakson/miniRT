@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 14:21:23 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/27 14:38:40 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:21:35 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ void	set_diameter_or_height(char *element_info, float *measurement)
 	if (ft_strchr(element_info, ','))
 		error_exit("Object diameter or height consists of only one number");
 	ft_atof(element_info, measurement);
-	if (*measurement < 0.0) //????????
-		error_exit("Object diameter or height can't be negative");
+	if (*measurement <= 0.0)
+		error_exit("Object diameter or height can't be negative or zero");
 }
