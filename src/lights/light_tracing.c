@@ -79,7 +79,7 @@ int	calculate_light(t_minirt *data, t_hit intersection)
 	light.light_distance = vec_length(light.direction);
 	light.direction = vec_normalize(light.direction);
 	light.shadow_ray.origin = vec_add(intersection.coordinates,
-			vec_scale(intersection.surface_normal, 0.1f));
+			vec_scale(intersection.surface_normal, 0.0001f));
 	light.shadow_ray.dir = light.direction;
 	light.color = calculate_shadow(data,
 			light.shadow_ray, light.light_distance);
