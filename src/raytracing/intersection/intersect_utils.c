@@ -6,13 +6,14 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 22:15:14 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 22:05:19 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:07:39 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/miniRT.h"
 
-void	set_intersection_data(t_hit *inter, t_xyz rgb, double inter_p, t_ray ray)
+void	set_intersection_data(
+		t_hit *inter, t_xyz rgb, double inter_p, t_ray ray)
 {
 	(*inter).closest_intersect = inter_p;
 	(*inter).rgb = rgb;
@@ -30,7 +31,8 @@ CALCUATION FOR 1 (intersection with curved surface)
 cyl_center_to_inter_p: a vector between the
 cylinder center and the intersection point.
 
-inter_dist_on_axis: (intersection distance on axis), a scalar projection where we see
+inter_dist_on_axis: (intersection distance on axis),
+a scalar projection where we see
 how har up on the cylinder axis, the intersection point is.
 
 axis_inter_p: (axis point closest to intersection point),

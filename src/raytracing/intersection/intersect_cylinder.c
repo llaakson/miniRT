@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 15:53:31 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/30 00:12:49 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:06:52 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,12 @@ cylinder center to the intersection point.
 
 axis_point_of_intersect = The intersection point is on the cylinder surface.
 Here we find out the distance from the cylinder center
-(middle point of cylinder, on the axis) to the point on the axis,
+(axis point on lower base of cylinder) to the point on the axis,
 where the intersection at a radius distance "horizontally" will happen.
 
-We make axis_point_of_intersect into a absolute value (the positive
-equivalent of the number, so -33 would be 33 and so on).
-The cylinder height is always positive, but the axis_point_of_intersect
-can be negative (since cylinder center is in the middle of the axis ("point 0"),
-the axis_point_of_intersect can be below it (negative), or above it (positive).
-Then we compare the absolute value against the cylinder height / 2.
-We divide the height by two, to compare the axis_point_of_intersect with either
-center_point to top of cylinder, or center_point, to bottom of cylinder.
+The height goes from 0 to height on the axis.
+We check that the point of intersect
+on the axis is within this boundary.
 
 Return:
 -1 if the intersection point is
@@ -85,8 +80,6 @@ static double	t_is_valid_intersection(t_cylinder *cyl, t_ray ray, double t)
 	vec_cyl_center_to_intersect_p = vec_sub(intersect_coords, cyl->center);
 	axis_point_of_intersect = vec_dot(vec_cyl_center_to_intersect_p,
 			cyl->orientation);
-	//if (fabs(axis_point_of_intersect) > cyl->height / 2.0)
-	//	return (-1);
 	if (axis_point_of_intersect < 0.0 || axis_point_of_intersect > cyl->height)
 		return (-1);
 	return (0);
@@ -115,20 +108,14 @@ static t_plane	init_cyl_base_as_plane(t_cylinder *cyl, int check)
 	cyl_base.rgb = (t_xyz){0, 0, 0};
 	if (check == 0)
 	{
-		//cyl_base.point_in_plane = vec_add(cyl->center,
-				//vec_scale(cyl->orientation, cyl->height / 2.0));
-		cyl_base.point_in_plane = vec_add(cyl->center, vec_scale(cyl->orientation, cyl->height));
+		cyl_base.point_in_plane = vec_add(
+				cyl->center, vec_scale(cyl->orientation, cyl->height));
 		cyl_base.orientation = cyl->orientation;
-		//printf("up base %f %f %f\n", cyl_base.point_in_plane.x,  cyl_base.point_in_plane.y,  cyl_base.point_in_plane.z);
 	}
 	else if (check == 1)
 	{
-		//cyl_base.point_in_plane = vec_sub(cyl->center,
-		//		vec_scale(cyl->orientation, cyl->height / 2.0));
 		cyl_base.point_in_plane = cyl->center;
 		cyl_base.orientation = vec_scale(cyl->orientation, -1);
-		//printf("down base %f %f %f\n", cyl_base.point_in_plane.x,  cyl_base.point_in_plane.y,  cyl_base.point_in_plane.z);
-		//error_exit("i finish here\n");
 	}
 	return (cyl_base);
 }
@@ -183,8 +170,6 @@ static void	intersect_cylinder_bases(t_ray ray, t_cylinder *cyl,
 		i++;
 	}
 }
-
-
 
 /*
 Arguments;
@@ -283,12 +268,3 @@ double	intersect_cylinder(t_cylinder *cyl, t_ray ray)
 	intersect_cylinder_bases(ray, cyl, cyl->diameter / 2, &t);
 	return (t);
 }
-
-
-
-
-
-
-
-
-
