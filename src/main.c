@@ -48,7 +48,7 @@ int	main(int argc, char **argv)
 		error_exit("Failed to init mlx");
 	store_pointer(1, data->mlx_ptr);
 	ft_render(data);
-	mlx_set_setting(MLX_STRETCH_IMAGE, 1); //check if this can poop itself
+	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
 	setup_scene_description(argv[1], data);
 	print_elements_of_rt_file(data);
 	raytracer(data);
