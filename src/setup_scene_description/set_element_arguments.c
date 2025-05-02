@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/05/02 13:32:35 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:32:20 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ static void	split_element_components(t_xyz *xyz, char *element_info)
 	while (split[i])
 		track_pointer(split[i++]);
 	track_pointer(split);
-	if (count_chars(element_info, ',') != 2)
-		error_exit("Extraneous comma ',' found in file");
 	if (i - 1 != 2 || !split[2])
 		error_exit("Vector, coordinates and RGB must have three components");
+	if (count_chars(element_info, ',') != 2)
+		error_exit("Extraneous comma ',' found in file");
 	ft_atof(split[0], &xyz->x);
 	ft_atof(split[1], &xyz->y);
 	ft_atof(split[2], &xyz->z);

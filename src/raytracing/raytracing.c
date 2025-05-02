@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/05/02 13:32:16 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:16:33 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,8 @@ Nothing. Only sets values in the camera struct.
 static void	set_detailed_camera(t_camera *camera)
 {
 	camera->world_up = (t_xyz){0, 1, 0};
+	if (fabs(camera->orientation.y) == 1.0)
+		camera->world_up = (t_xyz){0, 0, 1};
 	if (camera->orientation.x == 0.0
 		&& fabs(camera->orientation.y) == 1.0 && camera->orientation.z == 0.0)
 		camera->right_view = (t_xyz){1, 0, 0};
