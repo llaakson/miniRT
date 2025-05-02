@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:18:04 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/30 11:32:40 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:16:01 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static void	atof_decimal(char *str, int i, double *res_as_double)
 	double	decimal_place;
 
 	decimal_place = 0.1;
+	if (str[i] != '.')
+		return ;
 	i++;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
@@ -60,13 +62,14 @@ double	ft_atof(char *str, double *result)
 		i++;
 	}
 	no_extra_minus_in_str(str, i);
+	if (str[i] == '.')
+		error_exit("Decimal point with no whole number before it found");
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		res_as_double = res_as_double * 10 + (str[i] - '0');
 		i++;
 	}
-	if (str[i] == '.')
-		atof_decimal(str, i, &res_as_double);
+	atof_decimal(str, i, &res_as_double);
 	if (res_as_double > DBL_MAX || res_as_double < -DBL_MAX)
 		error_exit("double overflow detected");
 	*result = (double)res_as_double * sign;

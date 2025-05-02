@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:41:59 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/30 11:58:52 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:32:16 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,15 @@ static void	set_detailed_camera(t_camera *camera)
 	camera->fov_scale = tan(((double)camera->fov * M_PI / 180.0) / 2.0);
 }
 
+static void	calculate_set_color(
+		t_hit intersection, t_minirt *data, int x, int y)
+{
+	uint32_t	color;
+
+	intersection.rgb = divide_color(intersection.rgb);
+	color = calculate_light(data, intersection);
+	mlx_put_pixel(data->image_ptr, x, y, color);
+}
 
 /*
 Arguments:
@@ -241,7 +250,6 @@ void	raytracer(t_minirt *data)
 	int			y;
 	t_ray		ray;
 	t_hit		intersection;
-	uint32_t	color;
 
 	if (data->camera == NULL)
 		return ;
@@ -256,11 +264,7 @@ void	raytracer(t_minirt *data)
 			ray.dir = get_ray_direction(x, y, data->camera);
 			intersection = intersect(data, ray);
 			if (intersection.closest_intersect != INFINITY)
-			{
-				intersection.rgb = divide_color(intersection.rgb); // probably better way and place to do this.
-				color = calculate_light(data, intersection);
-				mlx_put_pixel(data->image_ptr, x, y, color);
-			}
+				calculate_set_color(intersection, data, x, y);
 			x++;
 		}
 		x = 0;

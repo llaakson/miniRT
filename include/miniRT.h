@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:56:06 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 21:41:14 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:33:02 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <stdio.h>
 # include <stdlib.h>
-# include <stdbool.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "../libft/libft.h"
 # include <math.h>
@@ -156,6 +155,7 @@ void		set_object_cylinder(char *line, int line_i, t_minirt *data);
 t_sphere	*add_new_sphere_node(t_minirt *data);
 t_plane		*add_new_plane_node(t_minirt *data);
 t_cylinder	*add_new_cylinder_node(t_minirt *data);
+int			count_chars(char *str, char c);
 
 //error
 void		error_exit(char *error);
@@ -199,9 +199,6 @@ void		set_intersection_data(t_hit *inter,
 				t_xyz rgb, double inter_p, t_ray ray);
 void		set_cyl_intersect_surface_normal(t_cylinder *cyl,
 				t_hit *inter, t_ray ray);
-
-//DELETE!
-void		print_elements_of_rt_file(t_minirt *data);
 
 //Shadows and lightning
 int			calculate_light(t_minirt *data, t_hit intersection);

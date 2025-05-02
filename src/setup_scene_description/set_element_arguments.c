@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:52:35 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/30 11:33:18 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:32:35 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	set_light_ratio(char *element_info, double *light_ratio)
 		error_exit("Light ratio argument has to be in range 0.0-1.0");
 }
 
-static void split_element_components(t_xyz *xyz, char *element_info)
+static void	split_element_components(t_xyz *xyz, char *element_info)
 {
-	char **split;
-	int i;
+	char	**split;
+	int		i;
 
 	split = ft_split(element_info, ',');
 	if (!split)
@@ -33,7 +33,9 @@ static void split_element_components(t_xyz *xyz, char *element_info)
 	while (split[i])
 		track_pointer(split[i++]);
 	track_pointer(split);
-	if (i - 1 != 2 || !split[2] || element_info[ft_strlen(element_info) - 1] == ',')
+	if (count_chars(element_info, ',') != 2)
+		error_exit("Extraneous comma ',' found in file");
+	if (i - 1 != 2 || !split[2])
 		error_exit("Vector, coordinates and RGB must have three components");
 	ft_atof(split[0], &xyz->x);
 	ft_atof(split[1], &xyz->y);
@@ -63,7 +65,7 @@ void	set_coordinates(char *element_info, t_xyz *coordinates)
 void	set_normalized_vector(char *element_info, t_xyz *vector)
 {
 	split_element_components(vector, element_info);
-	if (fabs(vector->x) > 1.0 || fabs(vector->y) > 1.0 || fabs(vector->z) > 1.0) //test
+	if (fabs(vector->x) > 1.0 || fabs(vector->y) > 1.0 || fabs(vector->z) > 1.0)
 		error_exit("Normalized vector argument must be between -1 and 1");
 	if (fabs(vec_length(*vector) - 1.0f) > 0.000001)
 		error_exit("Normalized vector has length 1.0. √(x² + y² + z²) = 1.0");

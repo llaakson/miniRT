@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 21:45:32 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 13:40:50 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:22:58 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,20 @@ void	track_rt_file_fd(int fd)
 		close(saved_fd);
 		saved_fd = -2;
 	}
+}
+
+int	count_chars(char *str, char c)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			count++;
+		i++;
+	}
+	return (count);
 }

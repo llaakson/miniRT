@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:13:57 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 18:14:32 by llaakson         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:33:25 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ int	main(int argc, char **argv)
 	if (!data)
 		error_exit("Memory allocation failed");
 	ft_bzero(data, sizeof(t_minirt));
+	setup_scene_description(argv[1], data);
 	data->mlx_ptr = mlx_init(IMG_WIDTH, IMG_HEIGHT, "miniRT", true);
 	if (!(data->mlx_ptr))
 		error_exit("Failed to init mlx");
 	store_pointer(1, data->mlx_ptr);
 	init_mlx(data);
 	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
-	setup_scene_description(argv[1], data);
 	raytracer(data);
 	mlx_loop_hook(data->mlx_ptr, key_input, data->mlx_ptr);
 	mlx_loop(data->mlx_ptr);
