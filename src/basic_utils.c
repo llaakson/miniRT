@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:18:04 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/04/29 21:38:53 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/04/30 11:32:40 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static void	atof_decimal(char *str, int i, double *res_as_double)
 		decimal_place *= 0.1;
 		i++;
 	}
+	if (str[i] == '.')
+		error_exit("Extraneous decimal point found in number");
 }
 
 double	ft_atof(char *str, double *result)

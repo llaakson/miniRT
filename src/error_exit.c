@@ -16,7 +16,6 @@ void	*store_pointer(int i, void *ptr)
 {
 	static void	*stored_ptr;
 
-	stored_ptr = NULL;
 	if (i == 1)
 		stored_ptr = ptr;
 	return (stored_ptr);
