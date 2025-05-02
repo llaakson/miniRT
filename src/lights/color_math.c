@@ -46,9 +46,9 @@ t_xyz	clamp_colors(t_xyz color)
 {
 	t_xyz	result;
 
-	result.x = fminf(255.0f, fmaxf(0.0f, color.x));
-	result.y = fminf(255.0f, fmaxf(0.0f, color.y));
-	result.z = fminf(255.0f, fmaxf(0.0f, color.z));
+	result.x = fmin(255.0f, fmax(0.0f, color.x));
+	result.y = fmin(255.0f, fmax(0.0f, color.y));
+	result.z = fmin(255.0f, fmax(0.0f, color.z));
 	return (result);
 }
 
