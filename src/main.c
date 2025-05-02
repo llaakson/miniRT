@@ -12,7 +12,7 @@
 
 #include "../include/miniRT.h"
 
-int	ft_render(t_minirt *mlx)
+static void	init_mlx(t_minirt *mlx)
 {
 	mlx->image_ptr = NULL;
 	mlx->image_ptr = mlx_new_image(mlx->mlx_ptr, IMG_WIDTH, IMG_HEIGHT);
@@ -20,7 +20,6 @@ int	ft_render(t_minirt *mlx)
 		error_exit("Failed to create image");
 	if (mlx_image_to_window(mlx->mlx_ptr, mlx->image_ptr, 0, 0) == -1)
 		error_exit("Failed to put image to window");
-	return (0);
 }
 
 void	key_input(void *ptr)
@@ -47,10 +46,9 @@ int	main(int argc, char **argv)
 	if (!(data->mlx_ptr))
 		error_exit("Failed to init mlx");
 	store_pointer(1, data->mlx_ptr);
-	ft_render(data);
+	init_mlx(data);
 	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
 	setup_scene_description(argv[1], data);
-	print_elements_of_rt_file(data);
 	raytracer(data);
 	mlx_loop_hook(data->mlx_ptr, key_input, data->mlx_ptr);
 	mlx_loop(data->mlx_ptr);

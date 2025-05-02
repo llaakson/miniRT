@@ -45,6 +45,8 @@ t_xyz	calculate_specular(t_minirt *data, t_hit hit, t_xyz direction)
 	double	spec;
 
 	specular_strength = 0.5;
+	if (data->light->ratio < 0.5)
+		specular_strength = data->light->ratio;
 	specular = (t_xyz){1, 1, 1};
 	view_direction = vec_sub(data->camera->coordinates, hit.coordinates);
 	view_direction = vec_normalize(view_direction);
