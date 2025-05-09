@@ -26,11 +26,13 @@ int	calculate_shadow(t_minirt *data, t_ray ray, double light_distance)
 	}
 	return (0);
 }
+
 /* Reflection
 	in - normal * 2 * dot(in, normal)
 	Calculates the reflection vector. 
 	Multiplied by two to cap the angle at 45 degrees to focus the brithness.
-	*/
+*/
+
 t_xyz	calculate_reflection(t_xyz in, t_hit intersection)
 {
 	t_xyz	result;
@@ -39,13 +41,16 @@ t_xyz	calculate_reflection(t_xyz in, t_hit intersection)
 					vec_dot(in, intersection.surface_normal))));
 	return (result);
 }
+
 /* Specilar reflection
-	Rays deflected off surface at inverse angle, so camera position matters
+	Rays deflected off surface at inverse angle, 
+	so camera position matters
 	exp(max(dot(R,C),0),k) * lightColor
 	R = normalized vector of light reflected off the surface
 	C = normalized vector from point to camera
 	k = constant exponent (larger bigger highlight)
 */
+
 t_xyz	calculate_specular(t_minirt *data, t_hit hit, t_xyz direction)
 {
 	double	specular_strength;
@@ -68,8 +73,10 @@ t_xyz	calculate_specular(t_minirt *data, t_hit hit, t_xyz direction)
 }
 
 /*Diffuse light
-	Rays assumed to deflect off surface equally in all directions, so camera position is irrelevant.
-	full intensity when ray is perpendicular to surface, falls of to zero when parallel to surface.
+	Rays assumed to deflect off surface equally in all directions,
+	so camera position is irrelevant.
+	full intensity when ray is perpendicular to surface,
+	falls of to zero when parallel to surface.
 	max(dot(N,L),0) * lightColor
 	N = normal at point of surface
 	L = normalized vector from point to light source
