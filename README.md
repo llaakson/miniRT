@@ -1,4 +1,4 @@
-# miniRT
+## miniRT
 Small RayTracing project 
 
 <table align="center">
@@ -11,3 +11,15 @@ Small RayTracing project
 </table>
 
 <br />
+
+In order to build it, open terminal and:
+```bash
+git clone https://github.com/llaakson/miniRT
+cd miniRT
+make
+```
+After that you run it with a scene from the scenes folder:
+```bash
+./miniRT scenes/sphere.rt
+```
+
